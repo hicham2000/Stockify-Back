@@ -13,6 +13,7 @@ on:
     branches: [ "Dev" ]
   pull_request:
     branches: [ "Dev" ]
+  workflow_dispatch:
 
 jobs:
   build:
