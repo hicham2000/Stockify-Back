@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -21,12 +24,26 @@ public class Produit implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Nullable
     private Long id;
-    private String name;
+    private String intitule;
+    private String description;
+    private String brande;
+    private Character uniteDeMesure;
+    private Date dateExpiration;
+    private Number quantite;
+    private Number prix;
+    private Number quantiteCritique;
+    public ValeurNutritionnel valeurNutritionnel;
+    public List<CategorieDeProduits> categorieDeProduits;
+    public List<PlanificationDeRepas> planificationDeRepas;
+
 
     public Produit(String name) {
-        this.name = name;
+        this.intitule = name;
     }
 }
+
+
+
 
 
 
