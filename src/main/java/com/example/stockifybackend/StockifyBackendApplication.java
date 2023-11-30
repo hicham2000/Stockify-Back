@@ -43,8 +43,8 @@ public class StockifyBackendApplication implements CommandLineRunner {
         p.setIntitule("ghj");
         p.setValeurNutritionnel(valeur);
         this.produitRepository.save(p);
-//        categorieDeProduits.setProduit(p);
-//        this.categorieDeProduitsRepository.save(categorieDeProduits);
+        categorieDeProduits.setProduit(p);
+        this.categorieDeProduitsRepository.save(categorieDeProduits);
 
 
 
