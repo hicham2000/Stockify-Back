@@ -16,26 +16,25 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Table(name = "produit")
 public class Produit implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Nullable
     private Long id;
     private String intitule;
     private String description;
     private String brande;
-    private Character uniteDeMesure;
+    private String uniteDeMesure;
     private Date dateExpiration;
+
     private Number quantite;
     private Number prix;
     private Number quantiteCritique;
-    public ValeurNutritionnel valeurNutritionnel;
-    @ElementCollection
-    public List<CategorieDeProduits> categorieDeProduits;
-    public List<PlanificationDeRepas> planificationDeRepas;
-
-
+    @OneToOne
+    private ValeurNutritionnel valeurNutritionnel;
+    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
+    private List<CategorieDeProduits> categories =  new ArrayList<>();
 
     public Produit(String name) {
         this.intitule = name;

@@ -13,7 +13,7 @@ import lombok.ToString;
 import java.io.Serializable;
 
 
-
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,12 +24,12 @@ public class ValeurNutritionnel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Nullable
     private Long id;
-    private Number proteine;
-    private Number carbohydrate;
-    private Number lipide;
-    private Number enegie;
-    private Number sucre;
-    private Number fibre;
+    private double proteine;
+    private double carbohydrate;
+    private double lipide;
+    private double enegie;
+    private double sucre;
+    private double fibre;
 
 }
 
