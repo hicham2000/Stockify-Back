@@ -18,7 +18,7 @@ public class Recommendation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    public List<Produit> Produit;
+    @OneToMany(mappedBy = "recommendation")
     public List<Recette> Recette;
     @OneToMany(mappedBy = "recommendation")
     public List<Produit> produit;

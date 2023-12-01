@@ -26,6 +26,9 @@ public class Recette implements Serializable {
     private Stock stock;
     @OneToMany(mappedBy = "recette", cascade = CascadeType.ALL)
     public List<Ingredient> ingredient;
+    @ManyToOne
+    @JoinColumn(name = "recommendation_id")
+    private Recommendation recommendation;
 }
 
 
