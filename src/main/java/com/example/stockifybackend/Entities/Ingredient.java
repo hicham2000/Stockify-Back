@@ -7,28 +7,19 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.List;
+
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Recette implements Serializable {
+public class Ingredient implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String intitule;
-    private String desctipion;
-    private int dureeTotal;
     @ManyToOne
-    @JoinColumn(name = "stock_id")
-    private Stock stock;
-    @OneToMany(mappedBy = "recette", cascade = CascadeType.ALL)
-    public List<Ingredient> ingredient;
+    private Recette recette;
+
 }
-
-
-
-
-
