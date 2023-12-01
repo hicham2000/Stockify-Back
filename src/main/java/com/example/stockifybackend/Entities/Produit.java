@@ -35,6 +35,9 @@ public class Produit implements Serializable{
     private ValeurNutritionnel valeurNutritionnel;
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
     private List<CategorieDeProduits> categories =  new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "stock_id")
+    private Stock stock;
 
     public Produit(String name) {
         this.intitule = name;

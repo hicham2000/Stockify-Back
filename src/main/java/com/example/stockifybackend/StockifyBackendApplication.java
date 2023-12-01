@@ -1,11 +1,7 @@
 package com.example.stockifybackend;
 
-import com.example.stockifybackend.Entities.CategorieDeProduits;
-import com.example.stockifybackend.Entities.Produit;
-import com.example.stockifybackend.Entities.ValeurNutritionnel;
-import com.example.stockifybackend.Repositories.CategorieDeProduitsRepository;
-import com.example.stockifybackend.Repositories.ProduitRepository;
-import com.example.stockifybackend.Repositories.ValeurNutritionnelRepository;
+import com.example.stockifybackend.Entities.*;
+import com.example.stockifybackend.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,6 +19,12 @@ public class StockifyBackendApplication implements CommandLineRunner {
     @Autowired
     private ValeurNutritionnelRepository valeurNutritionnelRepository;
 
+    @Autowired
+    private RecetteRepository recetteRepository;
+
+    @Autowired
+    private StockRepository stockRepository;
+
     public static void main(String[] args) {
 
         SpringApplication.run(StockifyBackendApplication.class, args);
@@ -37,14 +39,29 @@ public class StockifyBackendApplication implements CommandLineRunner {
         ValeurNutritionnel valeur = new ValeurNutritionnel(1L,3,4,6,7,3,4);
         this.valeurNutritionnelRepository.save(valeur);
 
+        Stock stock = new Stock();
+        this.stockRepository.save(stock);
+
+        Recette recette = new Recette();
+        recette.setIntitule("fghj");
+        recette.setStock(stock);
+
+        this.recetteRepository.save(recette);
+
+
+
+
+
 
 
         Produit p = new Produit("testproduct1");
         p.setIntitule("ghj");
         p.setValeurNutritionnel(valeur);
+        p.setStock(stock);
         this.produitRepository.save(p);
         categorieDeProduits.setProduit(p);
         this.categorieDeProduitsRepository.save(categorieDeProduits);
+
 
 
 
