@@ -38,6 +38,12 @@ public class Produit implements Serializable{
     @ManyToOne
     @JoinColumn(name = "stock_id")
     private Stock stock;
+    @ManyToOne
+    @JoinColumn(name = "depense_id")
+    private Depense depense;
+    @ManyToOne
+    @JoinColumn(name = "recommendation_id")
+    private Recommendation recommendation;
 
     public Produit(String name) {
         this.intitule = name;
