@@ -21,5 +21,8 @@ public class Depense implements Serializable {
     private Long id;
     private Date Date;
     private Time Time;
+    @ManyToOne
+    @JoinColumn(name = "budget_id")
+    private Recommendation budget;
 
 }
