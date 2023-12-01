@@ -9,6 +9,7 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,9 +20,7 @@ public class Intolerance implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date Date;
-    private Time Time;
-    @ManyToOne
-    @JoinColumn(name = "budget_id")
-    private Recommendation budget;
+    private String Intitule;
+    private String Description;
+    public List<Produit> IngredientsInterdits;
 }

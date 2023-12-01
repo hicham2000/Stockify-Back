@@ -23,6 +23,6 @@ public class Depense implements Serializable {
     private Time Time;
     @ManyToOne
     @JoinColumn(name = "budget_id")
-    private Recommendation budget;
+    private Budget budget;
 
 }

@@ -18,11 +18,11 @@ public class Budget implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Number BudgetTotal;
-    private Number BudgetDesProduitsConsommes;
-    private Number BudgetDesProduitsGaspilles;
+    private Double BudgetTotal;
+    private Double BudgetDesProduitsConsommes;
+    private Double BudgetDesProduitsGaspilles;
     private String PeriodiciteDeCalculDuBudget;
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL)
-    private List<Depense> depenses;
+    private List<Depense> depense;
 }

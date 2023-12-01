@@ -20,6 +20,6 @@ public class Recommendation implements Serializable {
     private Long id;
     public List<Produit> Produit;
     public List<Recette> Recette;
-    @OneToMany(mappedBy = "Recommendation")
+    @OneToMany(mappedBy = "recommendation")
     public List<Produit> produit;
 }
