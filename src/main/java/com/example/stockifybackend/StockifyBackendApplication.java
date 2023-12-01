@@ -25,6 +25,9 @@ public class StockifyBackendApplication implements CommandLineRunner {
     @Autowired
     private StockRepository stockRepository;
 
+    @Autowired
+    private IngredientRepository ingredientRepository;
+
     public static void main(String[] args) {
 
         SpringApplication.run(StockifyBackendApplication.class, args);
@@ -42,11 +45,21 @@ public class StockifyBackendApplication implements CommandLineRunner {
         Stock stock = new Stock();
         this.stockRepository.save(stock);
 
+
+
+
+
         Recette recette = new Recette();
         recette.setIntitule("fghj");
         recette.setStock(stock);
 
         this.recetteRepository.save(recette);
+
+        Ingredient ingredient = new Ingredient();
+        ingredient.setIntitule("kamoun");
+        ingredient.setRecette(recette);
+
+        ingredientRepository.save(ingredient);
 
 
 
