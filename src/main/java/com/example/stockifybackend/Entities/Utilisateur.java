@@ -1,12 +1,13 @@
 package com.example.stockifybackend.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-public class Utilisateur {
+public class Utilisateur implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,4 +16,7 @@ public class Utilisateur {
     private String email;
     private String password;
     private boolean modeSportif;
+    @OneToMany
+    @JoinColumn(name = "id")
+    private List<PréférenceAlimentaire> préférenceAlimentaires = new ArrayList<>();
 }
