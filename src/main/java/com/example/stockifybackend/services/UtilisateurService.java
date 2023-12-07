@@ -32,4 +32,12 @@ public class UtilisateurService {
         }
         return tempUtilisateur.get();
     }
+    // get Utilisateur by email
+    public Utilisateur getUtilisateurByEmail(String email) {
+        Optional<Utilisateur> tempUtilisateur = utilisateurRepository.findByEmail(email);
+        if (tempUtilisateur.isEmpty()) {
+            throw new RuntimeException("Utilisateur with email {\"+ email +\"} not found");
+        }
+        return tempUtilisateur.get();
+    }
 }
