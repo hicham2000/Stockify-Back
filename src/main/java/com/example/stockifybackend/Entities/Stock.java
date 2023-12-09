@@ -1,5 +1,8 @@
 package com.example.stockifybackend.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +24,7 @@ public class Stock implements Serializable {
     private int quantiteCritiqueParDefaut;
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
     public List<Recette> recette;
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
     @OneToMany(mappedBy = "stock")
     public List<Produit> produit;
 

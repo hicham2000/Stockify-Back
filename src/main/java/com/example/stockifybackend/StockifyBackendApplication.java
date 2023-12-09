@@ -44,6 +44,14 @@ public class StockifyBackendApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        Stock s = new Stock();
+        s.setQuantiteCritiqueParDefaut(10);
+        stockRepository.save(s);
+
+        Stock s1 = new Stock();
+        s.setQuantiteCritiqueParDefaut(10533);
+        stockRepository.save(s1);
+
 //        CategorieDeProduits categorieDeProduits = new CategorieDeProduits();
 //        categorieDeProduits.setIntitule("hicham");
 //

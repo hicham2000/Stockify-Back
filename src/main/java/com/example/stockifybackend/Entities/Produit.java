@@ -1,4 +1,7 @@
 package com.example.stockifybackend.Entities;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,13 +31,14 @@ public class Produit implements Serializable{
     private String uniteDeMesure;
     private Date dateExpiration;
 
-    private Number quantite;
-    private Number prix;
-    private Number quantiteCritique;
+    private double quantite;
+    private double prix;
+    private double quantiteCritique;
     @OneToOne
     private ValeurNutritionnel valeurNutritionnel;
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
     private List<CategorieDeProduits> categories =  new ArrayList<>();
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
     @ManyToOne
     @JoinColumn(name = "stock_id")
     private Stock stock;
