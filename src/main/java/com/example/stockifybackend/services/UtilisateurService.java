@@ -14,6 +14,7 @@ public class UtilisateurService {
 
     // add an utilisateur
     public Utilisateur addUtilisateur(Utilisateur utilisateur) {
+
         return utilisateurRepository.save(utilisateur);
     }
     // delete an utilisateur
@@ -39,5 +40,8 @@ public class UtilisateurService {
             throw new RuntimeException("Utilisateur with email {\"+ email +\"} not found");
         }
         return tempUtilisateur.get();
+    }
+    public boolean isUserExists(String email){
+        return utilisateurRepository.existsByEmail(email);
     }
 }
