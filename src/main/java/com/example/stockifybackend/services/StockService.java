@@ -88,6 +88,39 @@ public class StockService {
         }
     }
 
+    public void updateProduct(Long stockId, Long productId, Produit updatedProduit) {
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            List<Produit> produits = stock.getProduit();
+
+            for (Produit produit : produits) {
+                if (produit.getId().equals(productId)) {
+
+                    produit.setIntitule(updatedProduit.getIntitule());
+                    produit.setDescription(updatedProduit.getDescription());
+                    produit.setBrande(updatedProduit.getBrande());
+                    produit.setUniteDeMesure(updatedProduit.getUniteDeMesure());
+                    produit.setDateExpiration(updatedProduit.getDateExpiration());
+                    produit.setQuantite(updatedProduit.getQuantite());
+                    produit.setPrix(updatedProduit.getPrix());
+                    produit.setQuantiteCritique(updatedProduit.getQuantiteCritique());
+                    produit.setValeurNutritionnel(updatedProduit.getValeurNutritionnel());
+                    produit.setCategories(updatedProduit.getCategories());
+
+                    produitRepository.save(produit);
+                    stockRepository.save(stock);
+                    return;
+                }
+            }
+
+            throw new RuntimeException("Product with id " + productId + " does not exist in this stock");
+        } else {
+            throw new RuntimeException("There is no stock with this id");
+        }
+    }
+
     public List<Produit> getAllProductsInStock(Long stockId) {
         return produitRepository.findAllByStockIdCustomQuery(stockId);
 
