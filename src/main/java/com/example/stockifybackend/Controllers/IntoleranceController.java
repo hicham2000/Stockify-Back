@@ -35,7 +35,7 @@ public class IntoleranceController {
     }
 
     @PostMapping
-    public ResponseEntity<Intolerance> createIntolerance(@RequestBody Intolerance intolerance) {
+    public ResponseEntity<Intolerance> addIntolerance(@RequestBody Intolerance intolerance) {
         Intolerance savedIntolerance = intoleranceService.saveIntolerance(intolerance);
         return new ResponseEntity<>(savedIntolerance, HttpStatus.CREATED);
     }

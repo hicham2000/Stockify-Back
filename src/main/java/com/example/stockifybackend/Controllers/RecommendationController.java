@@ -35,7 +35,7 @@ public class RecommendationController {
     }
 
     @PostMapping
-    public ResponseEntity<Recommendation> createRecommendation(@RequestBody Recommendation recommendation) {
+    public ResponseEntity<Recommendation> addRecommendation(@RequestBody Recommendation recommendation) {
         Recommendation savedRecommendation = recommendationService.saveRecommendation(recommendation);
         return new ResponseEntity<>(savedRecommendation, HttpStatus.CREATED);
     }

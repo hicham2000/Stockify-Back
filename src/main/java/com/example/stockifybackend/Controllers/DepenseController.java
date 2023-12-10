@@ -35,7 +35,7 @@ public class DepenseController {
     }
 
     @PostMapping
-    public ResponseEntity<Depense> createDepense(@RequestBody Depense depense) {
+    public ResponseEntity<Depense> addDepense(@RequestBody Depense depense) {
         Depense savedDepense = depenseService.saveDepense(depense);
         return new ResponseEntity<>(savedDepense, HttpStatus.CREATED);
     }
