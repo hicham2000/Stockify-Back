@@ -38,6 +38,12 @@ public class StockController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping("/{stockId}/recipes/{recipeId}")
+    public ResponseEntity<String> updateRecipe(@PathVariable Long stockId, @PathVariable Long recipeId, @RequestBody Recette updatedRecette) {
+        stockService.updateRecipe(stockId, recipeId, updatedRecette);
+        return ResponseEntity.ok("Recipe updated successfully");
+    }
+
 
     @PostMapping("/{stockId}/products")
     public ResponseEntity<Void> addProductToStock(@PathVariable Long stockId, @RequestBody Produit produit) {

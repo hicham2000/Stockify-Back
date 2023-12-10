@@ -58,6 +58,32 @@ public class StockService {
         }
     }
 
+    public void updateRecipe(Long stockId, Long recipeId, Recette updatedRecette) {
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            List<Recette> recettes = stock.getRecette();
+
+            for (Recette recette : recettes) {
+                if (recette.getId().equals(recipeId)) {
+
+                    recette.setIntitule(updatedRecette.getIntitule());
+                    recette.setDesctipion(updatedRecette.getDesctipion());
+                    recette.setDureeTotal(updatedRecette.getDureeTotal());
+                    recette.setRecommendation(updatedRecette.getRecommendation());
+
+                    recetteRepository.save(recette);
+                    return;
+                }
+            }
+
+            throw new RuntimeException("Recipe with id " + recipeId + " does not exist in this stock");
+        } else {
+            throw new RuntimeException("There is no stock with this id");
+        }
+    }
+
     public void addProductToStock(Long stockId, Produit produit) {
         Optional<Stock> optionalStock = stockRepository.findById(stockId);
 
