@@ -2,8 +2,10 @@ package com.example.stockifybackend.services;
 
 import com.example.stockifybackend.Entities.ListeCourse;
 import com.example.stockifybackend.Entities.Produit;
+import com.example.stockifybackend.Entities.Stock;
 import com.example.stockifybackend.Repositories.ListeCourseRepository;
 import com.example.stockifybackend.Repositories.ProduitRepository;
+import com.example.stockifybackend.Repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,9 @@ public class CourseService {
 
     @Autowired
     private ProduitRepository produitRepository;
+
+    @Autowired
+    private StockRepository stockRepository;
 
    public void addProductToListeCourse(Long courseId, Produit produit){
        Optional<ListeCourse> optionalListeCourse=listeCourseRepository.findById(courseId);
@@ -73,10 +78,15 @@ public class CourseService {
 
 
     public void initProduit(){
+        Stock s = new Stock();
+        s.setQuantiteCritiqueParDefaut(10);
 
         Stream.of("Lait","Pattes","Lazagnes","Spagitti","Tomates","Fromage").forEach(nameProduct->{
             Produit produit=new Produit();
             produit.setIntitule(nameProduct);
+
+            stockRepository.save(s);
+            produit.setStock(s);
             produitRepository.save(produit);
 
         });
