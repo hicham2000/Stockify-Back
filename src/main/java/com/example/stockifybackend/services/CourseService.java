@@ -77,29 +77,7 @@ public class CourseService {
     }
 
 
-    public void initProduit(){
-        Stock s = new Stock();
-        s.setQuantiteCritiqueParDefaut(10);
 
-        Stream.of("Lait","Pattes","Lazagnes","Spagitti","Tomates","Fromage").forEach(nameProduct->{
-            Produit produit=new Produit();
-            produit.setIntitule(nameProduct);
-
-            stockRepository.save(s);
-            produit.setStock(s);
-            produitRepository.save(produit);
-
-        });
-    }
-
-
-
-    public void initCourse(){
-       ListeCourse course=new ListeCourse();
-       listeCourseRepository.save(course);
-        ListeCourse course1=new ListeCourse();
-        listeCourseRepository.save(course1);
-    }
 
 
 

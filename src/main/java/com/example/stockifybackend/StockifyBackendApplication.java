@@ -9,6 +9,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.stream.Stream;
+
 @SpringBootApplication
 public class StockifyBackendApplication implements CommandLineRunner {
 
@@ -55,6 +57,19 @@ public class StockifyBackendApplication implements CommandLineRunner {
         s.setQuantiteCritiqueParDefaut(190);
         stockRepository.save(s);
 
+        Stock s2 = new Stock();
+        s2.setQuantiteCritiqueParDefaut(10);
+
+        Stream.of("Lait","Pattes","Lazagnes","Spagitti","Tomates","Fromage").forEach(nameProduct->{
+            Produit produit=new Produit();
+            produit.setIntitule(nameProduct);
+
+            stockRepository.save(s2);
+            produit.setStock(s2);
+            produitRepository.save(produit);
+
+        });
+
 
 
 //        CategorieDeProduits categorieDeProduits = new CategorieDeProduits();
@@ -98,8 +113,7 @@ public class StockifyBackendApplication implements CommandLineRunner {
 
 
 
-        courseService.initProduit();
-        courseService.initCourse();
+
 
 
 
