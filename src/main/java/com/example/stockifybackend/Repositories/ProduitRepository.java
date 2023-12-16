@@ -11,4 +11,7 @@ import java.util.List;
 public interface ProduitRepository extends JpaRepository<Produit, Long> {
     @Query("SELECT p FROM Produit p WHERE p.stock.id = :stockId")
     List<Produit> findAllByStockIdCustomQuery(Long stockId);
+
+    @Query("SELECT product FROM Produit product WHERE (product.listeCourse.id = :courseId or product.listeCourse.id = null) ")
+    List<Produit> findAllByListeCourseIdCustomQuery(Long courseId);
 }
