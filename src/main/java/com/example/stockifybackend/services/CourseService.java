@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -58,17 +59,19 @@ public class CourseService {
            ListeCourse course=listeCourseOptional.get();
            List<Produit> produits=course.getProduit();
 
-           for(Produit produit:produits){
-               if(produit.getId().equals(productId)){
-
+           Iterator<Produit> iterator = produits.iterator();
+           while (iterator.hasNext()) {
+               Produit produit = iterator.next();
+               if (produit.getId().equals(productId)) {
                    produit.setIntitule(productUpdate.getIntitule());
                    produit.setQuantite(productUpdate.getQuantite());
-                   productUpdate.setUniteDeMesure(productUpdate.getUniteDeMesure());
+                   produit.setUniteDeMesure(productUpdate.getUniteDeMesure());
 
                    produitRepository.save(produit);
                    listeCourseRepository.save(course);
                }
            }
+
        }
     }
 
@@ -78,28 +81,35 @@ public class CourseService {
 
 
     public void initProduit(){
-        Stock s = new Stock();
-        s.setQuantiteCritiqueParDefaut(10);
-
+     //   Stock s = new Stock();
+     //   s.setQuantiteCritiqueParDefaut(10);
+        ListeCourse c=new ListeCourse();
         Stream.of("Lait","Pattes","Lazagnes","Spagitti","Tomates","Fromage").forEach(nameProduct->{
             Produit produit=new Produit();
             produit.setIntitule(nameProduct);
 
-            stockRepository.save(s);
-            produit.setStock(s);
+
+         //   stockRepository.save(s);
+          //  produit.setStock(s);
+            listeCourseRepository.save(c);
+            produit.setListeCourse(c);
+
             produitRepository.save(produit);
+
 
         });
     }
 
 
 
-    public void initCourse(){
-       ListeCourse course=new ListeCourse();
-       listeCourseRepository.save(course);
-        ListeCourse course1=new ListeCourse();
-        listeCourseRepository.save(course1);
-    }
+   // public void initCourse(){
+     //  ListeCourse course=new ListeCourse();
+     //  List<Produit> produits=produitRepository.findAll();
+     //  course.setProduit(produits);
+     //  listeCourseRepository.save(course);
+     //   ListeCourse course1=new ListeCourse();
+     //   listeCourseRepository.save(course1);
+   // }
 
 
 

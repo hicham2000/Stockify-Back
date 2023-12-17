@@ -99,7 +99,7 @@ public class StockifyBackendApplication implements CommandLineRunner {
 
 
         courseService.initProduit();
-        courseService.initCourse();
+      //  courseService.initCourse();
 
 
 
