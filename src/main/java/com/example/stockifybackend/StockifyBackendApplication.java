@@ -52,7 +52,7 @@ public class StockifyBackendApplication implements CommandLineRunner {
     }*/
     @Override
     public void run(String... args) throws Exception {
-
+        ListeCourse c=new ListeCourse();
        Stock s = new Stock();
         s.setQuantiteCritiqueParDefaut(190);
         stockRepository.save(s);
@@ -63,6 +63,9 @@ public class StockifyBackendApplication implements CommandLineRunner {
         Stream.of("Lait","Pattes","Lazagnes","Spagitti","Tomates","Fromage").forEach(nameProduct->{
             Produit produit=new Produit();
             produit.setIntitule(nameProduct);
+
+            courseRepository.save(c);
+            produit.setListeCourse(c);
 
             stockRepository.save(s2);
             produit.setStock(s2);
@@ -114,7 +117,7 @@ public class StockifyBackendApplication implements CommandLineRunner {
 
 
 
-        courseService.initProduit();
+      //  courseService.initProduit();
       //  courseService.initCourse();
 
 
