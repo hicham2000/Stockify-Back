@@ -80,6 +80,7 @@ public class CourseService {
     }
 
 
+
     public void initProduit(){
      //   Stock s = new Stock();
      //   s.setQuantiteCritiqueParDefaut(10);
@@ -110,6 +111,7 @@ public class CourseService {
      //   ListeCourse course1=new ListeCourse();
      //   listeCourseRepository.save(course1);
    // }
+
 
 
 
