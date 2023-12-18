@@ -93,8 +93,8 @@
                 <sonar.host.url>http://localhost:9000</sonar.host.url>
 
                 <!-- SonarQube project key and name -->
-                <sonar.projectKey>stockify</sonar.projectKey>
-                <sonar.projectName>stockify</sonar.projectName>
+                <sonar.projectKey>stockifyBack</sonar.projectKey>
+                <sonar.projectName>stockifyBack</sonar.projectName>
 
                 <!-- SonarQube authentication token -->
                 <sonar.login>sqa_ded63177d80f9187b08af931ad50de03194b6106</sonar.login>
