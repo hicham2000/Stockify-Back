@@ -1,6 +1,7 @@
 package com.example.stockifybackend.Controllers;
 
 import com.example.stockifybackend.Entities.Produit;
+import com.example.stockifybackend.Entities.ProduitAAcheter;
 import com.example.stockifybackend.Repositories.ListeCourseRepository;
 import com.example.stockifybackend.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class CourseController {
     private ListeCourseRepository courseRepository;
 
     @PostMapping("/{courseId}/products")
-    public ResponseEntity<Void> addProductToListeCourse(@PathVariable Long courseId,@RequestBody Produit produit){
+    public ResponseEntity<Void> addProductToListeCourse(@PathVariable Long courseId,@RequestBody ProduitAAcheter produit){
 
       courseService.addProductToListeCourse(courseId,produit);
     return new ResponseEntity<>(HttpStatus.CREATED);
@@ -40,7 +41,7 @@ public class CourseController {
     }
 
     @GetMapping("/{courseId}/products")
-    public List<Produit>getAllProduitListeCourse(@PathVariable Long courseId){
+    public List<ProduitAAcheter>getAllProduitListeCourse(@PathVariable Long courseId){
         return courseService.getAllProduitInCourse(courseId);
     }
 

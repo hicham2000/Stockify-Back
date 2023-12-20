@@ -20,7 +20,7 @@ public class ListeCourse implements Serializable {
     private Long id;
     @OneToMany(mappedBy = "listeCourse")
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
-    public List<Produit> produit;
+    public List<ProduitAAcheter> produit;
 
 
 }

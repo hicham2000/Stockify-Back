@@ -18,6 +18,9 @@ public class StockifyBackendApplication implements CommandLineRunner {
     private ProduitRepository produitRepository ;
 
     @Autowired
+    private ProduitAAcheterRepository produitAcheterRepository ;
+
+    @Autowired
     private CategorieDeProduitsRepository categorieDeProduitsRepository;
 
     @Autowired
@@ -61,15 +64,14 @@ public class StockifyBackendApplication implements CommandLineRunner {
         s2.setQuantiteCritiqueParDefaut(10);
 
         Stream.of("Lait","Pattes","Lazagnes","Spagitti","Tomates","Fromage").forEach(nameProduct->{
-            Produit produit=new Produit();
+            ProduitAAcheter produit=new ProduitAAcheter();
             produit.setIntitule(nameProduct);
 
             courseRepository.save(c);
             produit.setListeCourse(c);
 
-            stockRepository.save(s2);
-            produit.setStock(s2);
-            produitRepository.save(produit);
+
+            produitAcheterRepository.save(produit);
 
         });
 

@@ -49,9 +49,6 @@ public class Produit implements Serializable{
     @JoinColumn(name = "recommendation_id")
     private Recommendation recommendation;
 
-    @ManyToOne
-    @JoinColumn(name = "listecourse_id" )
-    private ListeCourse listeCourse;
 
     public Produit(String name) {
         this.intitule = name;

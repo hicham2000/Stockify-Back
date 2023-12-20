@@ -2,8 +2,10 @@ package com.example.stockifybackend.services;
 
 import com.example.stockifybackend.Entities.ListeCourse;
 import com.example.stockifybackend.Entities.Produit;
+import com.example.stockifybackend.Entities.ProduitAAcheter;
 import com.example.stockifybackend.Entities.Stock;
 import com.example.stockifybackend.Repositories.ListeCourseRepository;
+import com.example.stockifybackend.Repositories.ProduitAAcheterRepository;
 import com.example.stockifybackend.Repositories.ProduitRepository;
 import com.example.stockifybackend.Repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,12 @@ public class CourseService {
     private ListeCourseRepository listeCourseRepository;
 
     @Autowired
-    private ProduitRepository produitRepository;
+    private ProduitAAcheterRepository produitRepository;
 
     @Autowired
     private StockRepository stockRepository;
 
-   public void addProductToListeCourse(Long courseId, Produit produit){
+   public void addProductToListeCourse(Long courseId, ProduitAAcheter produit){
        Optional<ListeCourse> optionalListeCourse=listeCourseRepository.findById(courseId);
 
        if(optionalListeCourse.isPresent()){
@@ -45,7 +47,7 @@ public class CourseService {
 
         if(listeCourseOption.isPresent()){
             ListeCourse couse=listeCourseOption.get();
-            List<Produit> produits=couse.getProduit();
+            List<ProduitAAcheter> produits=couse.getProduit();
             produits.removeIf(produit -> produit.getId().equals(ProduitId));
             produitRepository.deleteById(ProduitId);
             listeCourseRepository.save(couse);
@@ -57,11 +59,11 @@ public class CourseService {
 
        if(listeCourseOptional.isPresent()){
            ListeCourse course=listeCourseOptional.get();
-           List<Produit> produits=course.getProduit();
+           List<ProduitAAcheter> produits=course.getProduit();
 
-           Iterator<Produit> iterator = produits.iterator();
+           Iterator<ProduitAAcheter> iterator = produits.iterator();
            while (iterator.hasNext()) {
-               Produit produit = iterator.next();
+               ProduitAAcheter produit = iterator.next();
                if (produit.getId().equals(productId)) {
                    produit.setIntitule(productUpdate.getIntitule());
                    produit.setQuantite(productUpdate.getQuantite());
@@ -75,7 +77,7 @@ public class CourseService {
        }
     }
 
-    public List<Produit> getAllProduitInCourse(Long courseId){
+    public List<ProduitAAcheter> getAllProduitInCourse(Long courseId){
                   return produitRepository.findAllByListeCourseIdCustomQuery(courseId);
     }
 
@@ -86,7 +88,7 @@ public class CourseService {
      //   s.setQuantiteCritiqueParDefaut(10);
         ListeCourse c=new ListeCourse();
         Stream.of("Lait","Pattes","Lazagnes","Spagitti","Tomates","Fromage").forEach(nameProduct->{
-            Produit produit=new Produit();
+            ProduitAAcheter produit=new ProduitAAcheter();
             produit.setIntitule(nameProduct);
 
 

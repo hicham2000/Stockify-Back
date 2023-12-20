@@ -1,9 +1,6 @@
 package com.example.stockifybackend.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +16,13 @@ public class ProduitAAcheter implements Serializable  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String intitule;
+    private String uniteDeMesure;
+    private double quantite;
     private boolean etat;
+    @ManyToOne
+    @JoinColumn(name = "listecourse_id" )
+    private ListeCourse listeCourse;
+
 
 }
