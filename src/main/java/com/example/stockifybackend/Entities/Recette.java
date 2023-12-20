@@ -29,6 +29,9 @@ public class Recette implements Serializable {
     @ManyToOne
     @JoinColumn(name = "recommendation_id")
     private Recommendation recommendation;
+
+    private int is_deleted = 0;
+
 }
 
 

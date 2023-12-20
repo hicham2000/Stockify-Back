@@ -53,6 +53,9 @@ public class Produit implements Serializable{
     @JoinColumn(name = "listecourse_id" )
     private ListeCourse listeCourse;
 
+    private int is_deleted = 0;
+
+
     public Produit(String name) {
         this.intitule = name;
     }
