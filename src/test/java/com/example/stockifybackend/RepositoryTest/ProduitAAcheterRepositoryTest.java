@@ -1,7 +1,6 @@
 package com.example.stockifybackend.RepositoryTest;
 
 import com.example.stockifybackend.Entities.ListeCourse;
-import com.example.stockifybackend.Entities.Produit;
 import com.example.stockifybackend.Entities.ProduitAAcheter;
 import com.example.stockifybackend.Repositories.ProduitAAcheterRepository;
 import org.junit.jupiter.api.AfterEach;
