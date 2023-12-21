@@ -46,7 +46,24 @@ public class UtilisateurApiControllerTest {
         Mockito.verify(utilisateurService, Mockito.times(1)).addUtilisateur(Mockito.any(Utilisateur.class));
     }
 
-    // Add similar tests for other methods in UtilisateurApiController
+    @Test
+    public void testAuthenticateUser() throws Exception {
+        LogingUtilisateur logingUtilisateur = new LogingUtilisateur("test@example.com", "password");
+
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setId(1L);
+        utilisateur.setEmail("test@example.com");
+        utilisateur.setPassword("password");
+
+        Mockito.when(utilisateurService.getUtilisateurByEmail(Mockito.anyString())).thenReturn(utilisateur);
+        Mockito.when(utilisateurService.isUserExists(Mockito.anyString())).thenReturn(true);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/Login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(logingUtilisateur)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("Login successfully :)"));
+    }
 
     // Utility method to convert objects to JSON string
     private String asJsonString(Object obj) throws Exception {
