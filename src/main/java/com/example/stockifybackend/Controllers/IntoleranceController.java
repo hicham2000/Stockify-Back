@@ -1,4 +1,4 @@
-package com.example.stockifybackend.controllers;
+package com.example.stockifybackend.Controllers;
 
 import com.example.stockifybackend.Entities.Intolerance;
 import com.example.stockifybackend.services.IntoleranceService;
