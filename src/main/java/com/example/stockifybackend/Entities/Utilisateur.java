@@ -31,4 +31,14 @@ public class Utilisateur implements Serializable {
 
     }
 
+    public Utilisateur(Long id, String prénom, String nom, String email, String password, String régimeSpécieux, boolean modeSportif) {
+        this.id = id;
+        this.prénom = prénom;
+        this.nom = nom;
+        this.email = email;
+        this.password = password;
+        this.régimeSpécieux = régimeSpécieux;
+        this.modeSportif = modeSportif;
+    }
+
 }
