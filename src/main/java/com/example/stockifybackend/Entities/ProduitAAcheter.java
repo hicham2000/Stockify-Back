@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -24,5 +26,12 @@ public class ProduitAAcheter implements Serializable  {
     @JoinColumn(name = "listecourse_id" )
     private ListeCourse listeCourse;
 
+    public ProduitAAcheter(String intitule, String uniteDeMesure, double quantite, boolean etat) {
+        this.intitule = intitule;
+        this.uniteDeMesure = uniteDeMesure;
+        this.quantite = quantite;
+        this.etat = etat;
+        this.listeCourse = new ListeCourse();
+    }
 
 }
