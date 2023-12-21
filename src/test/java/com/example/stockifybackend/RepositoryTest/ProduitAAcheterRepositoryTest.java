@@ -2,6 +2,7 @@ package com.example.stockifybackend.RepositoryTest;
 
 import com.example.stockifybackend.Entities.ListeCourse;
 import com.example.stockifybackend.Entities.ProduitAAcheter;
+import com.example.stockifybackend.Repositories.ListeCourseRepository;
 import com.example.stockifybackend.Repositories.ProduitAAcheterRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +17,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class ProduitAAcheterRepositoryTest {
 
+    private final ProduitAAcheterRepository produitAAcheterRepository;
+    private final ListeCourseRepository listeCourseRepository;
+
     @Autowired
-    private ProduitAAcheterRepository produitAAcheterRepository;
+    ProduitAAcheterRepositoryTest(ProduitAAcheterRepository produitAAcheterRepository, ListeCourseRepository listeCourseRepository) {
+        this.produitAAcheterRepository = produitAAcheterRepository;
+        this.listeCourseRepository = listeCourseRepository;
+    }
 
     @BeforeEach
     void setUp() {
@@ -33,9 +40,15 @@ class ProduitAAcheterRepositoryTest {
     void testFindAllByListeCourseIdCustomQuery() {
         // Save test data to the database
         ListeCourse listeCourse = new ListeCourse();
-        ProduitAAcheter produitAAcheter1 = new ProduitAAcheter("Product 1", "Unit 1", 5, false);
-        ProduitAAcheter produitAAcheter2 = new ProduitAAcheter("Product 2", "Unit 2", 10, true);
+        listeCourse = listeCourseRepository.save(listeCourse);
 
+        ProduitAAcheter produitAAcheter1 = new ProduitAAcheter("Product 1", "Kg", 5, false, listeCourse);
+        ProduitAAcheter produitAAcheter2 = new ProduitAAcheter("Product 2", "litre", 10, true, listeCourse);
+
+        // Save the ListeCourse and ProduitAAcheter instances
+        listeCourseRepository.save(listeCourse);
+
+        // Now that ListeCourse is saved, save the ProduitAAcheter instances
         produitAAcheterRepository.save(produitAAcheter1);
         produitAAcheterRepository.save(produitAAcheter2);
 
