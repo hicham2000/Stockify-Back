@@ -34,10 +34,10 @@ class ProduitRepositoryTest {
     void testFindAllByStockIdCustomQuery() {
         // Save test data to the database
         Stock stock = new Stock();
-        Produit produit1 = new Produit(null, "Product 1", "Description 1", "Brand 1", "Unit 1", new Date(),
-                10.0, 20.0, 5.0, null, new Stock(), null, null, 0);
-        Produit produit2 = new Produit(null, "Product 2", "Description 2", "Brand 2", "Unit 2", new Date(),
-                15.0, 25.0, 8.0, null, new Stock(), null, null, 0);
+        Produit produit1 = new Produit("Product 1", "Description 1", "Brand 1", "Unit 1", new Date(),
+                10.0, 20.0, 5.0, null, null, new Stock(), null, null);
+        Produit produit2 = new Produit("Product 2", "Description 2", "Brand 2", "Unit 2", new Date(),
+                15.0, 25.0, 8.0, null, null, new Stock(), null, null);
 
         produitRepository.save(produit1);
         produitRepository.save(produit2);
