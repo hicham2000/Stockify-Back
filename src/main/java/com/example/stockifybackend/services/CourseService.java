@@ -54,7 +54,7 @@ public class CourseService {
         }
     }
 
-    public void updateProductCourse(Long courseId, Long productId, Produit productUpdate){
+    public void updateProductCourse(Long courseId, Long productId, ProduitAAcheter productUpdate){
        Optional<ListeCourse> listeCourseOptional=listeCourseRepository.findById(courseId);
 
        if(listeCourseOptional.isPresent()){

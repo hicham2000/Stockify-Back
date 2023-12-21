@@ -29,7 +29,7 @@ public class CourseController {
     }
 
     @PutMapping("/{courseId}/products/{productId}")
-    public ResponseEntity<String> updateProductInListeCourse(@PathVariable Long courseId,@PathVariable Long productId,@RequestBody Produit update){
+    public ResponseEntity<String> updateProductInListeCourse(@PathVariable Long courseId,@PathVariable Long productId,@RequestBody ProduitAAcheter update){
         courseService.updateProductCourse(courseId,productId,update);
         return ResponseEntity.ok("Produit a ete updater");
     }
