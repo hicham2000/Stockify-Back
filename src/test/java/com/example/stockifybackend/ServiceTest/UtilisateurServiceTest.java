@@ -1,7 +1,8 @@
-package com.example.stockifybackend.services;
+package com.example.stockifybackend.ServiceTest;
 
 import com.example.stockifybackend.Entities.Utilisateur;
 import com.example.stockifybackend.Repositories.UtilisateurRepository;
+import com.example.stockifybackend.services.UtilisateurService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
