@@ -53,6 +53,24 @@ public class Produit implements Serializable{
     private int is_deleted = 0;
 
 
+    public Produit(String intitule, String description, String brande, String uniteDeMesure, Date dateExpiration,
+                   double quantite, double prix, double quantiteCritique, ValeurNutritionnel valeurNutritionnel,
+                   List<CategorieDeProduits> categories, Stock stock, Depense depense, Recommendation recommendation) {
+        this.intitule = intitule;
+        this.description = description;
+        this.brande = brande;
+        this.uniteDeMesure = uniteDeMesure;
+        this.dateExpiration = dateExpiration;
+        this.quantite = quantite;
+        this.prix = prix;
+        this.quantiteCritique = quantiteCritique;
+        this.valeurNutritionnel = valeurNutritionnel;
+        this.categories = categories;
+        this.stock = stock;
+        this.depense = depense;
+        this.recommendation = recommendation;
+    }
+
     public Produit(String name) {
         this.intitule = name;
     }
