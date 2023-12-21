@@ -45,5 +45,11 @@ public class CourseController {
         return courseService.getAllProduitInCourse(courseId);
     }
 
+    @GetMapping("/{courseId}/products/{intitule}")
+    public List<ProduitAAcheter> getProduiInCourse(@PathVariable Long courseId,@PathVariable String intitule){
+        return courseService.findByListeCourseProduit(courseId,intitule);
+    }
+
+
 
 }
