@@ -72,6 +72,16 @@ public class UtilisateurApiControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("User logged out successfully!..."));
     }
 
+    @Test
+    public void testDeleteUtilisateur() throws Exception {
+        Long userId = 1L;
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/Utilisateurs/{id}", userId))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        Mockito.verify(utilisateurService, Mockito.times(1)).deleteUtilisateur(userId);
+    }
+
 
 
     // Utility method to convert objects to JSON string
