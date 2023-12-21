@@ -65,6 +65,15 @@ public class UtilisateurApiControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("Login successfully :)"));
     }
 
+    @Test
+    public void testLogoutUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/logout"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("User logged out successfully!..."));
+    }
+
+
+
     // Utility method to convert objects to JSON string
     private String asJsonString(Object obj) throws Exception {
         return new ObjectMapper().writeValueAsString(obj);
