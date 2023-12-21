@@ -63,17 +63,10 @@ public class StockifyBackendApplication implements CommandLineRunner {
         Stock s2 = new Stock();
         s2.setQuantiteCritiqueParDefaut(10);
 
-        Stream.of("Lait","Pattes","Lazagnes","Spagitti","Tomates","Fromage").forEach(nameProduct->{
-            ProduitAAcheter produit=new ProduitAAcheter();
-            produit.setIntitule(nameProduct);
+
 
             courseRepository.save(c);
-            produit.setListeCourse(c);
 
-
-            produitAcheterRepository.save(produit);
-
-        });
 
 
 

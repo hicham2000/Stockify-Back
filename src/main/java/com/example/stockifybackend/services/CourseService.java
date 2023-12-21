@@ -54,7 +54,7 @@ public class CourseService {
         }
     }
 
-    public void updateProductCourse(Long courseId, Long productId, Produit productUpdate){
+    public void updateProductCourse(Long courseId, Long productId, ProduitAAcheter productUpdate){
        Optional<ListeCourse> listeCourseOptional=listeCourseRepository.findById(courseId);
 
        if(listeCourseOptional.isPresent()){
@@ -68,6 +68,7 @@ public class CourseService {
                    produit.setIntitule(productUpdate.getIntitule());
                    produit.setQuantite(productUpdate.getQuantite());
                    produit.setUniteDeMesure(productUpdate.getUniteDeMesure());
+                   produit.setEtat(productUpdate.isEtat());
 
                    produitRepository.save(produit);
                    listeCourseRepository.save(course);
@@ -80,6 +81,9 @@ public class CourseService {
     public List<ProduitAAcheter> getAllProduitInCourse(Long courseId){
                   return produitRepository.findAllByListeCourseIdCustomQuery(courseId);
     }
+     public List<ProduitAAcheter> findByListeCourseProduit(Long courseId,String intitule){
+       return produitRepository.findByListeCourseProduit(courseId,intitule);
+     }
 
 
 
