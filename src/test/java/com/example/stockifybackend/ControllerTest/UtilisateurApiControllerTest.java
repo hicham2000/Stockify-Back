@@ -28,6 +28,24 @@ public class UtilisateurApiControllerTest {
     @MockBean
     private UtilisateurRepository utilisateurRepository;
 
+    @Test
+    public void testAddUtilisateur() throws Exception {
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setId(1L);
+        utilisateur.setEmail("test@example.com");
+        utilisateur.setPassword("password");
+
+        Mockito.when(utilisateurService.isUserExists(Mockito.anyString())).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(utilisateur)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("You are registred Successfully!"));
+
+        Mockito.verify(utilisateurService, Mockito.times(1)).addUtilisateur(Mockito.any(Utilisateur.class));
+    }
+
     // Add similar tests for other methods in UtilisateurApiController
 
     // Utility method to convert objects to JSON string
