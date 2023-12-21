@@ -82,7 +82,22 @@ public class UtilisateurApiControllerTest {
         Mockito.verify(utilisateurService, Mockito.times(1)).deleteUtilisateur(userId);
     }
 
+    @Test
+    public void testGetUtilisateur() throws Exception {
+        Long userId = 1L;
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setId(userId);
+        utilisateur.setEmail("test@example.com");
+        utilisateur.setPassword("password");
 
+        Mockito.when(utilisateurService.getUtilisateur(userId)).thenReturn(utilisateur);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/Utilisateur/{id}", userId))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(userId))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("test@example.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.password").value("password"));
+    }
 
     // Utility method to convert objects to JSON string
     private String asJsonString(Object obj) throws Exception {
