@@ -36,7 +36,7 @@ public class UtilisateurApiController {
         }
         return new ResponseEntity<>("Invalid credentials :(", HttpStatus.UNAUTHORIZED);
     }
-    @PostMapping("/singup")
+    @PostMapping("/signup")
     public ResponseEntity<?> addUtilisateur(@RequestBody Utilisateur utilisateur) {
         if (utilisateurService.isUserExists(utilisateur.getEmail())) {
             return new ResponseEntity<>("Utilisateur with this email already exists!",HttpStatus.BAD_REQUEST);
