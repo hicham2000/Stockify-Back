@@ -32,24 +32,24 @@ class UtilisateurRepositoryTest {
     @Test
     void testFindByEmail() {
         // Enregistrer un utilisateur dans la base de données
-        Utilisateur savedUser = utilisateurRepository.save(new Utilisateur(null, "John", "Doe", "john.doe@example.com", "password", false));
+        Utilisateur savedUser = utilisateurRepository.save(new Utilisateur(0L, "John", "Doe", "john.doe@example.com", "password", "", false));
 
         // Récupérer l'utilisateur par e-mail depuis le dépôt
         Optional<Utilisateur> retrievedUser = utilisateurRepository.findByEmail(savedUser.getEmail());
 
         // Assertions
         assertThat(retrievedUser).isPresent();
-        assertThat(retrievedUser.get().getNom()).isEqualTo("John");
-        assertThat(retrievedUser.get().getPrénom()).isEqualTo("Doe");
+        assertThat(retrievedUser.get().getPrénom()).isEqualTo("John");
+        assertThat(retrievedUser.get().getNom()).isEqualTo("Doe");
     }
 
     @Test
     void testExistsByEmail() {
         // Enregistrer un utilisateur dans la base de données
-        utilisateurRepository.save(new Utilisateur(null, "Jane", "Doe", "jane.doe@example.com", "password", false));
+        utilisateurRepository.save(new Utilisateur(0L, "John", "Doe", "john.doe@example.com", "password", "", false));
 
         // Vérifier l'existence de l'utilisateur par e-mail
-        boolean userExists = utilisateurRepository.existsByEmail("jane.doe@example.com");
+        boolean userExists = utilisateurRepository.existsByEmail("john.doe@example.com");
 
         // Assertions
         assertThat(userExists).isTrue();
