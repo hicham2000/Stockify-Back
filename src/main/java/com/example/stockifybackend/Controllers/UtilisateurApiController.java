@@ -48,7 +48,7 @@ public class UtilisateurApiController {
     @PostMapping("/signup")
     public ResponseEntity<?> addUtilisateur(@RequestBody Utilisateur utilisateur) {
         if (utilisateurService.isUserExists(utilisateur.getEmail())) {
-            return new ResponseEntity<>("Utilisateur with this email already exists!",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Utilisateur with this email already exists!", HttpStatus.BAD_REQUEST);
         }
         utilisateurService.addUtilisateur(utilisateur);
         return new ResponseEntity<>("You are registred Successfully!", HttpStatus.OK);
