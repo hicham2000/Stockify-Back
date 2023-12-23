@@ -3,6 +3,7 @@ package com.example.stockifybackend;
 import com.example.stockifybackend.Entities.*;
 import com.example.stockifybackend.Repositories.*;
 import com.example.stockifybackend.services.CourseService;
+import com.example.stockifybackend.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -41,6 +42,9 @@ public class StockifyBackendApplication implements CommandLineRunner {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private UtilisateurService utilisateurService;
+
     public static void main(String[] args) {
 
         SpringApplication.run(StockifyBackendApplication.class, args);
@@ -63,11 +67,14 @@ public class StockifyBackendApplication implements CommandLineRunner {
         Stock s2 = new Stock();
         s2.setQuantiteCritiqueParDefaut(10);
 
+        Utilisateur user1 = new Utilisateur(1L,
+                "wassim","rifay",
+                "rifaywassim@gmail.com", "123456@Wassim",
+                "", false);
 
+        utilisateurService.addUtilisateur(user1);
 
-            courseRepository.save(c);
-
-
+        courseRepository.save(c);
 
 
 //        CategorieDeProduits categorieDeProduits = new CategorieDeProduits();

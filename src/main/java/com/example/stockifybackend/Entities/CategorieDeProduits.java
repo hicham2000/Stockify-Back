@@ -25,7 +25,7 @@ public class CategorieDeProduits implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String intitule;
-    @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "categorieDeProduits", cascade = CascadeType.ALL)
     private List<Produit> produits = new ArrayList<>();
 
 }
