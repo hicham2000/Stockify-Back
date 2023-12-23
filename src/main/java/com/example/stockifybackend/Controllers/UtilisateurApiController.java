@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -24,18 +26,25 @@ public class UtilisateurApiController {
     private UtilisateurRepository utilisateurRepository;
 
     @PostMapping("/Login")
-    public ResponseEntity<String> authenticateUser(@RequestBody LogingUtilisateur logingUtilisateur, HttpServletRequest request) {
+    public ResponseEntity<?> authenticateUser(
+            @RequestBody LogingUtilisateur logingUtilisateur
+    ) {
         Optional<Utilisateur> utilisateurOptional = Optional.ofNullable(utilisateurService.getUtilisateurByEmail(logingUtilisateur.getEmail()));
-        if(utilisateurOptional.isPresent()){
+        Map<String, Object> response = new HashMap<>();
+
+        if (utilisateurOptional.isPresent()) {
             Utilisateur utilisateur = utilisateurOptional.get();
-            if(utilisateur.getPassword().equals(logingUtilisateur.getPassword())){
-                HttpSession session = request.getSession(true);
-                session.setAttribute("userId", utilisateur.getId());
-                return new ResponseEntity<>("Login successfully :)", HttpStatus.OK);
+            if (utilisateur.getPassword().equals(logingUtilisateur.getPassword())) {
+                response.put("message", "Login successfully :)");
+                response.put("user_id", utilisateur.getId());
+
+                return new ResponseEntity<>(response, HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>("Invalid credentials :(", HttpStatus.UNAUTHORIZED);
+        response.put("message", "Invalid credentials :(");
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
+
     @PostMapping("/signup")
     public ResponseEntity<?> addUtilisateur(@RequestBody Utilisateur utilisateur) {
         if (utilisateurService.isUserExists(utilisateur.getEmail())) {

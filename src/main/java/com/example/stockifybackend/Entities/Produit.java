@@ -36,16 +36,20 @@ public class Produit implements Serializable{
     private double quantiteCritique;
     @OneToOne
     private ValeurNutritionnel valeurNutritionnel;
+
     @ManyToOne
     @JoinColumn(name = "categorieDeProduits_id")
     private CategorieDeProduits categories;
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @ManyToOne
     @JoinColumn(name = "stock_id")
     private Stock stock;
+
     @ManyToOne
     @JoinColumn(name = "depense_id")
     private Depense depense;
+
     @ManyToOne
     @JoinColumn(name = "recommendation_id")
     private Recommendation recommendation;
@@ -74,6 +78,22 @@ public class Produit implements Serializable{
 
     public Produit(String name) {
         this.intitule = name;
+    }
+
+    public void removeCategories() {
+        this.categories = null;
+    }
+
+    public void removeStock() {
+        this.stock = null;
+    }
+
+    public void removeDepense() {
+        this.depense = null;
+    }
+
+    public void removeRecommendation() {
+        this.recommendation = null;
     }
 }
 
