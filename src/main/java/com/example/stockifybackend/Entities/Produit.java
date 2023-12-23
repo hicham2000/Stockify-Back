@@ -36,8 +36,8 @@ public class Produit implements Serializable{
     private double quantiteCritique;
     @OneToOne
     private ValeurNutritionnel valeurNutritionnel;
-    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
-    private List<CategorieDeProduits> categories =  new ArrayList<>();
+    @ManyToOne
+    private CategorieDeProduits categories;
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
     @ManyToOne
     @JoinColumn(name = "stock_id")
@@ -55,7 +55,7 @@ public class Produit implements Serializable{
 
     public Produit(String intitule, String description, String brande, String uniteDeMesure, Date dateExpiration,
                    double quantite, double prix, double quantiteCritique, ValeurNutritionnel valeurNutritionnel,
-                   List<CategorieDeProduits> categories, Stock stock, Depense depense, Recommendation recommendation) {
+                   CategorieDeProduits categories, Stock stock, Depense depense, Recommendation recommendation) {
         this.intitule = intitule;
         this.description = description;
         this.brande = brande;

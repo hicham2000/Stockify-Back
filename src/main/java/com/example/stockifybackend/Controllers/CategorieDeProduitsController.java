@@ -1,6 +1,7 @@
 package com.example.stockifybackend.Controllers;
 
 import com.example.stockifybackend.Entities.CategorieDeProduits;
+import com.example.stockifybackend.Entities.Produit;
 import com.example.stockifybackend.services.CategorieDeProduitsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,5 +27,9 @@ public class CategorieDeProduitsController {
     @GetMapping("/categorie{id}")
     public CategorieDeProduits getCategorie(@PathVariable Long id){
         return categorieDeProduitsService.getCategorie(id);
+    }
+    @GetMapping("/{id}/produits")
+    public List<Produit> getCategorieDeProduits(@PathVariable Long id){
+        return categorieDeProduitsService.getProduitsByCategorie(id);
     }
 }

@@ -10,6 +10,7 @@ import lombok.ToString;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,8 +25,8 @@ public class CategorieDeProduits implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String intitule;
-    @ManyToOne
-    private Produit produit;
+    @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
+    private List<Produit> produits = new ArrayList<>();
 
 }
 
