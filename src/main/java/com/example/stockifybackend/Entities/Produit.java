@@ -37,6 +37,7 @@ public class Produit implements Serializable{
     @OneToOne
     private ValeurNutritionnel valeurNutritionnel;
     @ManyToOne
+    @JoinColumn(name = "categorieDeProduits_id")
     private CategorieDeProduits categories;
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
     @ManyToOne
