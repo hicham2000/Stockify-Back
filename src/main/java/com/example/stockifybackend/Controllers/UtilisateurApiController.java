@@ -54,6 +54,8 @@ public class UtilisateurApiController {
             response.put("message", "Utilisateur with this email already exists!");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
+
+
         utilisateurService.addUtilisateur(utilisateur);
         response.put("message", "You are registred Successfully!");
         return new ResponseEntity<>(response, HttpStatus.OK);
