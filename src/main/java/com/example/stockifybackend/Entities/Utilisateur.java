@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,6 +22,10 @@ public class Utilisateur implements Serializable {
     private String nom;
     private String email;
     private String password;
+    private String sexe;
+    private String taille;
+    private String poids;
+    private Date dateDeNaissance;
     private String régimeSpécieux;
     private boolean modeSportif;
     @OneToMany
