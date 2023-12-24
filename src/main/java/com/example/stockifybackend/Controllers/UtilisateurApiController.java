@@ -38,6 +38,8 @@ public class UtilisateurApiController {
             if (utilisateur.getPassword().equals(logingUtilisateur.getPassword())) {
                 response.put("message", "Login successfully :)");
                 response.put("user_id", utilisateur.getId());
+                response.put("stock_id", utilisateur.getStock_id());
+                response.put("listeDeCourse_id", utilisateur.getListeDeCourse_id());
 
                 return new ResponseEntity<>(response, HttpStatus.OK);
             }

@@ -24,5 +24,4 @@ public class ListeCourse implements Serializable {
     public List<ProduitAAcheter> produit = new ArrayList<>();;
 
 
-
 }
