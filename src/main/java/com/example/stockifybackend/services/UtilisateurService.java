@@ -5,6 +5,7 @@ import com.example.stockifybackend.Repositories.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 @Service
@@ -19,7 +20,7 @@ public class UtilisateurService {
     }
 
     // update an utilisateur
-        public void updateUtilisateur(Long id, Utilisateur updatedUtilisateur) {
+    public void updateUtilisateur(Long id, Utilisateur updatedUtilisateur) {
         Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
 
         if (optionalUtilisateur.isEmpty()) {
@@ -28,17 +29,21 @@ public class UtilisateurService {
 
         Utilisateur existingUtilisateur = optionalUtilisateur.get();
 
-        // Update only the fields you want to allow updating
-        existingUtilisateur.setPrénom(updatedUtilisateur.getPrénom());
-        existingUtilisateur.setNom(updatedUtilisateur.getNom());
-        existingUtilisateur.setEmail(updatedUtilisateur.getEmail());
-        existingUtilisateur.setPassword(updatedUtilisateur.getPassword());
-        existingUtilisateur.setRégimeSpécieux(updatedUtilisateur.getRégimeSpécieux());
-        existingUtilisateur.setModeSportif(updatedUtilisateur.isModeSportif());
-        existingUtilisateur.setSexe(updatedUtilisateur.getSexe());
-        existingUtilisateur.setTaille(updatedUtilisateur.getTaille());
-        existingUtilisateur.setPoids(updatedUtilisateur.getPoids());
-        existingUtilisateur.setDateDeNaissance(updatedUtilisateur.getDateDeNaissance());
+        /// Iterate through fields using reflection
+        for (Field field : Utilisateur.class.getDeclaredFields()) {
+            try {
+                // Get the value of the field from updatedUtilisateur
+                Object updatedValue = field.get(updatedUtilisateur);
+
+                // Update only non-null values
+                if (updatedValue != null) {
+                    field.set(existingUtilisateur, updatedValue);
+                }
+            } catch (IllegalAccessException e) {
+                // Handle exception if needed
+                e.printStackTrace();
+            }
+        }
 
         // Save the updated utilisateur
         utilisateurRepository.save(existingUtilisateur);
