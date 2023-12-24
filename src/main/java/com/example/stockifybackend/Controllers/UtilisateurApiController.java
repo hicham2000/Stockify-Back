@@ -58,21 +58,46 @@ public class UtilisateurApiController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @PostMapping("/logout")
-    public ResponseEntity<String> logoutUser(HttpServletRequest request) {
+    public ResponseEntity<?> logoutUser(HttpServletRequest request) {
+        Map<String, Object> response = new HashMap<>();
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
-        return new ResponseEntity<>("User logged out successfully!...", HttpStatus.OK);
+        response.put("message", "\"User logged out successfully!...\"")
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/Utilisateurs/{id}")
-    public void deleteUtilisateur(@PathVariable Long id){
-        utilisateurService.deleteUtilisateur(id);
+    public ResponseEntity<?> deleteUtilisateur(@PathVariable Long id){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            utilisateurService.deleteUtilisateur(id);
+        }catch(Exception error){
+            response.put("message", error);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("message", "User logged out successfully!...");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/Utilisateur/{id}")
     public Utilisateur getUtilisateur(@PathVariable Long id){
         return utilisateurService.getUtilisateur(id);
+    }
+
+    @PutMapping("/Utilisateur/{id}")
+    public ResponseEntity<?> updateUtilisateur(@PathVariable Long id, @RequestBody Utilisateur updatedUtilisateur){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            utilisateurService.updateUtilisateur(id, updatedUtilisateur);
+        }catch(Exception error){
+            response.put("message", error);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("message", "User updated successfully!...");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

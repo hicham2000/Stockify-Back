@@ -17,6 +17,29 @@ public class UtilisateurService {
 
         return utilisateurRepository.save(utilisateur);
     }
+
+    // update an utilisateur
+        public void updateUtilisateur(Long id, Utilisateur updatedUtilisateur) {
+        Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
+
+        if (optionalUtilisateur.isEmpty()) {
+            throw new RuntimeException("Utilisateur with id " + id + " not found");
+        }
+
+        Utilisateur existingUtilisateur = optionalUtilisateur.get();
+
+        // Update only the fields you want to allow updating
+        existingUtilisateur.setPrénom(updatedUtilisateur.getPrénom());
+        existingUtilisateur.setNom(updatedUtilisateur.getNom());
+        existingUtilisateur.setEmail(updatedUtilisateur.getEmail());
+        existingUtilisateur.setPassword(updatedUtilisateur.getPassword());
+        existingUtilisateur.setRégimeSpécieux(updatedUtilisateur.getRégimeSpécieux());
+        existingUtilisateur.setModeSportif(updatedUtilisateur.isModeSportif());
+
+        // Save the updated utilisateur
+        utilisateurRepository.save(existingUtilisateur);
+    }
+
     // delete an utilisateur
     public void deleteUtilisateur(Long id) {
         Optional<Utilisateur> tempUtilisateur = utilisateurRepository.findById(id);
