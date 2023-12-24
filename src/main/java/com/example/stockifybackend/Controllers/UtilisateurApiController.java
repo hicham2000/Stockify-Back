@@ -75,7 +75,7 @@ public class UtilisateurApiController {
         try {
             utilisateurService.deleteUtilisateur(id);
         }catch(Exception error){
-            response.put("message", error);
+            response.put("Error", error);
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -91,9 +91,9 @@ public class UtilisateurApiController {
     public ResponseEntity<?> updateUtilisateur(@PathVariable Long id, @RequestBody Utilisateur updatedUtilisateur){
         Map<String, Object> response = new HashMap<>();
         try {
-            utilisateurService.updateUtilisateur(id, updatedUtilisateur);
+            utilisateurService.updateUtilisateurFields(id, updatedUtilisateur);
         }catch(Exception error){
-            response.put("message", error);
+            response.put("Error", error);
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
