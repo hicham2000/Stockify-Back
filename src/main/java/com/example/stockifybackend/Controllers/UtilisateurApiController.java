@@ -47,11 +47,15 @@ public class UtilisateurApiController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> addUtilisateur(@RequestBody Utilisateur utilisateur) {
+        Map<String, Object> response = new HashMap<>();
+
         if (utilisateurService.isUserExists(utilisateur.getEmail())) {
-            return new ResponseEntity<>("Utilisateur with this email already exists!", HttpStatus.BAD_REQUEST);
+            response.put("message", "Utilisateur with this email already exists!");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
         utilisateurService.addUtilisateur(utilisateur);
-        return new ResponseEntity<>("You are registred Successfully!", HttpStatus.OK);
+        response.put("message", "You are registred Successfully!");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @PostMapping("/logout")
     public ResponseEntity<String> logoutUser(HttpServletRequest request) {
