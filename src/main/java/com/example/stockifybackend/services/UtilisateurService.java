@@ -35,6 +35,10 @@ public class UtilisateurService {
         existingUtilisateur.setPassword(updatedUtilisateur.getPassword());
         existingUtilisateur.setRégimeSpécieux(updatedUtilisateur.getRégimeSpécieux());
         existingUtilisateur.setModeSportif(updatedUtilisateur.isModeSportif());
+        existingUtilisateur.setSexe(updatedUtilisateur.getSexe());
+        existingUtilisateur.setTaille(updatedUtilisateur.getTaille());
+        existingUtilisateur.setPoids(updatedUtilisateur.getPoids());
+        existingUtilisateur.setDateDeNaissance(updatedUtilisateur.getDateDeNaissance());
 
         // Save the updated utilisateur
         utilisateurRepository.save(existingUtilisateur);
