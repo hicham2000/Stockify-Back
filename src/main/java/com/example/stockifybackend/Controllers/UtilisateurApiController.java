@@ -64,7 +64,7 @@ public class UtilisateurApiController {
         if (session != null) {
             session.invalidate();
         }
-        response.put("message", "\"User logged out successfully!...\"")
+        response.put("message", "User logged out successfully!...");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -78,7 +78,7 @@ public class UtilisateurApiController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        response.put("message", "User logged out successfully!...");
+        response.put("message", "User Deleted successfully!...");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/Utilisateur/{id}")
