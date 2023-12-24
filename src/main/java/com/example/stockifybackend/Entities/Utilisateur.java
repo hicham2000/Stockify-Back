@@ -28,6 +28,10 @@ public class Utilisateur implements Serializable {
     private Date dateDeNaissance;
     private String régimeSpécieux;
     private boolean modeSportif;
+
+    private long stock_id;
+    private long listeDeCourse_id;
+
     @OneToMany
     @JoinColumn(name = "id")
     private List<PréférenceAlimentaire> préférenceAlimentaires = new ArrayList<>();

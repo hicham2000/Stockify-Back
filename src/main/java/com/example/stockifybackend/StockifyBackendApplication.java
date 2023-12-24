@@ -59,10 +59,10 @@ public class StockifyBackendApplication implements CommandLineRunner {
     }*/
     @Override
     public void run(String... args) throws Exception {
-        ListeCourse c=new ListeCourse();
+        ListeCourse c = new ListeCourse();
        Stock s = new Stock();
         s.setQuantiteCritiqueParDefaut(190);
-        stockRepository.save(s);
+        s = stockRepository.save(s);
 
         Stock s2 = new Stock();
         s2.setQuantiteCritiqueParDefaut(10);
@@ -72,10 +72,13 @@ public class StockifyBackendApplication implements CommandLineRunner {
                 "rifaywassim@gmail.com", "123456@Wassim",
                 "", false);
 
+
+        c = courseRepository.save(c);
+
+        user1.setStock_id(s.getId());
+        user1.setListeDeCourse_id(c.getId());
+
         utilisateurService.addUtilisateur(user1);
-
-        courseRepository.save(c);
-
 
 //        CategorieDeProduits categorieDeProduits = new CategorieDeProduits();
 //        categorieDeProduits.setIntitule("hicham");

@@ -1,6 +1,10 @@
 package com.example.stockifybackend.services;
 
+import com.example.stockifybackend.Entities.ListeCourse;
+import com.example.stockifybackend.Entities.Stock;
 import com.example.stockifybackend.Entities.Utilisateur;
+import com.example.stockifybackend.Repositories.ListeCourseRepository;
+import com.example.stockifybackend.Repositories.StockRepository;
 import com.example.stockifybackend.Repositories.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +21,22 @@ public class UtilisateurService {
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
+    @Autowired
+    private StockRepository stockRepository;
+
+    @Autowired
+    private ListeCourseRepository listeCourseRepository;
+
     // add an utilisateur
     public Utilisateur addUtilisateur(Utilisateur utilisateur) {
+
+        Stock stock = new Stock();
+        stock = stockRepository.save(stock);
+        utilisateur.setStock_id(stock.getId());
+
+        ListeCourse listeCourse = new ListeCourse();
+        listeCourse = listeCourseRepository.save(listeCourse);
+        utilisateur.setListeDeCourse_id(listeCourse.getId());
 
         return utilisateurRepository.save(utilisateur);
     }
