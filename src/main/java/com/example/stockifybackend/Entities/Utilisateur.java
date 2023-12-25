@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,8 +22,16 @@ public class Utilisateur implements Serializable {
     private String nom;
     private String email;
     private String password;
+    private String sexe;
+    private String taille;
+    private String poids;
+    private Date dateDeNaissance;
     private String régimeSpécieux;
     private boolean modeSportif;
+
+    private long stock_id;
+    private long listeDeCourse_id;
+
     @OneToMany
     @JoinColumn(name = "id")
     private List<PréférenceAlimentaire> préférenceAlimentaires = new ArrayList<>();
@@ -31,4 +40,13 @@ public class Utilisateur implements Serializable {
 
     }
 
+    public Utilisateur(Long id, String prénom, String nom, String email, String password, String régimeSpécieux, boolean modeSportif) {
+        this.id = id;
+        this.prénom = prénom;
+        this.nom = nom;
+        this.email = email;
+        this.password = password;
+        this.régimeSpécieux = régimeSpécieux;
+        this.modeSportif = modeSportif;
+    }
 }
