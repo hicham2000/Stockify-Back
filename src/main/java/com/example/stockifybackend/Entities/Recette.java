@@ -24,6 +24,9 @@ public class Recette implements Serializable {
     private List<String> InstructionsDePreparation;
     private String imageUrl;
 
+    @OneToOne
+    private ValeurNutritionnel valeurNutritionnel;
+
     @ManyToOne
     @JoinColumn(name = "categorie_id")
     private CategorieDeRecette categorieDeRecette;
