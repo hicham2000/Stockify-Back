@@ -31,6 +31,9 @@ public class StockifyBackendApplication implements CommandLineRunner {
     private RecetteRepository recetteRepository;
 
     @Autowired
+    private RepasRepository repasRepository;
+
+    @Autowired
     private StockRepository stockRepository;
 
     @Autowired
@@ -182,12 +185,12 @@ public class StockifyBackendApplication implements CommandLineRunner {
         produit.setIntitule("test");
         produit.setStock(s);
         produitRepository.save(produit);
-        //Ajouter Recette avec is_deleted==1 pour tester la corbeille
-        Recette recette = new Recette();
-        recette.setIntitule("RECETTETest");
-        recette.setStock(s);
-        recette.setIs_deleted(1);
-        this.recetteRepository.save(recette);
+        //Ajouter Repas avec is_deleted==1 pour tester la corbeille
+        Repas repas = new Repas();
+        repas.setIntitule("RepasTest");
+        repas.setStock(s);
+        repas.setIs_deleted(1);
+        this.repasRepository.save(repas);
 
 
 

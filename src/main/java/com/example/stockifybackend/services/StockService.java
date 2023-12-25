@@ -3,9 +3,11 @@ package com.example.stockifybackend.services;
 
 import com.example.stockifybackend.Entities.Produit;
 import com.example.stockifybackend.Entities.Recette;
+import com.example.stockifybackend.Entities.Repas;
 import com.example.stockifybackend.Entities.Stock;
 import com.example.stockifybackend.Repositories.ProduitRepository;
 import com.example.stockifybackend.Repositories.RecetteRepository;
+import com.example.stockifybackend.Repositories.RepasRepository;
 import com.example.stockifybackend.Repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class StockService {
 
     @Autowired
     private RecetteRepository recetteRepository;
+
+    @Autowired
+    private RepasRepository repasRepository;
 
 
     public void addRecipeToStock(Long stockId, Recette recette) {
@@ -155,6 +160,9 @@ public class StockService {
 
     public List<Recette> getAllRecipesInStock(Long stockId) {
         return recetteRepository.findAllByStockIdCustomQuery(stockId);
+    }
+    public List<Repas> getAllRecettesInStock(Long stockId) {
+        return repasRepository.findAllRepasByStockIdCustomQuery(stockId);
     }
 
 

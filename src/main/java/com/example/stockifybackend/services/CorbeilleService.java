@@ -2,6 +2,7 @@ package com.example.stockifybackend.services;
 
 import com.example.stockifybackend.Entities.Produit;
 import com.example.stockifybackend.Entities.Recette;
+import com.example.stockifybackend.Entities.Repas;
 import com.example.stockifybackend.Entities.Stock;
 import com.example.stockifybackend.Repositories.ProduitRepository;
 import com.example.stockifybackend.Repositories.RecetteRepository;
@@ -29,10 +30,10 @@ public class CorbeilleService {
         return deletedProducts;
 
     }
-    public  List<Recette> getAllDeletedrecettes(Long id){
-        List<Recette> deletedR = new ArrayList<>();
-        List<Recette> deletedRecettes = stockService.getAllRecipesInStock(id);
-        for(Recette r : deletedRecettes){
+        public  List<Repas> getAllDeletedrecettes(Long id){
+        List<Repas> deletedR = new ArrayList<>();
+        List<Repas> deletedRecettes = stockService.getAllRecettesInStock(id);
+        for(Repas r : deletedRecettes){
             if(r.getIs_deleted() == 1){
                 deletedR.add(r);
             }

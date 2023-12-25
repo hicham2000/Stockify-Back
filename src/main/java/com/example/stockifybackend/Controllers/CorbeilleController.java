@@ -2,6 +2,7 @@ package com.example.stockifybackend.Controllers;
 
 import com.example.stockifybackend.Entities.Produit;
 import com.example.stockifybackend.Entities.Recette;
+import com.example.stockifybackend.Entities.Repas;
 import com.example.stockifybackend.services.CorbeilleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,9 +22,9 @@ public class CorbeilleController {
         List<Produit> DeletedProduits= corbeilleService.getAllDeletedProducts(Id);
         return DeletedProduits;
     }
-    @GetMapping("/deletedRecette/{Id}")
-    public List<Recette> getDeletedRecettes(@PathVariable Long Id) {
-        List<Recette> DeletedRecettes= corbeilleService.getAllDeletedrecettes(Id);
+    @GetMapping("/deletedRecipe/{Id}")
+    public List<Repas> getDeletedRecipes(@PathVariable Long Id) {
+        List<Repas> DeletedRecettes= corbeilleService.getAllDeletedrecettes(Id);
         return DeletedRecettes;
     }
 
