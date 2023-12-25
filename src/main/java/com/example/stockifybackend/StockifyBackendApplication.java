@@ -45,6 +45,8 @@ public class StockifyBackendApplication implements CommandLineRunner {
     @Autowired
     private UtilisateurService utilisateurService;
 
+
+
     public static void main(String[] args) {
 
         SpringApplication.run(StockifyBackendApplication.class, args);
@@ -79,6 +81,52 @@ public class StockifyBackendApplication implements CommandLineRunner {
         user1.setListeDeCourse_id(c.getId());
 
         utilisateurService.addUtilisateur(user1);
+
+
+        courseRepository.save(c);
+
+
+        String[] products = {
+                "Nutella",
+                "Kellogg's Corn Flakes",
+                "Coca-Cola",
+                "Oreo Cookies",
+                "Heinz Ketchup",
+                "Nestlé KitKat",
+                "Pringles",
+                "Bounty Chocolate Bar",
+                "Cadbury Dairy Milk",
+                "McCormick Spices",
+                "Lay's Potato Chips",
+                "Pepsi",
+                "Campbell's Tomato Soup",
+                "Hershey's Chocolate",
+                "Quaker Oats",
+                "Ferrero Rocher",
+                "M&M's",
+                "Doritos",
+                "Jif Peanut Butter",
+                "Snickers Chocolate Bar"
+        };
+
+        for(int i=0 ; i < 20 ; i++ ){
+            Produit p = new Produit();
+            p.setIntitule(products[i]);
+            p.setStock(s);
+            p.setQuantite(10);
+            p.setUniteDeMesure("KG");
+            produitRepository.save(p);
+        }
+
+        String [] categories = {"Refrigerateur","Congelateur","garde-manger"};
+
+        for (int i = 0; i<categories.length ; i++){
+            CategorieDeProduits ct = new CategorieDeProduits();
+            ct.setIntitule(categories[i]);
+            categorieDeProduitsRepository.save(ct);
+        }
+
+
 
 //        CategorieDeProduits categorieDeProduits = new CategorieDeProduits();
 //        categorieDeProduits.setIntitule("hicham");
