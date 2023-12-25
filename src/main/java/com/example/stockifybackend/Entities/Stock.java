@@ -31,5 +31,7 @@ public class Stock implements Serializable {
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
     private List<Produit> produit = new ArrayList<>();
 
+
+
 }
 

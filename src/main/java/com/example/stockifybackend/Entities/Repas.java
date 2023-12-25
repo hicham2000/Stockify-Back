@@ -27,9 +27,8 @@ public class Repas implements Serializable {
     private Date datePeremtion;
     private Date dateAlert;
 
-    @ManyToOne
-    @JoinColumn(name = "categorieDeProduits_id")
-    private CategorieDeProduits categories;
+
+    private String categories;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @ManyToOne
@@ -41,4 +40,6 @@ public class Repas implements Serializable {
     public List<Ingredient> ingredients;
 
     private int is_deleted = 0;
+
+
 }
