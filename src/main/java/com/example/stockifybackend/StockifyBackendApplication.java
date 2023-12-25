@@ -173,6 +173,21 @@ public class StockifyBackendApplication implements CommandLineRunner {
       //  courseService.initProduit();
       //  courseService.initCourse();
 
+        //Ajouter Produit avec is_deleted==1 pour tester la corbeille
+
+        Produit produit=new Produit();
+        produit.setIs_deleted(1);
+        produit.setQuantite(10);
+        produit.setUniteDeMesure("KG");
+        produit.setIntitule("test");
+        produit.setStock(s);
+        produitRepository.save(produit);
+        //Ajouter Recette avec is_deleted==1 pour tester la corbeille
+        Recette recette = new Recette();
+        recette.setIntitule("RECETTETest");
+        recette.setStock(s);
+        recette.setIs_deleted(1);
+        this.recetteRepository.save(recette);
 
 
 
