@@ -1,5 +1,7 @@
 package com.example.stockifybackend.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +23,12 @@ public class Ingredient implements Serializable {
     private String intitule;
     @ManyToOne
     private Recette recette;
+
+    private Double quantity;
+
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @ManyToOne
+    @JoinColumn(name = "repas_id")
+    private Repas repas;
 
 }

@@ -1,7 +1,6 @@
 package com.example.stockifybackend.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -18,18 +17,28 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Stock implements Serializable {
+public class Repas implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int quantiteCritiqueParDefaut;
-    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
-    public List<Recette> recette;
+    private String intitule;
 
-    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
-    private List<Produit> produit = new ArrayList<>();
+    private Date datePeremtion;
+    private Date dateAlert;
 
+    @ManyToOne
+    @JoinColumn(name = "categorieDeProduits_id")
+    private CategorieDeProduits categories;
+
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @ManyToOne
+    @JoinColumn(name = "stock_id")
+    private Stock stock;
+
+    @OneToMany
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+    public List<Ingredient> ingredients;
+
+    private int is_deleted = 0;
 }
-
