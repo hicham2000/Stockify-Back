@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/produits")
+@RequestMapping("/global")
 public class ProduitGlobaleController {
 
     private final ProduitGlobaleService produitGlobaleService;
@@ -20,22 +20,22 @@ public class ProduitGlobaleController {
     }
 
     @GetMapping
-    public List<ProduitGlobale> getAllProduits() {
-        return produitGlobaleService.getAllProduits();
+    public List<ProduitGlobale> getAllGlobals() {
+        return produitGlobaleService.getAllGlobals();
     }
 
     @GetMapping("/{id}")
-    public Optional<ProduitGlobale> getProduitById(@PathVariable Long id) {
-        return produitGlobaleService.getProduitById(id);
+    public Optional<ProduitGlobale> getGlobalById(@PathVariable Long id) {
+        return produitGlobaleService.getGlobalById(id);
     }
 
     @PostMapping
-    public ProduitGlobale saveProduit(@RequestBody ProduitGlobale produitGlobale) {
-        return produitGlobaleService.saveProduit(produitGlobale);
+    public ProduitGlobale updateGlobal(@RequestBody ProduitGlobale produitGlobale) {
+        return produitGlobaleService.saveGlobal(produitGlobale);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduit(@PathVariable Long id) {
-        produitGlobaleService.deleteProduit(id);
+    public void deleteGlobal(@PathVariable Long id) {
+        produitGlobaleService.deleteGlobal(id);
     }
 }

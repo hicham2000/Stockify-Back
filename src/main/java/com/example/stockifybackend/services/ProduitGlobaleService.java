@@ -18,19 +18,19 @@ public class ProduitGlobaleService {
         this.produitGlobaleRepository = produitGlobaleRepository;
     }
 
-    public List<ProduitGlobale> getAllProduits() {
+    public List<ProduitGlobale> getAllGlobals() {
         return produitGlobaleRepository.findAll();
     }
 
-    public Optional<ProduitGlobale> getProduitById(Long id) {
+    public Optional<ProduitGlobale> getGlobalById(Long id) {
         return produitGlobaleRepository.findById(id);
     }
 
-    public ProduitGlobale saveProduit(ProduitGlobale produitGlobale) {
+    public ProduitGlobale saveGlobal(ProduitGlobale produitGlobale) {
         return produitGlobaleRepository.save(produitGlobale);
     }
 
-    public void deleteProduit(Long id) {
+    public void deleteGlobal(Long id) {
         produitGlobaleRepository.deleteById(id);
     }
 }
