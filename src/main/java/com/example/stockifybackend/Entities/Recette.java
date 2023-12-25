@@ -19,25 +19,32 @@ public class Recette implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String intitule;
-    private String desctipion;
+    private String description;
     private int dureeTotal;
+    private List<String> InstructionsDePreparation;
+    private String imageUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "categorie_id")
+    private CategorieDeRecette categorieDeRecette;
+
     @ManyToOne
     @JoinColumn(name = "stock_id")
     private Stock stock;
     @OneToMany(mappedBy = "recette", cascade = CascadeType.ALL)
-    public List<Ingredient> ingredient;
+    public List<Ingredient> ingredients;
     @ManyToOne
     @JoinColumn(name = "recommendation_id")
     private Recommendation recommendation;
 
     private int is_deleted = 0;
 
-    public Recette(String intitule, String desctipion, int dureeTotal, Stock stock, List<Ingredient> ingredient, Recommendation recommendation, int is_deleted) {
+    public Recette(String intitule, String description, int dureeTotal, Stock stock, List<Ingredient> ingredient, Recommendation recommendation, int is_deleted) {
         this.intitule = intitule;
-        this.desctipion = desctipion;
+        this.description = description;
         this.dureeTotal = dureeTotal;
         this.stock = stock;
-        this.ingredient = ingredient;
+        this.ingredients = ingredient;
         this.recommendation = recommendation;
         this.is_deleted = is_deleted;
     }
