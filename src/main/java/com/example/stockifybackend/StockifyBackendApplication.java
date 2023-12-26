@@ -4,16 +4,34 @@ import com.example.stockifybackend.Entities.*;
 import com.example.stockifybackend.Repositories.*;
 import com.example.stockifybackend.services.CourseService;
 import com.example.stockifybackend.services.UtilisateurService;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+import java.io.IOException;
 import java.util.stream.Stream;
 
 @SpringBootApplication
+@EnableScheduling
+@ComponentScan("com.example.stockifybackend")
 public class StockifyBackendApplication implements CommandLineRunner {
+    @Bean
+    FirebaseMessaging firebaseMessaging() throws IOException {
+        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(
+                new ClassPathResource("stockify-9ed7f-firebase-adminsdk-3437r-aff5bf54fd.json").getInputStream());
+        FirebaseOptions firebaseOptions = FirebaseOptions.builder().setCredentials(googleCredentials).build();
+        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions,"stockify");
+        return  FirebaseMessaging.getInstance(app);
+    }
 
     @Autowired
     private ProduitRepository produitRepository ;
