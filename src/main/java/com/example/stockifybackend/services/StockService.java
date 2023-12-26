@@ -152,6 +152,7 @@ public class StockService {
         }
     }
 
+
     public List<Produit> getAllProductsInStock(Long stockId) {
         return produitRepository.findAllByStockIdCustomQuery(stockId);
 
