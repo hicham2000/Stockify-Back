@@ -24,13 +24,17 @@ public class Stock implements Serializable {
     private Long id;
     private int quantiteCritiqueParDefaut;
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
-    public List<Recette> recette;
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+    public List<Recette> recette;
+
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
     private List<Produit> produit = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private Utilisateur utilisateur;
+
 }
 

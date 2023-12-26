@@ -49,6 +49,9 @@ public class StockifyBackendApplication implements CommandLineRunner {
     private RecetteRepository recetteRepository;
 
     @Autowired
+    private RepasRepository repasRepository;
+
+    @Autowired
     private StockRepository stockRepository;
 
     @Autowired
@@ -62,6 +65,8 @@ public class StockifyBackendApplication implements CommandLineRunner {
 
     @Autowired
     private UtilisateurService utilisateurService;
+
+
 
     public static void main(String[] args) {
 
@@ -77,10 +82,10 @@ public class StockifyBackendApplication implements CommandLineRunner {
     }*/
     @Override
     public void run(String... args) throws Exception {
-        ListeCourse c=new ListeCourse();
+        ListeCourse c = new ListeCourse();
        Stock s = new Stock();
         s.setQuantiteCritiqueParDefaut(190);
-        stockRepository.save(s);
+        s = stockRepository.save(s);
 
         Stock s2 = new Stock();
         s2.setQuantiteCritiqueParDefaut(10);
@@ -90,9 +95,58 @@ public class StockifyBackendApplication implements CommandLineRunner {
                 "rifaywassim@gmail.com", "123456@Wassim",
                 "", false);
 
+
+        c = courseRepository.save(c);
+
+        user1.setStock_id(s.getId());
+        user1.setListeDeCourse_id(c.getId());
+
         utilisateurService.addUtilisateur(user1);
 
+
         courseRepository.save(c);
+
+
+        String[] products = {
+                "Nutella",
+                "Kellogg's Corn Flakes",
+                "Coca-Cola",
+                "Oreo Cookies",
+                "Heinz Ketchup",
+                "Nestlé KitKat",
+                "Pringles",
+                "Bounty Chocolate Bar",
+                "Cadbury Dairy Milk",
+                "McCormick Spices",
+                "Lay's Potato Chips",
+                "Pepsi",
+                "Campbell's Tomato Soup",
+                "Hershey's Chocolate",
+                "Quaker Oats",
+                "Ferrero Rocher",
+                "M&M's",
+                "Doritos",
+                "Jif Peanut Butter",
+                "Snickers Chocolate Bar"
+        };
+
+        for(int i=0 ; i < 20 ; i++ ){
+            Produit p = new Produit();
+            p.setIntitule(products[i]);
+            p.setStock(s);
+            p.setQuantite(10);
+            p.setUniteDeMesure("KG");
+            produitRepository.save(p);
+        }
+
+        String [] categories = {"Refrigerateur","Congelateur","garde-manger"};
+
+        for (int i = 0; i<categories.length ; i++){
+            CategorieDeProduits ct = new CategorieDeProduits();
+            ct.setIntitule(categories[i]);
+            categorieDeProduitsRepository.save(ct);
+        }
+
 
 
 //        CategorieDeProduits categorieDeProduits = new CategorieDeProduits();
@@ -140,6 +194,21 @@ public class StockifyBackendApplication implements CommandLineRunner {
       //  courseService.initProduit();
       //  courseService.initCourse();
 
+        //Ajouter Produit avec is_deleted==1 pour tester la corbeille
+
+        Produit produit=new Produit();
+        produit.setIs_deleted(1);
+        produit.setQuantite(10);
+        produit.setUniteDeMesure("KG");
+        produit.setIntitule("test");
+        produit.setStock(s);
+        produitRepository.save(produit);
+        //Ajouter Repas avec is_deleted==1 pour tester la corbeille
+        Repas repas = new Repas();
+        repas.setIntitule("RepasTest");
+        repas.setStock(s);
+        repas.setIs_deleted(1);
+        this.repasRepository.save(repas);
 
 
 

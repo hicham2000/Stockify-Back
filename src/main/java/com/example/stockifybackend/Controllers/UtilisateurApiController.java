@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,8 @@ public class UtilisateurApiController {
             if (utilisateur.getPassword().equals(logingUtilisateur.getPassword())) {
                 response.put("message", "Login successfully :)");
                 response.put("user_id", utilisateur.getId());
+                response.put("stock_id", utilisateur.getStock_id());
+                response.put("listeDeCourse_id", utilisateur.getListeDeCourse_id());
 
                 return new ResponseEntity<>(response, HttpStatus.OK);
             }
@@ -53,6 +56,8 @@ public class UtilisateurApiController {
             response.put("message", "Utilisateur with this email already exists!");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
+
+
         utilisateurService.addUtilisateur(utilisateur);
         response.put("message", "You are registred Successfully!");
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -74,7 +79,7 @@ public class UtilisateurApiController {
         try {
             utilisateurService.deleteUtilisateur(id);
         }catch(Exception error){
-            response.put("message", error);
+            response.put("Error", error);
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -90,9 +95,9 @@ public class UtilisateurApiController {
     public ResponseEntity<?> updateUtilisateur(@PathVariable Long id, @RequestBody Utilisateur updatedUtilisateur){
         Map<String, Object> response = new HashMap<>();
         try {
-            utilisateurService.updateUtilisateur(id, updatedUtilisateur);
+            utilisateurService.updateUtilisateurFields(id, updatedUtilisateur);
         }catch(Exception error){
-            response.put("message", error);
+            response.put("Error", error);
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

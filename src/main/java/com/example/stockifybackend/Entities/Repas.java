@@ -9,19 +9,37 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
-@Data @AllArgsConstructor @NoArgsConstructor @ToString
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class Repas implements Serializable {
 
-public class ListeCourse implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany(mappedBy = "listeCourse")
+    private String intitule;
+
+    private Date datePeremtion;
+    private Date dateAlert;
+
+
+    private String categories;
+
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @ManyToOne
+    @JoinColumn(name = "stock_id")
+    private Stock stock;
+
+    @OneToMany
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
-    public List<ProduitAAcheter> produit = new ArrayList<>();;
+    public List<Ingredient> ingredients;
+
+    private int is_deleted = 0;
 
 
 }
