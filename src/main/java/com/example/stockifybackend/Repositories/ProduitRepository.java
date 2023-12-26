@@ -11,7 +11,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface ProduitRepository extends JpaRepository<Produit, Long> {
-    @Query("SELECT p FROM Produit p WHERE p.stock.id = :stockId")
+    @Query("SELECT p FROM Produit p WHERE p.stock.id = :stockId and p.is_deleted = 0")
     List<Produit> findAllByStockIdCustomQuery(Long stockId);
 
     @Query("SELECT p FROM Produit p WHERE p.stock.id = :stockId AND p.is_deleted = 1")
