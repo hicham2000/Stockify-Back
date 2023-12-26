@@ -74,7 +74,7 @@ public class StockService {
                 if (recette.getId().equals(recipeId)) {
 
                     recette.setIntitule(updatedRecette.getIntitule());
-                    recette.setDesctipion(updatedRecette.getDesctipion());
+                    recette.setDescription(updatedRecette.getDescription());
                     recette.setDureeTotal(updatedRecette.getDureeTotal());
                     recette.setRecommendation(updatedRecette.getRecommendation());
 

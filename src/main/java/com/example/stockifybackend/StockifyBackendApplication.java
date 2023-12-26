@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.Date;
 import java.util.stream.Stream;
 
 @SpringBootApplication
@@ -76,6 +77,12 @@ public class StockifyBackendApplication implements CommandLineRunner {
                 "wassim","rifay",
                 "rifaywassim@gmail.com", "123456@Wassim",
                 "", false);
+
+        user1.setSexe("Homme");
+        user1.setTaille("179");
+        user1.setPoids("62");
+        Date dateDeNaissance = new Date(2001, 12, 9);
+        user1.setDateDeNaissance(dateDeNaissance);
 
 
         c = courseRepository.save(c);
