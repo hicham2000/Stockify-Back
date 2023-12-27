@@ -12,6 +12,7 @@ import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,9 +32,11 @@ public class Produit implements Serializable{
     private String brande;
     private String uniteDeMesure;
     @JsonFormat(pattern="yyyy.MM.dd")
-    private Date dateExpiration;
+    @DateTimeFormat(pattern = "yyyy.MM.dd")
+    private LocalDate dateExpiration;
     @JsonFormat(pattern="yyyy.MM.dd")
-    private Date dateAlerte;
+    @DateTimeFormat(pattern = "yyyy.MM.dd")
+    private LocalDate dateAlerte;
     private double quantite;
     private double prix;
     private double quantiteCritique;
@@ -61,7 +64,7 @@ public class Produit implements Serializable{
     private int is_deleted = 0;
 
 
-    public Produit(String intitule, String description, String brande, String uniteDeMesure, Date dateExpiration,
+    public Produit(String intitule, String description, String brande, String uniteDeMesure, LocalDate dateExpiration, LocalDate dateAlerte,
                    double quantite, double prix, double quantiteCritique, ValeurNutritionnel valeurNutritionnel,
                    CategorieDeProduits categories, Stock stock, Depense depense, Recommendation recommendation) {
         this.intitule = intitule;
