@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 
 @SpringBootApplication
 @EnableScheduling
-@ComponentScan("com.example.stockifybackend")
 public class StockifyBackendApplication implements CommandLineRunner {
     @Bean
     FirebaseMessaging firebaseMessaging() throws IOException {

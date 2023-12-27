@@ -130,10 +130,10 @@ public class StockService {
                 if (produit.getId().equals(productId)) {
 
                     produit.setIntitule(updatedProduit.getIntitule());
-                    produit.setDescription(updatedProduit.getDescription());
                     produit.setBrande(updatedProduit.getBrande());
                     produit.setUniteDeMesure(updatedProduit.getUniteDeMesure());
                     produit.setDateExpiration(updatedProduit.getDateExpiration());
+                    produit.setDateAlerte(updatedProduit.getDateAlerte());
                     produit.setQuantite(updatedProduit.getQuantite());
                     produit.setPrix(updatedProduit.getPrix());
                     produit.setQuantiteCritique(updatedProduit.getQuantiteCritique());

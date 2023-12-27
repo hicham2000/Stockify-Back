@@ -1,4 +1,5 @@
 package com.example.stockifybackend.Entities;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,11 +28,12 @@ public class Produit implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String intitule;
-    private String description;
     private String brande;
     private String uniteDeMesure;
+    @JsonFormat(pattern="yyyy.MM.dd")
     private Date dateExpiration;
-
+    @JsonFormat(pattern="yyyy.MM.dd")
+    private Date dateAlerte;
     private double quantite;
     private double prix;
     private double quantiteCritique;
@@ -62,10 +65,10 @@ public class Produit implements Serializable{
                    double quantite, double prix, double quantiteCritique, ValeurNutritionnel valeurNutritionnel,
                    CategorieDeProduits categories, Stock stock, Depense depense, Recommendation recommendation) {
         this.intitule = intitule;
-        this.description = description;
         this.brande = brande;
         this.uniteDeMesure = uniteDeMesure;
         this.dateExpiration = dateExpiration;
+        this.dateAlerte = dateAlerte;
         this.quantite = quantite;
         this.prix = prix;
         this.quantiteCritique = quantiteCritique;
