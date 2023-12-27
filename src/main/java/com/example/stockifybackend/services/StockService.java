@@ -152,10 +152,12 @@ public class StockService {
         }
     }
 
+
     public List<Produit> getAllProductsInStock(Long stockId) {
         return produitRepository.findAllByStockIdCustomQuery(stockId);
-
-
+    }
+    public List<Produit> getAllDeletedProductsInStock(Long stockId) {
+        return produitRepository.findAllDeletedProductsInStock(stockId);
     }
 
     public List<Recette> getAllRecipesInStock(Long stockId) {

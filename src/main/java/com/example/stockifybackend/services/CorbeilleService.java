@@ -1,9 +1,6 @@
 package com.example.stockifybackend.services;
 
-import com.example.stockifybackend.Entities.Produit;
-import com.example.stockifybackend.Entities.Recette;
-import com.example.stockifybackend.Entities.Repas;
-import com.example.stockifybackend.Entities.Stock;
+import com.example.stockifybackend.Entities.*;
 import com.example.stockifybackend.Repositories.ProduitRepository;
 import com.example.stockifybackend.Repositories.RecetteRepository;
 import com.example.stockifybackend.Repositories.StockRepository;
@@ -11,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,9 +17,15 @@ public class CorbeilleService {
    @Autowired
    private StockService stockService;
 
+   @Autowired
+   private ProduitRepository produitRepository;
+   private StockRepository stockRepository;
+
+
+
     public  List<Produit> getAllDeletedProducts(Long id){
         List<Produit> deletedProducts = new ArrayList<>();
-        List<Produit> produit = stockService.getAllProductsInStock(id);
+        List<Produit> produit = stockService.getAllDeletedProductsInStock(id);
         for(Produit p : produit){
             if(p.getIs_deleted() == 1){
                 deletedProducts.add(p);
@@ -40,6 +44,31 @@ public class CorbeilleService {
         }
         return deletedR;
 
+    }
+
+    public void recupererProductInStcok(Long stockId, Long productId){
+        Optional<Produit> produitOptional = produitRepository.findById(productId);
+        if (produitOptional.isPresent()) {
+            Produit productUpdate = produitOptional.get();
+            productUpdate.setIs_deleted(0);
+            stockService.updateProduct(stockId, productId, productUpdate);
+        }
+
+    }
+    public void supprimerDefProductFromStcok(Long stockId, Long productId){
+
+            stockService.deleteProductFromStock(stockId, productId);
+    }
+
+    public String  deleteAllDeletedProductsInStock(Long stockId) {
+        List<Produit> deletedProducts = produitRepository.findAllDeletedProductsInStock(stockId);
+
+        if (!deletedProducts.isEmpty()) {
+            produitRepository.deleteAllDeletedProductsInStock(stockId);
+            return "Deleted " + deletedProducts.size() + " products in stock with id " + stockId;
+        } else {
+            return "No products with is_deleted=1 found in stock with id " + stockId;
+        }
     }
 
 }
