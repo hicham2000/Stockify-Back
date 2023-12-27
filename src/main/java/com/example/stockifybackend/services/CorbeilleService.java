@@ -25,7 +25,7 @@ public class CorbeilleService {
 
     public  List<Produit> getAllDeletedProducts(Long id){
         List<Produit> deletedProducts = new ArrayList<>();
-        List<Produit> produit = stockService.getAllProductsInStock(id);
+        List<Produit> produit = stockService.getAllDeletedProductsInStock(id);
         for(Produit p : produit){
             if(p.getIs_deleted() == 1){
                 deletedProducts.add(p);
