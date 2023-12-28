@@ -32,6 +32,26 @@ public class StockService {
     @Autowired
     private RepasRepository repasRepository;
 
+    public Stock getStock(long stockId){
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+        if (optionalStock.isPresent()) {
+            return optionalStock.get();
+        } else {
+            throw new RuntimeException("Stock with id " + stockId + " does not exist in this stock");
+        }
+    }
+
+    public void updateQuantiteCritiqueParDefaut(Long stockId, int nouveauQuantiteCritiqueParDefaut) {
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            stock.setQuantiteCritiqueParDefaut(nouveauQuantiteCritiqueParDefaut);
+            stockRepository.save(stock);
+        } else {
+            throw new RuntimeException("Stock with id " + stockId + " does not exist in this stock");
+        }
+    }
+
 
     public void addRecipeToStock(Long stockId, Recette recette) {
         Optional<Stock> optionalStock = stockRepository.findById(stockId);
@@ -76,7 +96,6 @@ public class StockService {
                     recette.setIntitule(updatedRecette.getIntitule());
                     recette.setDescription(updatedRecette.getDescription());
                     recette.setDureeTotal(updatedRecette.getDureeTotal());
-                    recette.setRecommendation(updatedRecette.getRecommendation());
 
                     recetteRepository.save(recette);
                     return;

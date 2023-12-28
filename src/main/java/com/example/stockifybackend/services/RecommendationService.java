@@ -1,38 +1,29 @@
 package com.example.stockifybackend.services;
 
-import com.example.stockifybackend.Entities.Ingredient;
-import com.example.stockifybackend.Entities.Recette;
-import com.example.stockifybackend.Entities.Recommendation;
-import com.example.stockifybackend.Entities.Utilisateur;
+import com.example.stockifybackend.Entities.*;
 import com.example.stockifybackend.Repositories.RecetteRepository;
-import com.example.stockifybackend.Repositories.RecommendationRepository;
 import com.example.stockifybackend.Repositories.UtilisateurRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 @Service
 public class RecommendationService {
-
-    private final RecommendationRepository recommendationRepository;
 
     private final UtilisateurRepository utilisateurRepository;
 
@@ -42,26 +33,9 @@ public class RecommendationService {
     private String recommendationSystemUrl;
 
     @Autowired
-    public RecommendationService(RecommendationRepository recommendationRepository, UtilisateurRepository utilisateurRepository, RecetteRepository recetteRepository) {
-        this.recommendationRepository = recommendationRepository;
+    public RecommendationService(UtilisateurRepository utilisateurRepository, RecetteRepository recetteRepository) {
         this.utilisateurRepository = utilisateurRepository;
         this.recetteRepository = recetteRepository;
-    }
-
-    public List<Recommendation> getAllRecommendations() {
-        return recommendationRepository.findAll();
-    }
-
-    public Optional<Recommendation> getRecommendationById(Long id) {
-        return recommendationRepository.findById(id);
-    }
-
-    public Recommendation saveRecommendation(Recommendation recommendation) {
-        return recommendationRepository.save(recommendation);
-    }
-
-    public void deleteRecommendation(Long id) {
-        recommendationRepository.deleteById(id);
     }
 
 // ...
@@ -129,13 +103,12 @@ public class RecommendationService {
 
                 // Extraire les informations de la recette et créer un objet Recette
                 Long recetteId = recetteObject.getLong("Recipe_Id");
-                Recette recette = new Recette(); recette.setId(recetteId);
-                recommendedRecettes.add(recette);
-                /*Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
+                Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
 
                  if (optionalRecette.isPresent()) {
-                    recommendedRecettes.add(optionalRecette.get());
-                 }*/
+                    Recette recette = optionalRecette.get();
+                    recommendedRecettes.add(recette);
+                 }
             }
 
             return recommendedRecettes;
@@ -177,40 +150,13 @@ public class RecommendationService {
     }
 
 
-    private int extractMinutesFromTimeString(String timeString) {
-        // Vérifier si la chaîne est non nulle et non vide
-        if (timeString != null && !timeString.isEmpty()) {
-            // Séparer la partie numérique de la chaîne
-            String[] parts = timeString.split("\\s+");
-
-            // Vérifier s'il y a deux parties (ex. "45 min")
-            if (parts.length == 2) {
-                try {
-                    // Extraire le nombre de la première partie
-                    int minutes = Integer.parseInt(parts[0]);
-
-                    // Vérifier si la deuxième partie contient "min"
-                    if ("min".equalsIgnoreCase(parts[1])) {
-                        return minutes;
-                    }
-                } catch (NumberFormatException e) {
-                    // Gérer l'exception si la conversion en entier échoue
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        // Retourner une valeur par défaut si la chaîne ne correspond pas au format attendu
-        return -1;
-    }
-
-    private boolean hasPreferredIngredients(JSONObject recetteObject, List<String> preferredIngredients) throws JSONException {
+    private boolean hasPreferredIngredients(Recette recette, List<String> preferredIngredients) throws JSONException {
         // Vérifier si la recette contient tous les ingrédients préférés
-        JSONArray ingrédientsArray = recetteObject.getJSONArray("RecipeIngredients");
+        List<Ingredient> ingrédients = recette.getIngredients();
 
-        for (int j = 0; j < ingrédientsArray.length(); j++) {
-            String ingrédient = ingrédientsArray.getString(j);
-            if (!preferredIngredients.contains(ingrédient)) {
+        for (Ingredient ingrédient: ingrédients) {
+            String ingrédientName = ingrédient.getIntitule();
+            if (!preferredIngredients.contains(ingrédientName)) {
                 return false;
             }
         }
@@ -280,30 +226,26 @@ public class RecommendationService {
             for (int i = 0; i < recettesArray.length(); i++) {
                 JSONObject recetteObject = recettesArray.getJSONObject(i);
 
-                int totalTimeMinutes = extractMinutesFromTimeString((String) recetteObject.get("TotalTime"));
+                Long recetteId = recetteObject.getLong("Recipe_Id");
 
-                /*Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
+                Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
 
                 if (optionalRecette.isPresent()) {
                     Recette recette = optionalRecette.get();
-                    recommendedRecettes.add(recette);
 
-                }*/
+                    int totalTimeMinutes = recette.getDureeTotal();
+                    String categorieDeRecette = recette.getCategorieDeRecette().getIntitule();
 
-                //if (recette.get("categorieDeRecette").equals(régimeSpéciale) &&
-                if(totalTimeMinutes <= Integer.parseInt(tempsDePreparation) && hasPreferredIngredients(recetteObject, nomsDesIngrédientPréféres))
-                {
-                    // Extraire les informations de la recette et créer un objet Recette
-                    Long recetteId = recetteObject.getLong("Recipe_Id");
-                    String recetteName = recetteObject.getString("Recipe_Name");
-                    Recette recette = new Recette();
-                    recette.setId(recetteId);
-                    recette.setIntitule(recetteName);
-                    recette.setDureeTotal(totalTimeMinutes);
-                    recommendedRecettes.add(recette);
-
+                    if (categorieDeRecette.equals(régimeSpéciale) &&
+                            totalTimeMinutes <= Integer.parseInt(tempsDePreparation) &&
+                            hasPreferredIngredients(recette, nomsDesIngrédientPréféres))
+                    {
+                        recommendedRecettes.add(recette);
                     }
+
                 }
+
+            }
 
             return recommendedRecettes;
         }
@@ -312,28 +254,46 @@ public class RecommendationService {
     }
 
 
-    public List<Recette> getRecettesSimilaires(long reccette_id) throws JSONException {
+    public List<Recette> getRecettesSimilaires(long recette_id) throws JSONException {
+        Logger logger = LoggerFactory.getLogger(getClass());
         String url = recommendationSystemUrl + "/Recipe_suggestions/";
 
-        /*Optional<Recette> optionalRecette = recetteRepository.findById(reccette_id);
+        Optional<Recette> optionalRecette = recetteRepository.findById(recette_id);
 
         if (optionalRecette.isEmpty()) {
-            throw new RuntimeException("Reccette with id " + reccette_id + " not found");
+            throw new RuntimeException("Reccette with id " + recette_id + " not found");
         }
 
         Recette existingRecette = optionalRecette.get();
 
         List<String> ingrédientsNames = new ArrayList<>();
 
+        int count =0;
         for (Ingredient ingrédient : existingRecette.getIngredients()) {
-            ingrédientsNames.add(ingrédient.getIntitule());
-        }*/
+            if(count == 2){
+                break;
+            }
+            ingrédientsNames.add("\"" +ingrédient.getIntitule() + "\"");
+            count++;
+        }
 
-        List<String> ingrédientsNames = new ArrayList<>(List.of("\"Egg\"", "\"Tomato\""));
+        ValeurNutritionnel recetteValeurNutritionnel = existingRecette.getValeurNutritionnel();
+
+        List<Double> valeurNutritionnnelValues = new ArrayList<>(List.of(
+                recetteValeurNutritionnel.getEnegie(),      //Calories
+                recetteValeurNutritionnel.getLipide(),      //FatContent
+                0.0,                                          //SaturatedFatContent
+                0.0,                                          //CholesterolContent
+                0.0,                                          //SodiumContent
+                recetteValeurNutritionnel.getCarbohydrate(),//CarbohydrateContent
+                recetteValeurNutritionnel.getFibre(),       //FiberContent
+                recetteValeurNutritionnel.getSucre(),       //SugarContent
+                recetteValeurNutritionnel.getProteine()     //ProteinContent
+                ));
 
         // Construire la chaîne JSON directement
         String requestJson = "{" +
-                "\"nutrition_input\": [500, 50, 0, 0, 400, 100, 10, 10, 10]," +
+                "\"nutrition_input\": "+ valeurNutritionnnelValues + "," +
                 "\"number_of_recommendations\": 3, " +
                 "\"ingredients\": " + ingrédientsNames +
                 "}";
@@ -343,21 +303,26 @@ public class RecommendationService {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONArray recettesArray = jsonResponse.getJSONArray("output");
 
+            //System.out.println("recettesArray  => " + recettesArray);
+            logger.debug("recettesArray  => {}", recettesArray);
+
             List<Recette> similarRecettes = new ArrayList<>();
 
             for (int i = 0; i < recettesArray.length(); i++) {
-                /*Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
-
-                 if (optionalRecette.isPresent()) {
-                    recommendedRecettes.add(optionalRecette.get());
-                 }*/
 
                 JSONObject recetteObject = recettesArray.getJSONObject(i);
 
                 // Extraire les informations de la recette et créer un objet Recette
                 Long recetteId = recetteObject.getLong("Recipe_Id");
-                Recette recette = new Recette(); recette.setId(recetteId);
-                similarRecettes.add(recette);
+
+                optionalRecette = recetteRepository.findById(recetteId);
+
+                if (optionalRecette.isPresent()) {
+                    Recette recette = optionalRecette.get();
+                    logger.debug("recette {}: => {}", i, recette);
+                    //System.out.println("recette "+i+": => "+ recette);
+                    similarRecettes.add(recette);
+                }
             }
 
             return similarRecettes;

@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -78,13 +80,21 @@ public class StockController {
 
     @GetMapping("/{stockId}")
     public Stock getStockById(@PathVariable Long stockId) {
-        Optional<Stock> stockOptional = stockRepository.findById(stockId);
+        return stockService.getStock(stockId);
+    }
 
-
-        if (stockOptional.isPresent()) {
-            return stockOptional.get();
-        } else {
-            return null;
+    @PutMapping("/{stockId}/{newQuantiteCritiqueParDefault}")
+    public ResponseEntity<?> updateQuantiteCritiqueParDefaut(@PathVariable Long stockId, @PathVariable int newQuantiteCritiqueParDefault){
+        Map<String, Object> response = new HashMap<>();
+        try{
+            stockService.updateQuantiteCritiqueParDefaut(stockId, newQuantiteCritiqueParDefault);
+        }catch(Exception error){
+            response.put("Error", error);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        response.put("message", "QuantiteCritiqueParDefault du stock with stock_id="+stockId+" updated successfully!...");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 }
