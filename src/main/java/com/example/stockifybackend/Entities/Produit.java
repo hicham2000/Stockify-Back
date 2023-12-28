@@ -50,17 +50,13 @@ public class Produit implements Serializable{
     @JoinColumn(name = "depense_id")
     private Depense depense;
 
-    @ManyToOne
-    @JoinColumn(name = "recommendation_id")
-    private Recommendation recommendation;
-
 
     private int is_deleted = 0;
 
 
     public Produit(String intitule, String description, String brande, String uniteDeMesure, Date dateExpiration,
                    double quantite, double prix, double quantiteCritique, ValeurNutritionnel valeurNutritionnel,
-                   CategorieDeProduits categories, Stock stock, Depense depense, Recommendation recommendation) {
+                   CategorieDeProduits categories, Stock stock, Depense depense) {
         this.intitule = intitule;
         this.description = description;
         this.brande = brande;
@@ -73,7 +69,6 @@ public class Produit implements Serializable{
         this.categories = categories;
         this.stock = stock;
         this.depense = depense;
-        this.recommendation = recommendation;
     }
 
     public Produit(String name) {
@@ -90,10 +85,6 @@ public class Produit implements Serializable{
 
     public void removeDepense() {
         this.depense = null;
-    }
-
-    public void removeRecommendation() {
-        this.recommendation = null;
     }
 }
 

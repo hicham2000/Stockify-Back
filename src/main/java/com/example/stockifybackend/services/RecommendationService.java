@@ -38,7 +38,6 @@ public class RecommendationService {
         this.recetteRepository = recetteRepository;
     }
 
-
     public List<Recette> getRecommendedRecettes(long user_id, LocalDateTime tempsDuClient) throws JSONException {
         String url = recommendationSystemUrl + "/Repas_suggestions/";
 
@@ -328,5 +327,9 @@ public class RecommendationService {
         }
 
         return new ArrayList<>();
+    }
+
+    public void setRecommendationSystemUrl(String recommendationSystemUrl) {
+        this.recommendationSystemUrl = recommendationSystemUrl;
     }
 }
