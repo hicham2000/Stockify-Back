@@ -39,6 +39,13 @@ public class CorbeilleController {
         response.put("message", "Product is updated");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    /*@PutMapping("/recupererdeletedrepas/stockId={stockId}/recupererRepasId={recupererRepasId}/quantity={quantity}")
+    public ResponseEntity<?> updateRepasIsDeletedInStcok(@PathVariable Long stockId, @PathVariable Long recupererRepasId, @PathVariable int quantity) {
+        Map<String, Object> response = new HashMap<>();
+        corbeilleService.recupererRepasInStcok(stockId, recupererRepasId, quantity);
+        response.put("message", "Repas is updated");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }*/
 
     @DeleteMapping("/supprmerdefdeletedproduct/stockId={stockId}/supprimerProductId={supprimerProductId}")
     public ResponseEntity<?> deleteDefProductIsDeletedInStcok(@PathVariable Long stockId,@PathVariable Long supprimerProductId){
@@ -48,9 +55,28 @@ public class CorbeilleController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @DeleteMapping("/supprmerdefdeletedrecipe/stockId={stockId}/supprimerRepasId={supprimerRepasId}")
+    public ResponseEntity<?> deleteDefRepasIsDeletedInStcok(@PathVariable Long stockId,@PathVariable Long supprimerRepasId){
+        Map<String, Object> response = new HashMap<>();
+        corbeilleService.supprimerDefRepasFromStcok(stockId,supprimerRepasId);
+        response.put("message", "Repas is deleted");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @DeleteMapping("/viderproduits/{stockId}")
     public ResponseEntity<String> deleteAllDeletedProductsInStock(@PathVariable Long stockId) {
         String responseMessage = corbeilleService.deleteAllDeletedProductsInStock(stockId);
         return ResponseEntity.ok(responseMessage);
     }
+    @DeleteMapping("/viderrepas/{stockId}")
+    public ResponseEntity<String> deleteAllDeletedRecipesInStock(@PathVariable Long stockId) {
+        String responseMessage = corbeilleService.deleteAllDeletedRecipesInStock(stockId);
+        return ResponseEntity.ok(responseMessage);
+    }
+    @DeleteMapping("/vidercorbeille/{stockId}")
+    public ResponseEntity<String> deleteAllDeletedProductsAndRecipesInStock(@PathVariable Long stockId) {
+        String responseMessage = corbeilleService.deleteAllDeletedProductsAndRecipesInStock(stockId);
+        return ResponseEntity.ok(responseMessage);
+    }
+
 }
