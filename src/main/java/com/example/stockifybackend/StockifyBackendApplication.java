@@ -4,25 +4,18 @@ import com.example.stockifybackend.Entities.*;
 import com.example.stockifybackend.Repositories.*;
 import com.example.stockifybackend.services.CourseService;
 import com.example.stockifybackend.services.UtilisateurService;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.messaging.FirebaseMessaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
+import java.util.Date;
 import java.io.IOException;
 import java.util.stream.Stream;
 
 @SpringBootApplication
 @EnableScheduling
-@ComponentScan("com.example.stockifybackend")
 public class StockifyBackendApplication implements CommandLineRunner {
     @Bean
     FirebaseMessaging firebaseMessaging() throws IOException {
@@ -94,6 +87,12 @@ public class StockifyBackendApplication implements CommandLineRunner {
                 "wassim","rifay",
                 "rifaywassim@gmail.com", "123456@Wassim",
                 "", false);
+
+        user1.setSexe("Homme");
+        user1.setTaille("179");
+        user1.setPoids("62");
+        Date dateDeNaissance = new Date(2001, 12, 9);
+        user1.setDateDeNaissance(dateDeNaissance);
 
 
         c = courseRepository.save(c);

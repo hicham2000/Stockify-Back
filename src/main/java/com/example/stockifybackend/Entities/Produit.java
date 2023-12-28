@@ -1,4 +1,5 @@
 package com.example.stockifybackend.Entities;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -8,8 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,11 +29,14 @@ public class Produit implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String intitule;
-    private String description;
     private String brande;
     private String uniteDeMesure;
-    private Date dateExpiration;
-
+    @JsonFormat(pattern="yyyy.MM.dd")
+    @DateTimeFormat(pattern = "yyyy.MM.dd")
+    private LocalDate dateExpiration;
+    @JsonFormat(pattern="yyyy.MM.dd")
+    @DateTimeFormat(pattern = "yyyy.MM.dd")
+    private LocalDate dateAlerte;
     private double quantite;
     private double prix;
     private double quantiteCritique;
@@ -50,22 +56,18 @@ public class Produit implements Serializable{
     @JoinColumn(name = "depense_id")
     private Depense depense;
 
-    @ManyToOne
-    @JoinColumn(name = "recommendation_id")
-    private Recommendation recommendation;
-
 
     private int is_deleted = 0;
 
 
-    public Produit(String intitule, String description, String brande, String uniteDeMesure, Date dateExpiration,
+    public Produit(String intitule, String description, String brande, String uniteDeMesure, LocalDate dateExpiration, LocalDate dateAlerte,
                    double quantite, double prix, double quantiteCritique, ValeurNutritionnel valeurNutritionnel,
-                   CategorieDeProduits categories, Stock stock, Depense depense, Recommendation recommendation) {
+                   CategorieDeProduits categories, Stock stock, Depense depense) {
         this.intitule = intitule;
-        this.description = description;
         this.brande = brande;
         this.uniteDeMesure = uniteDeMesure;
         this.dateExpiration = dateExpiration;
+        this.dateAlerte = dateAlerte;
         this.quantite = quantite;
         this.prix = prix;
         this.quantiteCritique = quantiteCritique;
@@ -73,7 +75,6 @@ public class Produit implements Serializable{
         this.categories = categories;
         this.stock = stock;
         this.depense = depense;
-        this.recommendation = recommendation;
     }
 
     public Produit(String name) {
@@ -90,10 +91,6 @@ public class Produit implements Serializable{
 
     public void removeDepense() {
         this.depense = null;
-    }
-
-    public void removeRecommendation() {
-        this.recommendation = null;
     }
 }
 

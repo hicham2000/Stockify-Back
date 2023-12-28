@@ -32,6 +32,26 @@ public class StockService {
     @Autowired
     private RepasRepository repasRepository;
 
+    public Stock getStock(long stockId){
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+        if (optionalStock.isPresent()) {
+            return optionalStock.get();
+        } else {
+            throw new RuntimeException("Stock with id " + stockId + " does not exist in this stock");
+        }
+    }
+
+    public void updateQuantiteCritiqueParDefaut(Long stockId, int nouveauQuantiteCritiqueParDefaut) {
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            stock.setQuantiteCritiqueParDefaut(nouveauQuantiteCritiqueParDefaut);
+            stockRepository.save(stock);
+        } else {
+            throw new RuntimeException("Stock with id " + stockId + " does not exist in this stock");
+        }
+    }
+
 
     public void addRecipeToStock(Long stockId, Recette recette) {
         Optional<Stock> optionalStock = stockRepository.findById(stockId);
@@ -74,9 +94,8 @@ public class StockService {
                 if (recette.getId().equals(recipeId)) {
 
                     recette.setIntitule(updatedRecette.getIntitule());
-                    recette.setDesctipion(updatedRecette.getDesctipion());
+                    recette.setDescription(updatedRecette.getDescription());
                     recette.setDureeTotal(updatedRecette.getDureeTotal());
-                    recette.setRecommendation(updatedRecette.getRecommendation());
 
                     recetteRepository.save(recette);
                     return;
@@ -156,10 +175,10 @@ public class StockService {
                 if (produit.getId().equals(productId)) {
 
                     produit.setIntitule(updatedProduit.getIntitule());
-                    produit.setDescription(updatedProduit.getDescription());
                     produit.setBrande(updatedProduit.getBrande());
                     produit.setUniteDeMesure(updatedProduit.getUniteDeMesure());
                     produit.setDateExpiration(updatedProduit.getDateExpiration());
+                    produit.setDateAlerte(updatedProduit.getDateAlerte());
                     produit.setQuantite(updatedProduit.getQuantite());
                     produit.setPrix(updatedProduit.getPrix());
                     produit.setQuantiteCritique(updatedProduit.getQuantiteCritique());

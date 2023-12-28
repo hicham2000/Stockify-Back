@@ -1,6 +1,5 @@
 package com.example.stockifybackend.Entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +35,14 @@ public class Utilisateur implements Serializable {
     @OneToMany
     @JoinColumn(name = "id")
     private List<PréférenceAlimentaire> préférenceAlimentaires = new ArrayList<>();
+
+    @OneToMany
+    @JoinTable(
+            name = "utilisateur_recette",
+            joinColumns = @JoinColumn(name = "utilisateur_id"),
+            inverseJoinColumns = @JoinColumn(name = "recette_id"))
+    private List<Recette> recettesFavoris = new ArrayList<>();
+
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
     private List<Stock> stocks = new ArrayList<>();
     public Utilisateur() {

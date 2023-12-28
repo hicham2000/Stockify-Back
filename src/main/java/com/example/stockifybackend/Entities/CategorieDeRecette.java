@@ -7,19 +7,19 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Recommendation implements Serializable {
+public class CategorieDeRecette implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @OneToMany(mappedBy = "recommendation")
-    public List<Recette> Recette;
-    @OneToMany(mappedBy = "recommendation")
-    public List<Produit> produit;
+    private long id;
+    private String intitule;
+
+    public CategorieDeRecette(String intitule) {
+        this.intitule = intitule;
+    }
 }
