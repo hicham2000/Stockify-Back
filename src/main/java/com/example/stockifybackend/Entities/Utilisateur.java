@@ -43,6 +43,8 @@ public class Utilisateur implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "recette_id"))
     private List<Recette> recettesFavoris = new ArrayList<>();
 
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
+    private List<Stock> stocks = new ArrayList<>();
     public Utilisateur() {
 
     }

@@ -149,10 +149,10 @@ public class StockService {
                 if (produit.getId().equals(productId)) {
 
                     produit.setIntitule(updatedProduit.getIntitule());
-                    produit.setDescription(updatedProduit.getDescription());
                     produit.setBrande(updatedProduit.getBrande());
                     produit.setUniteDeMesure(updatedProduit.getUniteDeMesure());
                     produit.setDateExpiration(updatedProduit.getDateExpiration());
+                    produit.setDateAlerte(updatedProduit.getDateAlerte());
                     produit.setQuantite(updatedProduit.getQuantite());
                     produit.setPrix(updatedProduit.getPrix());
                     produit.setQuantiteCritique(updatedProduit.getQuantiteCritique());
@@ -171,10 +171,12 @@ public class StockService {
         }
     }
 
+
     public List<Produit> getAllProductsInStock(Long stockId) {
         return produitRepository.findAllByStockIdCustomQuery(stockId);
-
-
+    }
+    public List<Produit> getAllDeletedProductsInStock(Long stockId) {
+        return produitRepository.findAllDeletedProductsInStock(stockId);
     }
 
     public List<Recette> getAllRecipesInStock(Long stockId) {

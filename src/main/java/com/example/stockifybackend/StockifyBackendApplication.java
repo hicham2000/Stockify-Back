@@ -11,10 +11,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
+import java.io.IOException;
 import java.util.stream.Stream;
 
 @SpringBootApplication
+@EnableScheduling
 public class StockifyBackendApplication implements CommandLineRunner {
+    @Bean
+    FirebaseMessaging firebaseMessaging() throws IOException {
+        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(
+                new ClassPathResource("stockify-9ed7f-firebase-adminsdk-3437r-aff5bf54fd.json").getInputStream());
+        FirebaseOptions firebaseOptions = FirebaseOptions.builder().setCredentials(googleCredentials).build();
+        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions,"stockify");
+        return  FirebaseMessaging.getInstance(app);
+    }
 
     @Autowired
     private ProduitRepository produitRepository ;

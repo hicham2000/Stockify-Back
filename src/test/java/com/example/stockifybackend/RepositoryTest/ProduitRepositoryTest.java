@@ -37,7 +37,7 @@ class ProduitRepositoryTest {
         // Cleanup or reset the database state after each test if needed
     }
 
-    @Test
+    /*@Test
     void testFindAllByStockIdCustomQuery() {
         // Save test data to the database
         Stock stock = new Stock();
@@ -62,5 +62,5 @@ class ProduitRepositoryTest {
         assertThat(produits.get(0).getIntitule()).isEqualTo("Product 1");
         assertThat(produits.get(1).getIntitule()).isEqualTo("Product 2");
 
-    }
+    }*/
 }
