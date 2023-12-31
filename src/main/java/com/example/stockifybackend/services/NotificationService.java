@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 public class NotificationService {
-
+    @Autowired
     private final FirebaseMessaging firebaseMessaging;
 
     @Autowired

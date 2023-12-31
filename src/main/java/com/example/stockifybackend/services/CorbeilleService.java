@@ -3,6 +3,7 @@ package com.example.stockifybackend.services;
 import com.example.stockifybackend.Entities.*;
 import com.example.stockifybackend.Repositories.ProduitRepository;
 import com.example.stockifybackend.Repositories.RecetteRepository;
+import com.example.stockifybackend.Repositories.RepasRepository;
 import com.example.stockifybackend.Repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,9 @@ public class CorbeilleService {
 
    @Autowired
    private ProduitRepository produitRepository;
-   private StockRepository stockRepository;
+
+   @Autowired
+   private RepasRepository repasRepository;
 
 
 
@@ -55,6 +58,11 @@ public class CorbeilleService {
         }
 
     }
+    
+    public void supprimerDefRepasFromStcok(Long stockId, Long repasId){
+        stockService.deleteRepasFromStock(stockId, repasId);
+
+    }
     public void supprimerDefProductFromStcok(Long stockId, Long productId){
 
             stockService.deleteProductFromStock(stockId, productId);
@@ -70,5 +78,40 @@ public class CorbeilleService {
             return "No products with is_deleted=1 found in stock with id " + stockId;
         }
     }
+    public String  deleteAllDeletedRecipesInStock(Long stockId) {
+        List<Repas> deletedRecipes = repasRepository.findAllDeletedRecipesInStock(stockId);
+
+        if (!deletedRecipes.isEmpty()) {
+            repasRepository.deleteAllDeletedRecipesInStock(stockId);
+            return "Deleted " + deletedRecipes.size() + " recipes in stock with id " + stockId;
+        } else {
+            return "No recipes with is_deleted=1 found in stock with id " + stockId;
+        }
+    }
+    public String deleteAllDeletedProductsAndRecipesInStock(Long stockId) {
+        List<Produit> deletedProducts = produitRepository.findAllDeletedProductsInStock(stockId);
+        List<Repas> deletedRecipes = repasRepository.findAllDeletedRecipesInStock(stockId);
+
+        if (!deletedProducts.isEmpty() || !deletedRecipes.isEmpty()) {
+            produitRepository.deleteAllDeletedProductsInStock(stockId);
+            repasRepository.deleteAllDeletedRecipesInStock(stockId);
+
+            return "Deleted " + deletedProducts.size() + " products and " +
+                    deletedRecipes.size() + " recipes in stock with id " + stockId;
+        } else {
+            return "No products or recipes with is_deleted=1 found in stock with id " + stockId;
+        }
+    }
+
+   /* public void recupererRepasInStcok(Long stockId, Long recupererRepasId, int quantity) {
+        Optional<Repas> repasOptional = repasRepository.findById(recupererRepasId);
+        if (repasOptional.isPresent()) {
+            Repas repasUpdate = repasOptional.get();
+            repasUpdate.setIs_deleted(0);
+
+            // Update both the quantity and is_deleted
+            stockService.updateRepas(stockId, recupererRepasId, repasUpdate, quantity);
+        }
+    }*/
 
 }

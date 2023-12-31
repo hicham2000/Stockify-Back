@@ -107,6 +107,32 @@ public class StockService {
             throw new RuntimeException("There is no stock with this id");
         }
     }
+    /*public void updateRepas(Long stockId, Long repasId, Repas repasUpdate, int quantity) {
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            List<Repas> repasList = stock.getRepas();
+            for (Repas repas : repasList) {
+                if (repas.getId().equals(repasId)) {
+
+                    //repas.setQuantity(quantity);
+
+
+                    repasRepository.save(repas);
+                    return;
+                }
+            }
+            // Update the quantity of the repas
+
+
+            // Your other update logic goes here
+
+            stockRepository.save(stock);
+        } else {
+            throw new RuntimeException("There is no stock with this id");
+        }
+    }*/
 
     public void addProductToStock(Long stockId, Produit produit) {
         Optional<Stock> optionalStock = stockRepository.findById(stockId);
@@ -186,6 +212,21 @@ public class StockService {
         return repasRepository.findAllRepasByStockIdCustomQuery(stockId);
     }
 
+    public void deleteRepasFromStock(Long stockId, Long repasId) {
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            List<Repas> recipes = stock.getRepas();
+
+            recipes.removeIf(recipe -> recipe.getId().equals(repasId));
+            repasRepository.deleteById(repasId);
+
+            stockRepository.save(stock);
+        } else {
+            throw new RuntimeException("There is no stock with this id");
+        }
+    }
 
 
 }
