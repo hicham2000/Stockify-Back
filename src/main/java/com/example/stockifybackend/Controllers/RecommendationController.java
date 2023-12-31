@@ -2,6 +2,7 @@ package com.example.stockifybackend.Controllers;
 
 import com.example.stockifybackend.Entities.Recette;
 import com.example.stockifybackend.services.RecommendationService;
+import lombok.NoArgsConstructor;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/recommendations")
@@ -21,7 +21,6 @@ public class RecommendationController {
 
     private final RecommendationService recommendationService;
 
-    @Autowired
     public RecommendationController(RecommendationService recommendationService) {
         this.recommendationService = recommendationService;
     }
