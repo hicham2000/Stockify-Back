@@ -102,6 +102,49 @@ public class RecommendationService {
         return null;
     }
 
+    private List<RecetteResponse> processRecommendationResponse(JSONObject jsonResponse, LocalDateTime tempsDuClient, List<Produit> produitsAuStock, List<Repas> recettesAuStock, Utilisateur utilisateur) throws JSONException {
+        if (jsonResponse != null && jsonResponse.has("output")) {
+            JSONObject repasProgramme = jsonResponse.getJSONObject("output").getJSONObject("Repas_Programme");
+
+            List<RecetteResponse> recommendedRecettes = new ArrayList<>();
+
+            String repasType;
+
+            // Logique pour déterminer le repas en fonction du temps du client
+            if (tempsDuClient.getHour() < 12) {
+                repasType = "breakfast";
+            } else if (tempsDuClient.getHour() < 18) {
+                repasType = "lunch";
+            } else {
+                repasType = "dinner";
+            }
+
+            JSONArray recettesArray = repasProgramme.getJSONArray(repasType);
+
+            for (int i = 0; i < recettesArray.length(); i++) {
+                JSONObject recetteObject = recettesArray.getJSONObject(i);
+
+                // Extraire les informations de la recette et créer un objet Recette
+                Long recetteId = recetteObject.getLong("Recipe_Id");
+                Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
+
+                if (optionalRecette.isPresent()) {
+                    Recette recette = optionalRecette.get();
+                    RecetteResponse recetteResponse = new RecetteResponse(recette);
+                    recetteResponse.setQuantiteEnStock(recettesAuStock);
+                    recetteResponse.setIngredients(recette.getIngredients(), produitsAuStock);
+                    recetteResponse.setNombreIngredientManquantes();
+                    recetteResponse.setIsFavoris(utilisateur);
+                    recommendedRecettes.add(recetteResponse);
+                }
+            }
+
+            return recommendedRecettes;
+        }
+
+        return new ArrayList<>();
+    }
+
 
 
     public void setRecommendationSystemUrl(String recommendationSystemUrl) {
