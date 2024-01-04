@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,13 +19,13 @@ public class RecetteResponse implements Serializable {
     private String intitule;
     private String description;
     private int dureeTotal;
-    private List<String> instructionsList;
+    private List<String> instructionsList = new ArrayList<>();
     private String imageUrl;
     private ValeurNutritionnel valeurNutritionnel;
     private CategorieDeRecette categorieDeRecette;
     private int quantiteEnStock;
     private int nombreIngredientsManquantes;
-    private List<IngredientInfo> ingredients;
+    private List<IngredientInfo> ingredients = new ArrayList<>();
     private boolean isFavoris;
 
     @Data
@@ -50,8 +51,12 @@ public class RecetteResponse implements Serializable {
         this.isFavoris = isFavoris;
     }
 
-    public void setQuantiteEnStock(String intituleRecette, List<Repas> stockRepas) {
-        this.quantiteEnStock = quantiteRecetteEnStock(intituleRecette, stockRepas);
+    public void setQuantiteEnStock(List<Repas> stockRepas) {
+        this.quantiteEnStock = quantiteRecetteEnStock(this.intitule, stockRepas);
+    }
+
+    public void setNombreIngredientManquantes() {
+        this.nombreIngredientsManquantes = CalculerNombreIngredientsManquantes();
     }
 
     public void setIngredients(List<Ingredient> recetteIngredients, List<Produit> stockProduits) {
@@ -89,7 +94,6 @@ public class RecetteResponse implements Serializable {
         return (int) quantiteRecettesCorrespondantes;
     }
 
-
     private Double quantiteIngredientEnStock(Ingredient ingredient, List<Produit> stockProduits) {
         String ingredientName = ingredient.getIntitule().toLowerCase().strip();
 
@@ -101,6 +105,19 @@ public class RecetteResponse implements Serializable {
         // Si le produit correspondant est trouvé, retourner la quantité en stock, sinon retourner 0
         return produitOptional.map(Produit::getQuantite).orElse(Double.valueOf(0));
     }
+
+    public int CalculerNombreIngredientsManquantes() {
+        if (this.ingredients == null || this.ingredients.isEmpty()) {
+            return -1;
+        }
+
+        long countNotEnough = this.ingredients.stream()
+                .filter(ingredient -> !ingredient.isEnough())
+                .count();
+
+        return (int) countNotEnough;
+    }
+
 
 
 }
