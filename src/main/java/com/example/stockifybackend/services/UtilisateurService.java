@@ -1,9 +1,11 @@
 package com.example.stockifybackend.services;
 
 import com.example.stockifybackend.Entities.ListeCourse;
+import com.example.stockifybackend.Entities.Recette;
 import com.example.stockifybackend.Entities.Stock;
 import com.example.stockifybackend.Entities.Utilisateur;
 import com.example.stockifybackend.Repositories.ListeCourseRepository;
+import com.example.stockifybackend.Repositories.RecetteRepository;
 import com.example.stockifybackend.Repositories.StockRepository;
 import com.example.stockifybackend.Repositories.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -26,6 +29,9 @@ public class UtilisateurService {
 
     @Autowired
     private ListeCourseRepository listeCourseRepository;
+
+    @Autowired
+    private RecetteRepository recetteRepository;
 
     // add an utilisateur
     public Utilisateur addUtilisateur(Utilisateur utilisateur) {
@@ -126,5 +132,24 @@ public class UtilisateurService {
     }
     public boolean isUserExists(String email){
         return utilisateurRepository.existsByEmail(email);
+    }
+
+    public void AddRecetteAuFavoris(Long user_id, Long recette_id) {
+        Optional<Utilisateur> tempUtilisateur = utilisateurRepository.findById(user_id);
+        if (tempUtilisateur.isEmpty()) {
+            throw new RuntimeException("Utilisateur with id {\"+ id +\"} not found");
+        }
+        Utilisateur utilisateur = tempUtilisateur.get();
+        Optional<Recette> tempRecette = recetteRepository.findById(recette_id);
+        if (tempUtilisateur.isEmpty()) {
+            throw new RuntimeException("Recette with id {\"+ id +\"} not found");
+        }
+
+        Recette recette = tempRecette.get();
+        List<Recette> recetteFavoris = utilisateur.getRecettesFavoris();
+        recetteFavoris.add(recette);
+
+        utilisateurRepository.save(utilisateur);
+
     }
 }
