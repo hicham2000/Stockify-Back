@@ -104,7 +104,6 @@ public class RecommendationService {
         }
     }
 
-
     private String determineRepasType(LocalDateTime tempsDuClient) {
         if (tempsDuClient.getHour() < 12) {
             return "breakfast";
@@ -191,19 +190,21 @@ public class RecommendationService {
         return ingredientNames.containsAll(preferredIngredients);
     }
 
-    private boolean isRecetteValid(Recette recette, String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) {
-        if(régimeSpéciale.isEmpty() || tempsDePreparation.isEmpty()){
+    private boolean isRecetteValid(Recette recette, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) {
+        if (régimesSpéciaux.isEmpty() || tempsDePreparation.isEmpty()) {
             return true;
         }
+
         int totalTimeMinutes = recette.getDureeTotal();
         String categorieDeRecette = recette.getCategorieDeRecette().getIntitule();
 
-        boolean result = categorieDeRecette.equals(régimeSpéciale) && totalTimeMinutes <= Integer.parseInt(tempsDePreparation) && hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
+        boolean result = régimesSpéciaux.contains(categorieDeRecette) && totalTimeMinutes <= Integer.parseInt(tempsDePreparation) && hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
 
-        return categorieDeRecette.equals(régimeSpéciale) &&
+        return régimesSpéciaux.contains(categorieDeRecette) &&
                 totalTimeMinutes <= Integer.parseInt(tempsDePreparation) &&
                 hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
     }
+
 
     private RecetteResponse processRecetteObject(JSONObject recetteObject, List<Repas> recettesAuStock, List<Produit> produitsAuStock, String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
         Long recetteId = recetteObject.getLong("Recipe_Id");
