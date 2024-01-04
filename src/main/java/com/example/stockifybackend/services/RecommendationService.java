@@ -3,8 +3,6 @@ package com.example.stockifybackend.services;
 import com.example.stockifybackend.Entities.*;
 import com.example.stockifybackend.Repositories.RecetteRepository;
 import com.example.stockifybackend.Repositories.UtilisateurRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -26,9 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Service
-@AllArgsConstructor
 public class RecommendationService {
+
     private final UtilisateurRepository utilisateurRepository;
+
     private final RecetteRepository recetteRepository;
 
     @Value("${recommendation.system.url}")
@@ -40,8 +38,7 @@ public class RecommendationService {
         this.recetteRepository = recetteRepository;
     }
 
-
-    public List<Recette> getRecommendedRecettes(long user_id, LocalDateTime tempsDuClient) throws JSONException {
+    public List<RecetteResponse> getRecommendedRecettes(long user_id, LocalDateTime tempsDuClient) throws JSONException {
         String url = recommendationSystemUrl + "/Repas_suggestions/";
 
         Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(user_id);
@@ -84,7 +81,7 @@ public class RecommendationService {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONObject repasProgramme = jsonResponse.getJSONObject("output").getJSONObject("Repas_Programme");
 
-            List<Recette> recommendedRecettes = new ArrayList<>();
+            List<RecetteResponse> recommendedRecettes = new ArrayList<>();
 
             String repasType;
 
@@ -165,7 +162,7 @@ public class RecommendationService {
         return true;
     }
 
-    public List<Recette> getRecommendedFilteredRecettes(long user_id, LocalDateTime tempsDuClient, String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) throws JSONException {
+    public List<RecetteResponse> getRecommendedFilteredRecettes(long user_id, LocalDateTime tempsDuClient, String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) throws JSONException {
         String url = recommendationSystemUrl + "/Repas_suggestions/";
 
         Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(user_id);
@@ -209,7 +206,7 @@ public class RecommendationService {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONObject repasProgramme = jsonResponse.getJSONObject("output").getJSONObject("Repas_Programme");
 
-            List<Recette> recommendedRecettes = new ArrayList<>();
+            List<RecetteResponse> recommendedRecettes = new ArrayList<>();
 
             String repasType;
 
@@ -255,7 +252,7 @@ public class RecommendationService {
     }
 
 
-    public List<Recette> getRecettesSimilaires(long recette_id) throws JSONException {
+    public List<RecetteResponse> getRecettesSimilaires(long recette_id) throws JSONException {
         Logger logger = LoggerFactory.getLogger(getClass());
         String url = recommendationSystemUrl + "/Recipe_suggestions/";
 
@@ -307,7 +304,7 @@ public class RecommendationService {
             //System.out.println("recettesArray  => " + recettesArray);
             logger.debug("recettesArray  => {}", recettesArray);
 
-            List<Recette> similarRecettes = new ArrayList<>();
+            List<RecetteResponse> similarRecettes = new ArrayList<>();
 
             for (int i = 0; i < recettesArray.length(); i++) {
 

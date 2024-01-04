@@ -175,6 +175,7 @@ public class StockService {
                 if (produit.getId().equals(productId)) {
 
                     produit.setIntitule(updatedProduit.getIntitule());
+                    produit.setDescription(updatedProduit.getDescription());
                     produit.setBrande(updatedProduit.getBrande());
                     produit.setUniteDeMesure(updatedProduit.getUniteDeMesure());
                     produit.setDateExpiration(updatedProduit.getDateExpiration());
@@ -196,7 +197,6 @@ public class StockService {
             throw new RuntimeException("There is no stock with this id");
         }
     }
-
 
     public List<Produit> getAllProductsInStock(Long stockId) {
         return produitRepository.findAllByStockIdCustomQuery(stockId);
