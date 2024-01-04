@@ -50,5 +50,31 @@ public class RecommendationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/RecettesFiltred/{id}")
+    public ResponseEntity<?> getRecommendedFiltredRecettes(
+            @PathVariable Long id,
+            @RequestParam(name = "tempsDuClient", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime tempsDuClient,
+            @RequestBody Map<String, Object> requestBody
+    ) throws JSONException {
+        Map<String, Object> response = new HashMap<>();
+
+        if (tempsDuClient == null) {
+            tempsDuClient = LocalDateTime.now();
+        }
+
+        String régimeSpéciale = (String) requestBody.get("régimeSpéciale");
+        String tempsDePreparation = (String) requestBody.get("tempsDePreparation");
+        List<String> nomsDesIngrédientPréféres = (List<String>) requestBody.get("nomsDesIngrédientPréféres");
+
+        List<RecetteResponse> recommendedRecettes = recommendationService.getRecommendedFilteredRecettes(id, tempsDuClient, régimeSpéciale, tempsDePreparation, nomsDesIngrédientPréféres);
+        if (recommendedRecettes.isEmpty()) {
+            response.put("message", "Aucun Recettes recommandées");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        response.put("message", "Recettes Recommendées");
+        response.put("recettes", recommendedRecettes);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 }
