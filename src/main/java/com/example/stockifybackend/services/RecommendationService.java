@@ -372,6 +372,4 @@ public class RecommendationService {
     public void setRecommendationSystemUrl(String recommendationSystemUrl) {
         this.recommendationSystemUrl = recommendationSystemUrl;
     }
-
-
 }
