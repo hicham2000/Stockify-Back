@@ -45,6 +45,7 @@ public class RecommendationService {
     }
 
     private int calculateAge(Date dateDeNaissance) {
+
         LocalDate birthDate = dateDeNaissance.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate now = LocalDate.now();
         return Period.between(birthDate, now).getYears();
@@ -95,7 +96,7 @@ public class RecommendationService {
                     String.class
             );
         } catch (RestClientException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             return null;
         }
 
@@ -111,6 +112,11 @@ public class RecommendationService {
         }
     }
 
+    private List<RecetteResponse> processRecommendationResponse(JSONObject jsonResponse, LocalDateTime tempsDuClient, List<Produit> produitsAuStock, List<Repas> recettesAuStock, Utilisateur utilisateur) throws JSONException {
+        if (jsonResponse != null && jsonResponse.has("output")) {
+            JSONObject repasProgramme = jsonResponse.getJSONObject("output").getJSONObject("Repas_Programme");
+
+            List<RecetteResponse> recommendedRecettes = new ArrayList<>();
 
     private String determineRepasType(LocalDateTime tempsDuClient) {
         if (tempsDuClient.getHour() < 12) {

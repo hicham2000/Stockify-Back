@@ -43,31 +43,31 @@ class RecommendationServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
-//    @Test
-//    void testGetRecommendedRecettes() throws JSONException {
-//        // Mocking data
-//        long userId = 1L;
-//        LocalDateTime tempsDuClient = LocalDateTime.now();
-//        String recommendationSystemUrl = "http://localhost:8081";
-//        String jsonResponse = "{\"output\":{\"Repas_Programme\":{\"breakfast\":[{\"Recipe_Id\":1}]}}}";
-//
-//        // Mocking repository
-//        when(utilisateurRepository.findById(userId)).thenReturn(Optional.of(new Utilisateur()));
-//        when(recetteRepository.findById(anyLong())).thenReturn(Optional.of(new Recette()));
-//
-//        // Mocking RestTemplate
-//        when(restTemplate.exchange(anyString(), any(), any(), eq(String.class)))
-//                .thenReturn(ResponseEntity.ok(jsonResponse));
-//
-//        // Setting recommendationSystemUrl in the service
-//        recommendationService.setRecommendationSystemUrl(recommendationSystemUrl);
-//
-//        // Testing the service method
-//        List<RecetteResponse> recommendedRecettes = recommendationService.getRecommendedRecettes(userId);
-//
-//        // Assertions
-//        assertEquals(1, recommendedRecettes.size());
-//    }
+    @Test
+    void testGetRecommendedRecettes() throws JSONException {
+        // Mocking data
+        long userId = 1L;
+        LocalDateTime tempsDuClient = LocalDateTime.now();
+        String recommendationSystemUrl = "http://localhost:8081";
+        String jsonResponse = "{\"output\":{\"Repas_Programme\":{\"breakfast\":[{\"Recipe_Id\":1}]}}}";
+
+        // Mocking repository
+        when(utilisateurRepository.findById(userId)).thenReturn(Optional.of(new Utilisateur()));
+        when(recetteRepository.findById(anyLong())).thenReturn(Optional.of(new Recette()));
+
+        // Mocking RestTemplate
+        when(restTemplate.exchange(anyString(), any(), any(), eq(String.class)))
+                .thenReturn(ResponseEntity.ok(jsonResponse));
+
+        // Setting recommendationSystemUrl in the service
+        recommendationService.setRecommendationSystemUrl(recommendationSystemUrl);
+
+        // Testing the service method
+        List<RecetteResponse> recommendedRecettes = recommendationService.getRecommendedRecettes(userId, tempsDuClient);
+
+        // Assertions
+        assertEquals(1, recommendedRecettes.size());
+    }
 
 
 }
