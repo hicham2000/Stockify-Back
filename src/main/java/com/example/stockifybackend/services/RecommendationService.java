@@ -190,43 +190,43 @@ public class RecommendationService {
         return ingredientNames.containsAll(preferredIngredients);
     }
 
-    private boolean isRecetteValid(Recette recette, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) {
-        if (régimesSpéciaux.isEmpty() || tempsDePreparation.isEmpty()) {
-            return true;
+        private boolean isRecetteValid(Recette recette, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) {
+            if (régimesSpéciaux.isEmpty() || tempsDePreparation.isEmpty()) {
+                return true;
+            }
+
+            int totalTimeMinutes = recette.getDureeTotal();
+            String categorieDeRecette = recette.getCategorieDeRecette().getIntitule();
+
+            boolean result = régimesSpéciaux.contains(categorieDeRecette) && totalTimeMinutes <= Integer.parseInt(tempsDePreparation) && hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
+
+            return régimesSpéciaux.contains(categorieDeRecette) &&
+                    totalTimeMinutes <= Integer.parseInt(tempsDePreparation) &&
+                    hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
         }
 
-        int totalTimeMinutes = recette.getDureeTotal();
-        String categorieDeRecette = recette.getCategorieDeRecette().getIntitule();
 
-        boolean result = régimesSpéciaux.contains(categorieDeRecette) && totalTimeMinutes <= Integer.parseInt(tempsDePreparation) && hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
+        private RecetteResponse processRecetteObject(JSONObject recetteObject, List<Repas> recettesAuStock, List<Produit> produitsAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
+            Long recetteId = recetteObject.getLong("Recipe_Id");
+            JSONArray recipeInstructionsArray = recetteObject.getJSONArray("RecipeInstructions");
+            List<String> recipeInstructions = new ArrayList<>();
 
-        return régimesSpéciaux.contains(categorieDeRecette) &&
-                totalTimeMinutes <= Integer.parseInt(tempsDePreparation) &&
-                hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
-    }
+            for (int j = 0; j < recipeInstructionsArray.length(); j++) {
+                String instruction = recipeInstructionsArray.getString(j);
+                recipeInstructions.add(instruction);
+            }
 
+            // Récupérer la recette depuis la base de données
+            Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
 
-    private RecetteResponse processRecetteObject(JSONObject recetteObject, List<Repas> recettesAuStock, List<Produit> produitsAuStock, String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
-        Long recetteId = recetteObject.getLong("Recipe_Id");
-        JSONArray recipeInstructionsArray = recetteObject.getJSONArray("RecipeInstructions");
-        List<String> recipeInstructions = new ArrayList<>();
-
-        for (int j = 0; j < recipeInstructionsArray.length(); j++) {
-            String instruction = recipeInstructionsArray.getString(j);
-            recipeInstructions.add(instruction);
+            return optionalRecette.map(recette -> {
+                recette.setInstructionsList(recipeInstructions);
+                return createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette);
+            }).orElse(null);
         }
 
-        // Récupérer la recette depuis la base de données
-        Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
 
-        return optionalRecette.map(recette -> {
-            recette.setInstructionsList(recipeInstructions);
-            return createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette);
-        }).orElse(null);
-    }
-
-
-    private List<RecetteResponse> processRecommendationFiltredResponse(JSONObject jsonResponse, LocalDateTime tempsDuClient, List<Produit> produitsAuStock, List<Repas> recettesAuStock,String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
+    private List<RecetteResponse> processRecommendationFiltredResponse(JSONObject jsonResponse, LocalDateTime tempsDuClient, List<Produit> produitsAuStock, List<Repas> recettesAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONObject repasProgramme = jsonResponse.getJSONObject("output").getJSONObject("Repas_Programme");
 
@@ -240,7 +240,7 @@ public class RecommendationService {
             for (int i = 0; i < recettesArray.length(); i++) {
                 JSONObject recetteObject = recettesArray.getJSONObject(i);
 
-                RecetteResponse recetteResponse = processRecetteObject(recetteObject, recettesAuStock, produitsAuStock, régimeSpéciale, tempsDePreparation, nomsDesIngrédientPréféres, utilisateur);
+                RecetteResponse recetteResponse = processRecetteObject(recetteObject, recettesAuStock, produitsAuStock, régimesSpéciaux, tempsDePreparation, nomsDesIngrédientPréféres, utilisateur);
 
                 if(recetteResponse!= null){
                     recommendedFiltredRecettes.add(recetteResponse);
@@ -253,7 +253,7 @@ public class RecommendationService {
         return new ArrayList<>();
     }
 
-    public List<RecetteResponse> getRecommendedFilteredRecettes(long user_id, LocalDateTime tempsDuClient, String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) throws JSONException {
+    public List<RecetteResponse> getRecommendedFilteredRecettes(long user_id, LocalDateTime tempsDuClient, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) throws JSONException {
         String url = recommendationSystemUrl + "/Repas_suggestions/";
 
         Utilisateur utilisateur = utilisateurRepository.findById(user_id)
@@ -266,7 +266,7 @@ public class RecommendationService {
 
         JSONObject jsonResponse = sendRecommendationRequest(requestJson, url);
 
-        return processRecommendationFiltredResponse(jsonResponse, tempsDuClient, produitsAuStock, recettesAuStock,régimeSpéciale, tempsDePreparation, nomsDesIngrédientPréféres, utilisateur);
+        return processRecommendationFiltredResponse(jsonResponse, tempsDuClient, produitsAuStock, recettesAuStock,régimesSpéciaux, tempsDePreparation, nomsDesIngrédientPréféres, utilisateur);
 
     }
 
