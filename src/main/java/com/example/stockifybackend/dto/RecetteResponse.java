@@ -57,8 +57,8 @@ public class RecetteResponse implements Serializable {
         this.nombreIngredientsManquantes = CalculerNombreIngredientsManquantes();
     }
 
-    public void setIngredients(List<Ingredient> recetteIngredients, List<Produit> stockProduits) {
-        this.ingredients = convertIngredients(recetteIngredients, stockProduits);
+    public void setIngredients(List<Ingredient> recettesIngredients, List<Produit> stockProduits) {
+        this.ingredients = convertIngredients(recettesIngredients, stockProduits);
     }
 
     public void setIsFavoris(Utilisateur utilisateur) {
