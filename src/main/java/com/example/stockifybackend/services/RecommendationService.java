@@ -200,6 +200,33 @@ public class RecommendationService {
                 .orElse(null);
     }
 
+    private List<RecetteResponse> processRecommendationFiltredResponse(JSONObject jsonResponse, LocalDateTime tempsDuClient, List<Produit> produitsAuStock, List<Repas> recettesAuStock,String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
+        if (jsonResponse != null && jsonResponse.has("output")) {
+            JSONObject repasProgramme = jsonResponse.getJSONObject("output").getJSONObject("Repas_Programme");
+
+            List<RecetteResponse> recommendedFiltredRecettes = new ArrayList<>();
+
+            String repasType = determineRepasType(tempsDuClient);
+
+            JSONArray recettesArray = repasProgramme.getJSONArray(repasType);
+
+
+            for (int i = 0; i < recettesArray.length(); i++) {
+                JSONObject recetteObject = recettesArray.getJSONObject(i);
+
+                RecetteResponse recetteResponse = processRecetteObject(recetteObject, recettesAuStock, produitsAuStock, régimeSpéciale, tempsDePreparation, nomsDesIngrédientPréféres, utilisateur);
+
+                if(recetteResponse!= null){
+                    recommendedFiltredRecettes.add(recetteResponse);
+                }
+            }
+
+            return recommendedFiltredRecettes;
+        }
+
+        return new ArrayList<>();
+    }
+
     /* ---------------------------------------------------------*/
 
 
