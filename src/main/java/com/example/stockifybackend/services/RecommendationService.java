@@ -38,7 +38,7 @@ public class RecommendationService {
         this.recetteRepository = recetteRepository;
     }
 
-    public List<Recette> getRecommendedRecettes(long user_id, LocalDateTime tempsDuClient) throws JSONException {
+    public List<RecetteResponse> getRecommendedRecettes(long user_id, LocalDateTime tempsDuClient) throws JSONException {
         String url = recommendationSystemUrl + "/Repas_suggestions/";
 
         Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(user_id);
@@ -81,7 +81,7 @@ public class RecommendationService {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONObject repasProgramme = jsonResponse.getJSONObject("output").getJSONObject("Repas_Programme");
 
-            List<Recette> recommendedRecettes = new ArrayList<>();
+            List<RecetteResponse> recommendedRecettes = new ArrayList<>();
 
             String repasType;
 
@@ -162,7 +162,7 @@ public class RecommendationService {
         return true;
     }
 
-    public List<Recette> getRecommendedFilteredRecettes(long user_id, LocalDateTime tempsDuClient, String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) throws JSONException {
+    public List<RecetteResponse> getRecommendedFilteredRecettes(long user_id, LocalDateTime tempsDuClient, String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) throws JSONException {
         String url = recommendationSystemUrl + "/Repas_suggestions/";
 
         Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(user_id);
@@ -206,7 +206,7 @@ public class RecommendationService {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONObject repasProgramme = jsonResponse.getJSONObject("output").getJSONObject("Repas_Programme");
 
-            List<Recette> recommendedRecettes = new ArrayList<>();
+            List<RecetteResponse> recommendedRecettes = new ArrayList<>();
 
             String repasType;
 
@@ -252,7 +252,7 @@ public class RecommendationService {
     }
 
 
-    public List<Recette> getRecettesSimilaires(long recette_id) throws JSONException {
+    public List<RecetteResponse> getRecettesSimilaires(long recette_id) throws JSONException {
         Logger logger = LoggerFactory.getLogger(getClass());
         String url = recommendationSystemUrl + "/Recipe_suggestions/";
 
@@ -304,7 +304,7 @@ public class RecommendationService {
             //System.out.println("recettesArray  => " + recettesArray);
             logger.debug("recettesArray  => {}", recettesArray);
 
-            List<Recette> similarRecettes = new ArrayList<>();
+            List<RecetteResponse> similarRecettes = new ArrayList<>();
 
             for (int i = 0; i < recettesArray.length(); i++) {
 

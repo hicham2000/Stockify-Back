@@ -184,6 +184,4 @@ public class StockService {
         return repasRepository.findAllRepasByStockIdCustomQuery(stockId);
     }
 
-
-
 }
