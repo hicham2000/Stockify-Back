@@ -227,6 +227,23 @@ public class RecommendationService {
         return new ArrayList<>();
     }
 
+    public List<RecetteResponse> getRecommendedFilteredRecettes(long user_id, LocalDateTime tempsDuClient, String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) throws JSONException {
+        String url = recommendationSystemUrl + "/Repas_suggestions/";
+
+        Utilisateur utilisateur = utilisateurRepository.findById(user_id)
+                .orElseThrow(() -> new RuntimeException("Utilisateur with id " + user_id + " not found"));
+
+        List<Produit> produitsAuStock = stockService.getAllProductsInStock(utilisateur.getStock_id());
+        List<Repas> recettesAuStock = stockService.getAllRecettesInStock(utilisateur.getStock_id());
+
+        String requestJson = buildRecommendationRequestJson(utilisateur);
+
+        JSONObject jsonResponse = sendRecommendationRequest(requestJson, url);
+
+        return processRecommendationFiltredResponse(jsonResponse, tempsDuClient, produitsAuStock, recettesAuStock,régimeSpéciale, tempsDePreparation, nomsDesIngrédientPréféres, utilisateur);
+
+    }
+
     /* ---------------------------------------------------------*/
 
 
