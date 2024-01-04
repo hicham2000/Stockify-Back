@@ -192,6 +192,14 @@ public class RecommendationService {
                 hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
     }
 
+    private RecetteResponse processRecetteObject(JSONObject recetteObject, List<Repas> recettesAuStock, List<Produit> produitsAuStock, String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
+        Long recetteId = recetteObject.getLong("Recipe_Id");
+        return recetteRepository.findById(recetteId)
+                .filter(recette -> isRecetteValid(recette, régimeSpéciale, tempsDePreparation, nomsDesIngrédientPréféres))
+                .map(recette -> createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette))
+                .orElse(null);
+    }
+
     /* ---------------------------------------------------------*/
 
 
