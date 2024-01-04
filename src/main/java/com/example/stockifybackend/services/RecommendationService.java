@@ -285,7 +285,6 @@ public class RecommendationService {
     }
     private List<RecetteResponse> processRecommendationRecettesSimilairesResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Repas> recettesAuStock, Utilisateur utilisateur) throws JSONException {
         if (jsonResponse != null && jsonResponse.has("output")) {
-
             JSONArray recettesArray = jsonResponse.getJSONArray("output");
 
             List<RecetteResponse> recommendedRecettes = new ArrayList<>();
@@ -304,10 +303,17 @@ public class RecommendationService {
             }
 
             return recommendedRecettes;
-        }
+        } else {
+            // Générez trois recettes de manière aléatoire (exemple)
+            List<Recette> randomRecettes = generateRandomRecettes(3);
+            List<RecetteResponse> randomRecetteResponses = randomRecettes.stream()
+                    .map(recette -> createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette))
+                    .collect(Collectors.toList());
 
-        return new ArrayList<>();
+            return randomRecetteResponses;
+        }
     }
+
 
     public List<RecetteResponse> getRecettesSimilaires(Long recetteId, Long user_id) throws JSONException {
         String url = recommendationSystemUrl + "/Recipe_suggestions/";
