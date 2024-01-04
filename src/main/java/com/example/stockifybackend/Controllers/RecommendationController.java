@@ -77,4 +77,20 @@ public class RecommendationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/RecettesSimilaires/{id}")
+    public ResponseEntity<Map<String, Object>> getSimilarRecettes(@PathVariable Long id, @RequestBody Map<Long, Object> requestBody) throws JSONException {
+        Map<String, Object> response = new HashMap<>();
+        Long userId = (Long) requestBody.get("user_id");
+        List<RecetteResponse> similarRecettes = recommendationService.getRecettesSimilaires(id, userId);
+
+        if (similarRecettes.isEmpty()) {
+            response.put("message", "Aucun Recettes similaires");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        response.put("message", "Recettes similaires");
+        response.put("recettes", similarRecettes);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

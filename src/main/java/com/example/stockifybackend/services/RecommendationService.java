@@ -167,6 +167,8 @@ public class RecommendationService {
         return processRecommendationResponse(jsonResponse, tempsDuClient, produitsAuStock, recettesAuStock, utilisateur);
     }
 
+    /* ---------------------------------------------------------*/
+
     private boolean hasPreferredIngredients(Recette recette, List<String> preferredIngredients) {
         if(preferredIngredients.isEmpty()) {
             return true;
@@ -246,8 +248,38 @@ public class RecommendationService {
 
     /* ---------------------------------------------------------*/
 
+    private String buildRecommendationRecettesSimilairesRequestJson(Recette recette) {
+        ValeurNutritionnel valeurNutritionnel = recette.getValeurNutritionnel();
+
+        double proteine = valeurNutritionnel.getProteine();
+        double carbohydrate = valeurNutritionnel.getCarbohydrate();
+        double lipide = valeurNutritionnel.getLipide();
+        double enegie = valeurNutritionnel.getEnegie();
+        double sucre = valeurNutritionnel.getSucre();
+        double fibre = valeurNutritionnel.getFibre();
+
+        List<String> ingredientsNoms = recette.getIngredients().stream()
+                .map(ingredient -> "\"" + ingredient.getIntitule() + "\"")
+                .collect(Collectors.toList());
+
+        // Utilisation de String.join pour concaténer les noms d'ingrédients avec une virgule
+        String ingredientsString = String.join(", ", ingredientsNoms);
+
+        // Utilisation de %s dans le format pour insérer les valeurs dynamiques de manière propre
+        return String.format(
+                "{" +
+                        "\"nutrition_input\": [%s, %s, 0, 0, 10, %s, %s, %s, %s]," +
+                        "\"number_of_recommendations\": %s," +
+                        "\"ingredients\": [%s]" +
+                        "}",
+                enegie, lipide, carbohydrate, fibre, sucre, proteine,
+                3, ingredientsString
+        );
+    }
 
     public void setRecommendationSystemUrl(String recommendationSystemUrl) {
         this.recommendationSystemUrl = recommendationSystemUrl;
     }
+
+
 }
