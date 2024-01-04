@@ -49,6 +49,28 @@ public class RecommendationService {
         return Period.between(birthDate, now).getYears();
     }
 
+    private String buildRecommendationRequestJson(Utilisateur utilisateur, LocalDateTime tempsDuClient) {
+        int age = calculateAge(utilisateur.getDateDeNaissance());
+        int taille = Integer.parseInt(utilisateur.getTaille());
+        int poids = Integer.parseInt(utilisateur.getPoids());
+        String sexe = utilisateur.getSexe().equals("Femme") ? "female" : "male";
+        String weight_loss_plan = utilisateur.isModeSportif() ? "Mild weight loss" : "Maintain weight";
+
+        return String.format(
+                "{" +
+                        "\"age\": %d," +
+                        "\"height\": %d," +
+                        "\"weight\": %d," +
+                        "\"gender\": \"%s\"," +
+                        "\"activity\": \"Little/no exercise\"," +
+                        "\"number_of_meals\": 3," +
+                        "\"weight_loss_plan\": \"%s\"" +
+                        "}",
+                age, taille, poids, sexe, weight_loss_plan
+        );
+    }
+
+
 
     public void setRecommendationSystemUrl(String recommendationSystemUrl) {
         this.recommendationSystemUrl = recommendationSystemUrl;
