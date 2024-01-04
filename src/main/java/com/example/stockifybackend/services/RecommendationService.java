@@ -219,11 +219,14 @@ public class RecommendationService {
             // Récupérer la recette depuis la base de données
             Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
 
-            return optionalRecette.map(recette -> {
-                recette.setInstructionsList(recipeInstructions);
-                return createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette);
-            }).orElse(null);
+            return optionalRecette.filter(recette -> isRecetteValid(recette, régimesSpéciaux, tempsDePreparation, nomsDesIngrédientPréféres))
+                    .map(recette -> {
+                        recette.setInstructionsList(recipeInstructions);
+                        return createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette);
+                    })
+                    .orElse(null);
         }
+
 
 
     private List<RecetteResponse> processRecommendationFiltredResponse(JSONObject jsonResponse, LocalDateTime tempsDuClient, List<Produit> produitsAuStock, List<Repas> recettesAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
