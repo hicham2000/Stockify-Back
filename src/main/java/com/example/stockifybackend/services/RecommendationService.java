@@ -327,9 +327,8 @@ public class RecommendationService {
 
         String requestJson = buildRecommendationRecettesSimilairesRequestJson(recette);
 
-        System.out.println("requestJson => " + requestJson);
-
         JSONObject jsonResponse = sendRecommendationRequest(requestJson, url);
+
 
         return processRecommendationRecettesSimilairesResponse(jsonResponse, produitsAuStock, recettesAuStock,utilisateur);
     }
