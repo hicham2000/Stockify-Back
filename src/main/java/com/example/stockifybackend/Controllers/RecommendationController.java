@@ -1,6 +1,7 @@
 package com.example.stockifybackend.Controllers;
 
 import com.example.stockifybackend.Entities.Recette;
+import com.example.stockifybackend.dto.RecetteResponse;
 import com.example.stockifybackend.services.RecommendationService;
 import lombok.NoArgsConstructor;
 import org.json.JSONException;
@@ -38,7 +39,7 @@ public class RecommendationController {
             tempsDuClient = LocalDateTime.now();
         }
 
-        List<Recette> recommendedRecettes = recommendationService.getRecommendedRecettes(id, tempsDuClient);
+        List<RecetteResponse> recommendedRecettes = recommendationService.getRecommendedRecettes(id, tempsDuClient);
         if(recommendedRecettes.isEmpty()) {
             response.put("message", "Aucun Recettes recommandées");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -49,47 +50,5 @@ public class RecommendationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/RecettesFiltred/{id}")
-    public ResponseEntity<?> getRecommendedFiltredRecettes(
-            @PathVariable Long id,
-            @RequestParam(name = "tempsDuClient", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime tempsDuClient,
-            @RequestBody Map<String, Object> requestBody
-    ) throws JSONException {
-        Map<String, Object> response = new HashMap<>();
-
-        if (tempsDuClient == null) {
-            tempsDuClient = LocalDateTime.now();
-        }
-
-        String régimeSpéciale = (String) requestBody.get("régimeSpéciale");
-        String tempsDePreparation = (String) requestBody.get("tempsDePreparation");
-        List<String> nomsDesIngrédientPréféres = (List<String>) requestBody.get("nomsDesIngrédientPréféres");
-
-        List<Recette> recommendedRecettes = recommendationService.getRecommendedFilteredRecettes(id, tempsDuClient, régimeSpéciale, tempsDePreparation, nomsDesIngrédientPréféres);
-        if (recommendedRecettes.isEmpty()) {
-            response.put("message", "Aucun Recettes recommandées");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        response.put("message", "Recettes Recommendées");
-        response.put("recettes", recommendedRecettes);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @GetMapping("/RecettesSimilaires/{id}")
-    public ResponseEntity<Map<String, Object>> getSimilarRecettes(@PathVariable Long id) throws JSONException {
-        Map<String, Object> response = new HashMap<>();
-
-        List<Recette> similarRecettes = recommendationService.getRecettesSimilaires(id);
-
-        if (similarRecettes.isEmpty()) {
-            response.put("message", "Aucun Recettes similaires");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
-
-        response.put("message", "Recettes similaires");
-        response.put("recettes", similarRecettes);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 
 }
