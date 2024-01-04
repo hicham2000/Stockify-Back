@@ -150,6 +150,24 @@ public class UtilisateurService {
         recetteFavoris.add(recette);
 
         utilisateurRepository.save(utilisateur);
+    }
+
+    public void removeRecetteAuFavoris(Long user_id, Long recette_id) {
+        Optional<Utilisateur> tempUtilisateur = utilisateurRepository.findById(user_id);
+        if (tempUtilisateur.isEmpty()) {
+            throw new RuntimeException("Utilisateur with id {\"+ id +\"} not found");
+        }
+        Utilisateur utilisateur = tempUtilisateur.get();
+        Optional<Recette> tempRecette = recetteRepository.findById(recette_id);
+        if (tempUtilisateur.isEmpty()) {
+            throw new RuntimeException("Recette with id {\"+ id +\"} not found");
+        }
+
+        Recette recette = tempRecette.get();
+        List<Recette> recetteFavoris = utilisateur.getRecettesFavoris();
+        recetteFavoris.remove(recette);
+
+        utilisateurRepository.save(utilisateur);
 
     }
 }
