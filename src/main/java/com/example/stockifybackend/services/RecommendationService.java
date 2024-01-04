@@ -113,6 +113,15 @@ public class RecommendationService {
         }
     }
 
+    private RecetteResponse createRecetteResponse(Utilisateur utilisateur, List<Repas> recettesAuStock, List<Produit> produitsAuStock, Recette recette) {
+        RecetteResponse recetteResponse = new RecetteResponse(recette);
+        recetteResponse.setQuantiteEnStock(recettesAuStock);
+        recetteResponse.setIngredients(recette.getIngredients(), produitsAuStock);
+        recetteResponse.setNombreIngredientManquantes();
+        recetteResponse.setIsFavoris(utilisateur);
+        return recetteResponse;
+    }
+
     /* ---------------------------------------------------------*/
 
 
