@@ -1,13 +1,13 @@
 package com.example.stockifybackend.dto;  // Changez le package en conséquence
 
 import com.example.stockifybackend.Entities.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
@@ -76,5 +76,18 @@ public class RecetteResponse implements Serializable {
         return stockProduits.stream()
                 .anyMatch(produit -> produit.getIntitule().toLowerCase().strip().equals(ingredientName) && produit.getQuantite() >= ingredient.getQuantity());
     }
+
+    private Double quantiteIngredientEnStock(Ingredient ingredient, List<Produit> stockProduits) {
+        String ingredientName = ingredient.getIntitule().toLowerCase().strip();
+
+        // Rechercher le produit correspondant au nom de l'ingrédient dans la liste de produits du stock
+        Optional<Produit> produitOptional = stockProduits.stream()
+                .filter(produit -> produit.getIntitule().toLowerCase().strip().equals(ingredientName))
+                .findFirst();
+
+        // Si le produit correspondant est trouvé, retourner la quantité en stock, sinon retourner 0
+        return produitOptional.map(Produit::getQuantite).orElse(Double.valueOf(0));
+    }
+
 
 }
