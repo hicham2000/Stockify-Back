@@ -62,11 +62,11 @@ public class RecommendationController {
             tempsDuClient = LocalDateTime.now();
         }
 
-        String régimeSpéciale = (String) requestBody.get("régimeSpéciale");
+        List<String> régimesSpéciaux = (List<String>) requestBody.get("régimeSpéciaux");
         String tempsDePreparation = (String) requestBody.get("tempsDePreparation");
         List<String> nomsDesIngrédientPréféres = (List<String>) requestBody.get("nomsDesIngrédientPréféres");
 
-        List<RecetteResponse> recommendedRecettes = recommendationService.getRecommendedFilteredRecettes(id, tempsDuClient, régimeSpéciale, tempsDePreparation, nomsDesIngrédientPréféres);
+        List<RecetteResponse> recommendedRecettes = recommendationService.getRecommendedFilteredRecettes(id, tempsDuClient, régimesSpéciaux, tempsDePreparation, nomsDesIngrédientPréféres);
         if (recommendedRecettes.isEmpty()) {
             response.put("message", "Aucun Recettes recommandées");
             return new ResponseEntity<>(response, HttpStatus.OK);
