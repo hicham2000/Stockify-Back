@@ -61,6 +61,10 @@ public class RecetteResponse implements Serializable {
         this.ingredients = convertIngredients(recetteIngredients, stockProduits);
     }
 
+    public void setIsFavoris(Utilisateur utilisateur) {
+        this.isFavoris = recetteIsFavorisDeUtilisateur(utilisateur);
+    }
+
 
 
     private List<IngredientInfo> convertIngredients(List<Ingredient> recetteIngredients, List<Produit> stockProduits) {
