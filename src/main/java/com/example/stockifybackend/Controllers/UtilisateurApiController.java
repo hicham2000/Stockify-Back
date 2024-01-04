@@ -27,9 +27,7 @@ public class UtilisateurApiController {
     private UtilisateurRepository utilisateurRepository;
 
     @PostMapping("/Login")
-    public ResponseEntity<?> authenticateUser(
-            @RequestBody LogingUtilisateur logingUtilisateur
-    ) {
+    public ResponseEntity<?> authenticateUser(@RequestBody LogingUtilisateur logingUtilisateur) {
         Optional<Utilisateur> utilisateurOptional = Optional.ofNullable(utilisateurService.getUtilisateurByEmail(logingUtilisateur.getEmail()));
         Map<String, Object> response = new HashMap<>();
 
@@ -104,5 +102,6 @@ public class UtilisateurApiController {
         response.put("message", "User updated successfully!...");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
 }

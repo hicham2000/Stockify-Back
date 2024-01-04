@@ -139,9 +139,18 @@ public class RecommendationService {
 
                 // Extraire les informations de la recette et créer un objet Recette
                 Long recetteId = recetteObject.getLong("Recipe_Id");
+                JSONArray recipeInstructionsArray = recetteObject.getJSONArray("RecipeInstructions");
+                List<String> recipeInstructions = new ArrayList<>();
+
+                for (int j = 0; j < recipeInstructionsArray.length(); j++) {
+                    String instruction = recipeInstructionsArray.getString(j);
+                    recipeInstructions.add(instruction);
+                }
+
                 Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
 
                 optionalRecette.ifPresent(recette -> {
+                    recette.setInstructionsList(recipeInstructions);
                     RecetteResponse recetteResponse = createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette);
                     recommendedRecettes.add(recetteResponse);
                 });
@@ -198,11 +207,23 @@ public class RecommendationService {
 
     private RecetteResponse processRecetteObject(JSONObject recetteObject, List<Repas> recettesAuStock, List<Produit> produitsAuStock, String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
         Long recetteId = recetteObject.getLong("Recipe_Id");
-        return recetteRepository.findById(recetteId)
-                .filter(recette -> isRecetteValid(recette, régimeSpéciale, tempsDePreparation, nomsDesIngrédientPréféres))
-                .map(recette -> createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette))
-                .orElse(null);
+        JSONArray recipeInstructionsArray = recetteObject.getJSONArray("RecipeInstructions");
+        List<String> recipeInstructions = new ArrayList<>();
+
+        for (int j = 0; j < recipeInstructionsArray.length(); j++) {
+            String instruction = recipeInstructionsArray.getString(j);
+            recipeInstructions.add(instruction);
+        }
+
+        // Récupérer la recette depuis la base de données
+        Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
+
+        return optionalRecette.map(recette -> {
+            recette.setInstructionsList(recipeInstructions);
+            return createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette);
+        }).orElse(null);
     }
+
 
     private List<RecetteResponse> processRecommendationFiltredResponse(JSONObject jsonResponse, LocalDateTime tempsDuClient, List<Produit> produitsAuStock, List<Repas> recettesAuStock,String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
         if (jsonResponse != null && jsonResponse.has("output")) {
@@ -294,9 +315,18 @@ public class RecommendationService {
 
                 // Extraire les informations de la recette et créer un objet Recette
                 Long recetteId = recetteObject.getLong("Recipe_Id");
+                JSONArray recipeInstructionsArray = recetteObject.getJSONArray("RecipeInstructions");
+                List<String> recipeInstructions = new ArrayList<>();
+
+                for (int j = 0; j < recipeInstructionsArray.length(); j++) {
+                    String instruction = recipeInstructionsArray.getString(j);
+                    recipeInstructions.add(instruction);
+                }
+
                 Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
 
                 optionalRecette.ifPresent(recette -> {
+                    recette.setInstructionsList(recipeInstructions);
                     RecetteResponse recetteResponse = createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette);
                     recommendedRecettes.add(recetteResponse);
                 });
@@ -328,7 +358,6 @@ public class RecommendationService {
         String requestJson = buildRecommendationRecettesSimilairesRequestJson(recette);
 
         JSONObject jsonResponse = sendRecommendationRequest(requestJson, url);
-
 
         return processRecommendationRecettesSimilairesResponse(jsonResponse, produitsAuStock, recettesAuStock,utilisateur);
     }
