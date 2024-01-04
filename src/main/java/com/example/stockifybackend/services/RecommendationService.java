@@ -70,6 +70,38 @@ public class RecommendationService {
         );
     }
 
+    private JSONObject sendRecommendationRequest(String requestJson, String url) throws JSONException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestJson, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> responseEntity;
+
+        try {
+            responseEntity = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    requestEntity,
+                    String.class
+            );
+        } catch (RestClientException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if (responseEntity.getBody() == null) {
+            return null;
+        }
+
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            return new JSONObject(responseEntity.getBody());
+        }
+
+        return null;
+    }
+
 
 
     public void setRecommendationSystemUrl(String recommendationSystemUrl) {
