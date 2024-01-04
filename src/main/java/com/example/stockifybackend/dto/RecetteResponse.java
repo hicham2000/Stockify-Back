@@ -1,11 +1,13 @@
 package com.example.stockifybackend.dto;  // Changez le package en conséquence
 
 import com.example.stockifybackend.Entities.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,13 +21,13 @@ public class RecetteResponse implements Serializable {
     private String intitule;
     private String description;
     private int dureeTotal;
+    private List<String> instructionsList;
     private String imageUrl;
     private ValeurNutritionnel valeurNutritionnel;
     private CategorieDeRecette categorieDeRecette;
-    private List<String> instructionsList = new ArrayList<>();
     private int quantiteEnStock;
     private int nombreIngredientsManquantes;
-    private List<IngredientInfo> ingredients = new ArrayList<>();
+    private List<IngredientInfo> ingredients;
     private boolean isFavoris;
 
     @Data
@@ -39,6 +41,7 @@ public class RecetteResponse implements Serializable {
     }
 
     public RecetteResponse(Recette recette) {
+    public RecetteResponse(Recette recette, int quantiteEnStock, int nombreIngredientsManquantes, boolean isFavoris) {
         this.id = recette.getId();
         this.intitule = recette.getIntitule();
         this.description = recette.getDescription();
@@ -126,5 +129,10 @@ public class RecetteResponse implements Serializable {
                 .anyMatch(recette -> recette.getId().equals(this.id));
     }
 
+
+        this.quantiteEnStock = quantiteEnStock;
+        this.nombreIngredientsManquantes = nombreIngredientsManquantes;
+        this.isFavoris = isFavoris;
+    }
 
 }

@@ -55,8 +55,14 @@ public class RecommendationService {
         age = age >=0 ? age: 20;
         int taille = Integer.parseInt(utilisateur.getTaille());
         int poids = Integer.parseInt(utilisateur.getPoids());
-        String sexe = utilisateur.getSexe().equalsIgnoreCase("Femme") ? "female" : "male";
-        String weight_loss_plan = utilisateur.isModeSportif() ? "Mild weight loss" : "Maintain weight";
+        String sexe = "male";
+        if (utilisateur.getSexe().equals("Femme")) {
+            sexe = "female";
+        }
+        String weight_loss_plan = "Maintain weight";
+        if (utilisateur.isModeSportif()) {
+            weight_loss_plan = "Mild weight loss";
+        }
 
         return String.format(
                 "{" +
