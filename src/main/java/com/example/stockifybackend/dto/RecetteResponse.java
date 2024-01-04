@@ -37,7 +37,7 @@ public class RecetteResponse implements Serializable {
         private boolean isEnough;
     }
 
-    public RecetteResponse(Recette recette, int quantiteEnStock, int nombreIngredientsManquantes, boolean isFavoris) {
+    public RecetteResponse(Recette recette, int nombreIngredientsManquantes, boolean isFavoris) {
         this.id = recette.getId();
         this.intitule = recette.getIntitule();
         this.description = recette.getDescription();
@@ -46,10 +46,10 @@ public class RecetteResponse implements Serializable {
         this.imageUrl = recette.getImageUrl();
         this.valeurNutritionnel = recette.getValeurNutritionnel();
         this.categorieDeRecette = recette.getCategorieDeRecette();
-        this.quantiteEnStock = quantiteEnStock;
         this.nombreIngredientsManquantes = nombreIngredientsManquantes;
         this.isFavoris = isFavoris;
     }
+
 
     public void setIngredients(List<Ingredient> recetteIngredients, List<Produit> stockProduits) {
         this.ingredients = convertIngredients(recetteIngredients, stockProduits);
@@ -76,6 +76,16 @@ public class RecetteResponse implements Serializable {
         return stockProduits.stream()
                 .anyMatch(produit -> produit.getIntitule().toLowerCase().strip().equals(ingredientName) && produit.getQuantite() >= ingredient.getQuantity());
     }
+
+    private int quantiteRecetteEnStock(String intituleRecette, List<Repas> stockRepas) {
+        // Filtrer les repas du stock dont l'intitulé correspond à l'intitulé de la recette
+        long quantiteRecettesCorrespondantes = stockRepas.stream()
+                .filter(repas -> repas.getIntitule().equalsIgnoreCase(intituleRecette))
+                .count();
+
+        return (int) quantiteRecettesCorrespondantes;
+    }
+
 
     private Double quantiteIngredientEnStock(Ingredient ingredient, List<Produit> stockProduits) {
         String ingredientName = ingredient.getIntitule().toLowerCase().strip();
