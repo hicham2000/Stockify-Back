@@ -52,6 +52,21 @@ public class RecetteResponse implements Serializable {
     }
 
 
+
+    private List<IngredientInfo> convertIngredients(List<Ingredient> recetteIngredients, List<Produit> stockProduits) {
+        return recetteIngredients.stream()
+                .map(ingredient -> {
+                    boolean isEnough = isIngredientEnoughInStock(ingredient, stockProduits);
+                    return new IngredientInfo(
+                            ingredient.getId(),
+                            ingredient.getIntitule(),
+                            ingredient.getQuantity(),
+                            isEnough
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
     private boolean isIngredientEnoughInStock(Ingredient ingredient, List<Produit> stockProduits) {
         String ingredientName = ingredient.getIntitule().toLowerCase().strip();
 
