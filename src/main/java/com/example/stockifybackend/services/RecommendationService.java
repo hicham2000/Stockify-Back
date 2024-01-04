@@ -88,7 +88,7 @@ public class RecommendationService {
                     String.class
             );
         } catch (RestClientException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return null;
         }
 
@@ -272,10 +272,10 @@ public class RecommendationService {
                 "{" +
                         "\"nutrition_input\": [%s, %s, 0, 0, 10, %s, %s, %s, %s]," +
                         "\"number_of_recommendations\": %s," +
-                        "\"ingredients\": [%s]" +
+                        "\"ingredients\": []" +
                         "}",
                 enegie, lipide, carbohydrate, fibre, sucre, proteine,
-                3, ingredientsString
+                3
         );
     }
 
@@ -314,7 +314,6 @@ public class RecommendationService {
         }
     }
 
-
     public List<RecetteResponse> getRecettesSimilaires(Long recetteId, Long user_id) throws JSONException {
         String url = recommendationSystemUrl + "/Recipe_suggestions/";
         Utilisateur utilisateur = utilisateurRepository.findById(user_id)
@@ -328,11 +327,9 @@ public class RecommendationService {
 
         String requestJson = buildRecommendationRecettesSimilairesRequestJson(recette);
 
-        logger.debug("requestJson ", requestJson);
+        System.out.println("requestJson => " + requestJson);
 
         JSONObject jsonResponse = sendRecommendationRequest(requestJson, url);
-
-        logger.debug("jsonResponse  => ", jsonResponse);
 
         return processRecommendationRecettesSimilairesResponse(jsonResponse, produitsAuStock, recettesAuStock,utilisateur);
     }
