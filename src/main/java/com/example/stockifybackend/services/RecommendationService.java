@@ -277,6 +277,33 @@ public class RecommendationService {
         );
     }
 
+
+    private List<RecetteResponse> processRecommendationRecettesSimilairesResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Repas> recettesAuStock, Utilisateur utilisateur) throws JSONException {
+        if (jsonResponse != null && jsonResponse.has("output")) {
+
+            JSONArray recettesArray = jsonResponse.getJSONArray("output");
+
+            List<RecetteResponse> recommendedRecettes = new ArrayList<>();
+
+            for (int i = 0; i < recettesArray.length(); i++) {
+                JSONObject recetteObject = recettesArray.getJSONObject(i);
+
+                // Extraire les informations de la recette et créer un objet Recette
+                Long recetteId = recetteObject.getLong("Recipe_Id");
+                Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
+
+                optionalRecette.ifPresent(recette -> {
+                    RecetteResponse recetteResponse = createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette);
+                    recommendedRecettes.add(recetteResponse);
+                });
+            }
+
+            return recommendedRecettes;
+        }
+
+        return new ArrayList<>();
+    }
+
     public void setRecommendationSystemUrl(String recommendationSystemUrl) {
         this.recommendationSystemUrl = recommendationSystemUrl;
     }
