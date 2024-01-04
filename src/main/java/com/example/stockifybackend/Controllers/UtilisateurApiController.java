@@ -103,8 +103,8 @@ public class UtilisateurApiController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/Utilisateur/{userId}")
-    public ResponseEntity<?> ajouterRecetteFavorite(@PathVariable Long userId, @RequestParam Long recette_id) {
+    @PostMapping("/Utilisateur/{userId}/recetteFavoris/{recette_id}")
+    public ResponseEntity<?> ajouterRecetteFavorite(@PathVariable Long userId, @PathVariable Long recette_id) {
         Map<String, Object> response = new HashMap<>();
         try {
             utilisateurService.AddRecetteAuFavoris(userId, recette_id);
@@ -113,6 +113,19 @@ public class UtilisateurApiController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         response.put("message", "Recette ajoutée aux favoris avec succès");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/Utilisateurs/{userId}/recetteFavoris/{recette_id}")
+    public ResponseEntity<?> supprimerRecetteFavorite(@PathVariable Long userId, @PathVariable Long recette_id) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            utilisateurService.removeRecetteAuFavoris(userId, recette_id);
+        }catch(Exception error){
+            response.put("Error", error);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        response.put("message", "Recette supprimée de favoris avec succès");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
