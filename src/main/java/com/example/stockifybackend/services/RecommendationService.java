@@ -122,6 +122,76 @@ public class RecommendationService {
         return recetteResponse;
     }
 
+    private List<RecetteResponse> processRecommendationResponse(JSONObject jsonResponse, LocalDateTime tempsDuClient, List<Produit> produitsAuStock, List<Repas> recettesAuStock, Utilisateur utilisateur) throws JSONException {
+        if (jsonResponse != null && jsonResponse.has("output")) {
+            JSONObject repasProgramme = jsonResponse.getJSONObject("output").getJSONObject("Repas_Programme");
+
+            List<RecetteResponse> recommendedRecettes = new ArrayList<>();
+
+            String repasType = determineRepasType(tempsDuClient);
+
+            JSONArray recettesArray = repasProgramme.getJSONArray(repasType);
+
+            for (int i = 0; i < recettesArray.length(); i++) {
+                JSONObject recetteObject = recettesArray.getJSONObject(i);
+
+                // Extraire les informations de la recette et créer un objet Recette
+                Long recetteId = recetteObject.getLong("Recipe_Id");
+                Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
+
+                optionalRecette.ifPresent(recette -> {
+                    RecetteResponse recetteResponse = createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette);
+                    recommendedRecettes.add(recetteResponse);
+                });
+            }
+
+            return recommendedRecettes;
+        }
+
+        return new ArrayList<>();
+    }
+
+    public List<RecetteResponse> getRecommendedRecettes(long userId, LocalDateTime tempsDuClient) throws JSONException {
+        String url = recommendationSystemUrl + "/Repas_suggestions/";
+        Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(userId);
+
+        Utilisateur utilisateur = optionalUtilisateur.orElseThrow(() -> new RuntimeException("Utilisateur with id " + userId + " not found"));
+
+        List<Produit> produitsAuStock = stockService.getAllProductsInStock(utilisateur.getStock_id());
+        List<Repas> recettesAuStock = stockService.getAllRecettesInStock(utilisateur.getStock_id());
+
+        String requestJson = buildRecommendationRequestJson(utilisateur);
+
+        JSONObject jsonResponse = sendRecommendationRequest(requestJson, url);
+
+        return processRecommendationResponse(jsonResponse, tempsDuClient, produitsAuStock, recettesAuStock, utilisateur);
+    }
+
+    private boolean hasPreferredIngredients(Recette recette, List<String> preferredIngredients) {
+        if(preferredIngredients.isEmpty()) {
+            return true;
+        }
+        List<String> ingredientNames = recette.getIngredients().stream()
+                .map(Ingredient::getIntitule)
+                .collect(Collectors.toList());
+
+        return ingredientNames.containsAll(preferredIngredients);
+    }
+
+    private boolean isRecetteValid(Recette recette, String régimeSpéciale, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) {
+        if(régimeSpéciale.isEmpty() || tempsDePreparation.isEmpty()){
+            return true;
+        }
+        int totalTimeMinutes = recette.getDureeTotal();
+        String categorieDeRecette = recette.getCategorieDeRecette().getIntitule();
+
+        boolean result = categorieDeRecette.equals(régimeSpéciale) && totalTimeMinutes <= Integer.parseInt(tempsDePreparation) && hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
+
+        return categorieDeRecette.equals(régimeSpéciale) &&
+                totalTimeMinutes <= Integer.parseInt(tempsDePreparation) &&
+                hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
+    }
+
     /* ---------------------------------------------------------*/
 
 
