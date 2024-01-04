@@ -51,4 +51,13 @@ public class RecetteResponse implements Serializable {
         this.isFavoris = isFavoris;
     }
 
+
+    private boolean isIngredientEnoughInStock(Ingredient ingredient, List<Produit> stockProduits) {
+        String ingredientName = ingredient.getIntitule().toLowerCase().strip();
+
+        // Vérifier si le nom de l'ingrédient existe dans la liste des produits du stock
+        return stockProduits.stream()
+                .anyMatch(produit -> produit.getIntitule().toLowerCase().strip().equals(ingredientName) && produit.getQuantite() >= ingredient.getQuantity());
+    }
+
 }
