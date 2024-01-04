@@ -304,6 +304,24 @@ public class RecommendationService {
         return new ArrayList<>();
     }
 
+    public List<RecetteResponse> getRecettesSimilaires(Long recetteId, Long user_id) throws JSONException {
+        String url = recommendationSystemUrl + "/Recipe_suggestions/";
+        Utilisateur utilisateur = utilisateurRepository.findById(user_id)
+                .orElseThrow(() -> new RuntimeException("Utilisateur with id " + user_id + " not found"));
+
+        List<Produit> produitsAuStock = stockService.getAllProductsInStock(utilisateur.getStock_id());
+        List<Repas> recettesAuStock = stockService.getAllRecettesInStock(utilisateur.getStock_id());
+
+        Recette recette = recetteRepository.findById(recetteId)
+                .orElseThrow(() -> new RuntimeException("Recette with id " + recetteId + " not found"));
+
+        String requestJson = buildRecommendationRecettesSimilairesRequestJson(recette);
+
+        JSONObject jsonResponse = sendRecommendationRequest(requestJson, url);
+
+        return processRecommendationRecettesSimilairesResponse(jsonResponse, produitsAuStock, recettesAuStock,utilisateur);
+    }
+
     public void setRecommendationSystemUrl(String recommendationSystemUrl) {
         this.recommendationSystemUrl = recommendationSystemUrl;
     }
