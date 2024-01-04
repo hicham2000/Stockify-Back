@@ -46,8 +46,6 @@ public class RecommendationService {
 
     private int calculateAge(Date dateDeNaissance) {
         LocalDate birthDate = dateDeNaissance.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-
         LocalDate now = LocalDate.now();
         return Period.between(birthDate, now).getYears();
     }
@@ -104,6 +102,17 @@ public class RecommendationService {
             return new JSONObject(responseEntity.getBody());
         } else {
             return null;
+        }
+    }
+
+
+    private String determineRepasType(LocalDateTime tempsDuClient) {
+        if (tempsDuClient.getHour() < 12) {
+            return "breakfast";
+        } else if (tempsDuClient.getHour() < 18) {
+            return "lunch";
+        } else {
+            return "dinner";
         }
     }
 
