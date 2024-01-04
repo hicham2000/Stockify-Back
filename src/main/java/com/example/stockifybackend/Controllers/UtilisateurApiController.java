@@ -3,7 +3,6 @@ package com.example.stockifybackend.Controllers;
 import com.example.stockifybackend.Entities.LogingUtilisateur;
 import com.example.stockifybackend.Entities.Utilisateur;
 import com.example.stockifybackend.Repositories.UtilisateurRepository;
-import com.example.stockifybackend.dto.UtilisateurUpdateRequest;
 import com.example.stockifybackend.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +27,9 @@ public class UtilisateurApiController {
     private UtilisateurRepository utilisateurRepository;
 
     @PostMapping("/Login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LogingUtilisateur logingUtilisateur) {
+    public ResponseEntity<?> authenticateUser(
+            @RequestBody LogingUtilisateur logingUtilisateur
+    ) {
         Optional<Utilisateur> utilisateurOptional = Optional.ofNullable(utilisateurService.getUtilisateurByEmail(logingUtilisateur.getEmail()));
         Map<String, Object> response = new HashMap<>();
 
@@ -37,7 +38,7 @@ public class UtilisateurApiController {
             if (utilisateur.getPassword().equals(logingUtilisateur.getPassword())) {
                 response.put("message", "Login successfully :)");
                 response.put("user_id", utilisateur.getId());
-                response.put("stock_id", utilisateur.getStock().getId());
+                response.put("stock_id", utilisateur.getStock_id());
                 response.put("listeDeCourse_id", utilisateur.getListeDeCourse_id());
 
                 return new ResponseEntity<>(response, HttpStatus.OK);
@@ -88,9 +89,8 @@ public class UtilisateurApiController {
     }
 
     @PutMapping("/Utilisateur/{id}")
-    public ResponseEntity<?> updateUtilisateur(@RequestBody UtilisateurUpdateRequest updatedUtilisateur, @PathVariable Long id){
+    public ResponseEntity<?> updateUtilisateur(@PathVariable Long id, @RequestBody Utilisateur updatedUtilisateur){
         Map<String, Object> response = new HashMap<>();
-
         try {
             utilisateurService.updateUtilisateurFields(id, updatedUtilisateur);
         }catch(Exception error){
