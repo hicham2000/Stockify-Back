@@ -38,7 +38,7 @@ public class RecetteResponse implements Serializable {
         private boolean isEnough;
     }
 
-    public RecetteResponse(Recette recette, int nombreIngredientsManquantes, boolean isFavoris) {
+    public RecetteResponse(Recette recette) {
         this.id = recette.getId();
         this.intitule = recette.getIntitule();
         this.description = recette.getDescription();
@@ -47,8 +47,6 @@ public class RecetteResponse implements Serializable {
         this.imageUrl = recette.getImageUrl();
         this.valeurNutritionnel = recette.getValeurNutritionnel();
         this.categorieDeRecette = recette.getCategorieDeRecette();
-        this.nombreIngredientsManquantes = nombreIngredientsManquantes;
-        this.isFavoris = isFavoris;
     }
 
     public void setQuantiteEnStock(List<Repas> stockRepas) {
@@ -62,6 +60,8 @@ public class RecetteResponse implements Serializable {
     public void setIngredients(List<Ingredient> recetteIngredients, List<Produit> stockProduits) {
         this.ingredients = convertIngredients(recetteIngredients, stockProduits);
     }
+
+
 
     private List<IngredientInfo> convertIngredients(List<Ingredient> recetteIngredients, List<Produit> stockProduits) {
         return recetteIngredients.stream()
@@ -118,6 +118,11 @@ public class RecetteResponse implements Serializable {
         return (int) countNotEnough;
     }
 
+    public boolean recetteIsFavorisDeUtilisateur(Utilisateur utilisateur) {
+        List<Recette> recettesFavorites = utilisateur.getRecettesFavoris();
+        return recettesFavorites.stream()
+                .anyMatch(recette -> recette.getId().equals(this.id));
+    }
 
 
 }
