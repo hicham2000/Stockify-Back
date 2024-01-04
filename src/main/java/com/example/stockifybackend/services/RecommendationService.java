@@ -96,12 +96,14 @@ public class RecommendationService {
             return null;
         }
 
-        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+        HttpStatus statusCode = (HttpStatus) responseEntity.getStatusCode();
+        if (statusCode == HttpStatus.OK) {
             return new JSONObject(responseEntity.getBody());
+        } else {
+            return null;
         }
-
-        return null;
     }
+
 
     private String determineRepasType(LocalDateTime tempsDuClient) {
         if (tempsDuClient.getHour() < 12) {
@@ -277,7 +279,10 @@ public class RecommendationService {
         );
     }
 
-
+    private List<Recette> generateRandomRecettes(int count) {
+        List<Recette> randomRecettes = new ArrayList<>();
+        return randomRecettes;
+    }
     private List<RecetteResponse> processRecommendationRecettesSimilairesResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Repas> recettesAuStock, Utilisateur utilisateur) throws JSONException {
         if (jsonResponse != null && jsonResponse.has("output")) {
 
@@ -317,7 +322,11 @@ public class RecommendationService {
 
         String requestJson = buildRecommendationRecettesSimilairesRequestJson(recette);
 
+        logger.debug("requestJson ", requestJson);
+
         JSONObject jsonResponse = sendRecommendationRequest(requestJson, url);
+
+        logger.debug("jsonResponse  => ", jsonResponse);
 
         return processRecommendationRecettesSimilairesResponse(jsonResponse, produitsAuStock, recettesAuStock,utilisateur);
     }
