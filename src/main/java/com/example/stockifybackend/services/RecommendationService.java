@@ -46,6 +46,8 @@ public class RecommendationService {
 
     private int calculateAge(Date dateDeNaissance) {
         LocalDate birthDate = dateDeNaissance.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+
         LocalDate now = LocalDate.now();
         return Period.between(birthDate, now).getYears();
     }

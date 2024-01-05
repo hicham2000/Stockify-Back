@@ -38,7 +38,7 @@ public class Utilisateur implements Serializable {
 
     @OneToMany
     @JoinTable(
-            name = "utilisateur_recette",
+            name = "utilisateur_recette_favoris",
             joinColumns = @JoinColumn(name = "utilisateur_id"),
             inverseJoinColumns = @JoinColumn(name = "recette_id"))
     private List<Recette> recettesFavoris = new ArrayList<>();
