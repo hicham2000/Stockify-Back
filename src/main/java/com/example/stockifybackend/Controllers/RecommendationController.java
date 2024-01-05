@@ -47,15 +47,12 @@ public class RecommendationController {
     }
 
     @GetMapping("/RecettesFiltred/{id}")
-    public ResponseEntity<?> getRecommendedFiltredRecettes(
-            @PathVariable Long id,
-            @RequestBody Map<String, Object> requestBody
-    ) throws JSONException {
+    public ResponseEntity<?> getRecommendedFiltredRecettes(@PathVariable Long id, @RequestBody Map<String, Object> requestBody) throws JSONException {
         Map<String, Object> response = new HashMap<>();
 
-        List<String> régimesSpéciaux = (List<String>) requestBody.get("régimeSpéciaux");
+        List<String> régimesSpéciaux = (List<String>) requestBody.get("regimeSpeciaux");
         String tempsDePreparation = (String) requestBody.get("tempsDePreparation");
-        List<String> nomsDesIngrédientPréféres = (List<String>) requestBody.get("nomsDesIngrédientPréféres");
+        List<String> nomsDesIngrédientPréféres = (List<String>) requestBody.get("nomsDesIngredientPreferes");
 
         List<RecetteResponse> recommendedRecettes = recommendationService.getRecommendedFilteredRecettes(id, régimesSpéciaux, tempsDePreparation, nomsDesIngrédientPréféres);
         if (recommendedRecettes.isEmpty()) {
