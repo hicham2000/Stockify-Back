@@ -194,6 +194,8 @@ public class RecommendationService {
         }
     private RecetteResponse processRecetteObject(JSONObject recetteObject, List<Repas> recettesAuStock, List<Produit> produitsAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
             Long recetteId = recetteObject.getLong("Recipe_Id");
+            String recipeImageUrl = recetteObject.getString("Recipe_Image_link");
+
             JSONArray recipeInstructionsArray = recetteObject.getJSONArray("RecipeInstructions");
             List<String> recipeInstructions = new ArrayList<>();
 
@@ -207,6 +209,7 @@ public class RecommendationService {
             if(optionalRecette.isPresent()) {
                 Recette recette = optionalRecette.get();
                 if(isRecetteValid(recette, régimesSpéciaux, tempsDePreparation, nomsDesIngrédientPréféres)) {
+                    recette.setImageUrl(recipeImageUrl);
                     recette.setInstructionsList(recipeInstructions);
                     return createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette);
                 }
@@ -301,6 +304,7 @@ public class RecommendationService {
                 // Extraire les informations de la recette et créer un objet Recette
                 Long recetteId = recetteObject.getLong("Recipe_Id");
                 JSONArray recipeInstructionsArray = recetteObject.getJSONArray("RecipeInstructions");
+                String recipeImageUrl = recetteObject.getString("Recipe_Image_link");
                 List<String> recipeInstructions = new ArrayList<>();
 
                 for (int j = 0; j < recipeInstructionsArray.length(); j++) {
@@ -312,6 +316,7 @@ public class RecommendationService {
 
                 optionalRecette.ifPresent(recette -> {
                     recette.setInstructionsList(recipeInstructions);
+                    recette.setImageUrl(recipeImageUrl);
                     RecetteResponse recetteResponse = createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette);
                     recommendedRecettes.add(recetteResponse);
                 });
@@ -328,7 +333,6 @@ public class RecommendationService {
             return randomRecetteResponses;
         }
     }
-
     public List<RecetteResponse> getRecettesSimilaires(Long recetteId, Long user_id) throws JSONException {
         String url = recommendationSystemUrl + "/Recipe_suggestions/";
         Utilisateur utilisateur = utilisateurRepository.findById(user_id)
