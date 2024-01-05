@@ -29,17 +29,12 @@ public class RecommendationController {
 
     @GetMapping("/Recettes/{id}")
     public ResponseEntity<?> getRecommendedRecettes(
-            @PathVariable Long id,
-            @RequestParam(name = "tempsDuClient", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime tempsDuClient
+            @PathVariable Long id
     ) throws JSONException {
 
         Map<String, Object> response = new HashMap<>();
 
-        if (tempsDuClient == null) {
-            tempsDuClient = LocalDateTime.now();
-        }
-
-        List<RecetteResponse> recommendedRecettes = recommendationService.getRecommendedRecettes(id, tempsDuClient);
+        List<RecetteResponse> recommendedRecettes = recommendationService.getRecommendedRecettes(id);
         if(recommendedRecettes.isEmpty()) {
             response.put("message", "Aucun Recettes recommandées");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -53,20 +48,15 @@ public class RecommendationController {
     @GetMapping("/RecettesFiltred/{id}")
     public ResponseEntity<?> getRecommendedFiltredRecettes(
             @PathVariable Long id,
-            @RequestParam(name = "tempsDuClient", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime tempsDuClient,
             @RequestBody Map<String, Object> requestBody
     ) throws JSONException {
         Map<String, Object> response = new HashMap<>();
-
-        if (tempsDuClient == null) {
-            tempsDuClient = LocalDateTime.now();
-        }
 
         List<String> régimesSpéciaux = (List<String>) requestBody.get("régimeSpéciaux");
         String tempsDePreparation = (String) requestBody.get("tempsDePreparation");
         List<String> nomsDesIngrédientPréféres = (List<String>) requestBody.get("nomsDesIngrédientPréféres");
 
-        List<RecetteResponse> recommendedRecettes = recommendationService.getRecommendedFilteredRecettes(id, tempsDuClient, régimesSpéciaux, tempsDePreparation, nomsDesIngrédientPréféres);
+        List<RecetteResponse> recommendedRecettes = recommendationService.getRecommendedFilteredRecettes(id, régimesSpéciaux, tempsDePreparation, nomsDesIngrédientPréféres);
         if (recommendedRecettes.isEmpty()) {
             response.put("message", "Aucun Recettes recommandées");
             return new ResponseEntity<>(response, HttpStatus.OK);
