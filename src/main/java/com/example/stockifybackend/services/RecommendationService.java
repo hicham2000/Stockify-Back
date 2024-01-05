@@ -174,7 +174,7 @@ public class RecommendationService {
     }
 
     public List<RecetteResponse> getRecommendedRecettes(long userId) throws JSONException {
-        String url = recommendationSystemUrl + "/Repas_suggestions/"; System.out.println("url => " + url);
+        String url = recommendationSystemUrl + "/Repas_suggestions/";
         Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(userId);
 
         Utilisateur utilisateur = optionalUtilisateur.orElseThrow(() -> new RuntimeException("Utilisateur with id " + userId + " not found"));
@@ -182,19 +182,11 @@ public class RecommendationService {
         List<Produit> produitsAuStock = stockService.getAllProductsInStock(utilisateur.getStock().getId());
         List<Recette> recettesAuStock = stockService.getAllRecipesInStock(utilisateur.getStock().getId());
 
-//        String requestJson = buildRecommendationRequestJson(utilisateur);
-//
-//        JSONObject jsonResponse = sendRecommendationRequest(requestJson, url);
+        String requestJson = buildRecommendationRequestJson(utilisateur);
 
-//        return processRecommendationResponse(jsonResponse, produitsAuStock, recettesAuStock, utilisateur);
-        List<RecetteResponse> recetteResponses = recetteRepository.findAll()
-                .stream()
-                .limit(2)
-                .map(recette -> createRecetteResponse(utilisateur, recettesAuStock, produitsAuStock, recette))
-                .collect(Collectors.toList());
+        JSONObject jsonResponse = sendRecommendationRequest(requestJson, url);
 
-        System.out.println("recetteResponses => " + recetteResponses);
-        return recetteResponses;
+        return processRecommendationResponse(jsonResponse, produitsAuStock, recettesAuStock, utilisateur);
     }
 
     /* ---------------------------------------------------------*/
