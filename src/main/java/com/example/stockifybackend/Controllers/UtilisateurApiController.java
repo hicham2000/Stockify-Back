@@ -3,6 +3,7 @@ package com.example.stockifybackend.Controllers;
 import com.example.stockifybackend.Entities.LogingUtilisateur;
 import com.example.stockifybackend.Entities.Utilisateur;
 import com.example.stockifybackend.Repositories.UtilisateurRepository;
+import com.example.stockifybackend.dto.UtilisateurUpdateRequest;
 import com.example.stockifybackend.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -87,8 +88,9 @@ public class UtilisateurApiController {
     }
 
     @PutMapping("/Utilisateur/{id}")
-    public ResponseEntity<?> updateUtilisateur(@PathVariable Long id, @RequestBody Utilisateur updatedUtilisateur){
+    public ResponseEntity<?> updateUtilisateur(@RequestBody UtilisateurUpdateRequest updatedUtilisateur, @PathVariable Long id){
         Map<String, Object> response = new HashMap<>();
+
         try {
             utilisateurService.updateUtilisateurFields(id, updatedUtilisateur);
         }catch(Exception error){
