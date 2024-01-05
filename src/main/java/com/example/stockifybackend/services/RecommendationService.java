@@ -52,6 +52,7 @@ public class RecommendationService {
 
     private String buildRecommendationRequestJson(Utilisateur utilisateur) {
         int age = calculateAge(utilisateur.getDateDeNaissance());
+        age = age >=0 ? age: 20;
         int taille = Integer.parseInt(utilisateur.getTaille());
         int poids = Integer.parseInt(utilisateur.getPoids());
         String sexe = utilisateur.getSexe().equalsIgnoreCase("Femme") ? "female" : "male";

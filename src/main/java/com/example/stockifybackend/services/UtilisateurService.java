@@ -8,6 +8,7 @@ import com.example.stockifybackend.Repositories.ListeCourseRepository;
 import com.example.stockifybackend.Repositories.RecetteRepository;
 import com.example.stockifybackend.Repositories.StockRepository;
 import com.example.stockifybackend.Repositories.UtilisateurRepository;
+import com.example.stockifybackend.dto.UtilisateurUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,7 @@ public class UtilisateurService {
     }
 
     // update an utilisateur
-    public void updateUtilisateurFields(Long id, Utilisateur updatedUtilisateur) throws ParseException {
+    public void updateUtilisateurFields(Long id, UtilisateurUpdateRequest updatedUtilisateur) throws ParseException {
         Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
 
         if (optionalUtilisateur.isEmpty()) {
