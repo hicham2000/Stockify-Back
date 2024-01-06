@@ -59,11 +59,31 @@ public class StockService {
         if (optionalStock.isPresent()) {
             Stock stock = optionalStock.get();
             recette.setStock(stock);
-            recetteRepository.save(recette);
+            recetteRepository.saveAndFlush(recette);
             stock.getRecette().add(recette);
-            stockRepository.save(stock);
+            stockRepository.saveAndFlush(stock);
         } else {
             throw new RuntimeException("There is no stock with this id");
+        }
+    }
+
+    public void addRecipeToStockByRecetteId(Long stockId, Long recetteId){
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
+            if(optionalRecette.isPresent()){
+                Recette recette = optionalRecette.get();
+                recette.setStock(stock);
+                recetteRepository.saveAndFlush(recette);
+                stock.getRecette().add(recette);
+                stockRepository.saveAndFlush(stock);
+            } else {
+                throw new RuntimeException("There is no recette with this id=" + stockId);
+            }
+        } else {
+            throw new RuntimeException("There is no stock with this id=" + recetteId);
         }
     }
 
