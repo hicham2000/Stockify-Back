@@ -107,7 +107,7 @@ public class RecommendationService {
         }
     }
 
-    private RecetteResponse createRecetteResponse(Utilisateur utilisateur, List<Repas> recettesAuStock, List<Produit> produitsAuStock, Recette recette) {
+    private RecetteResponse createRecetteResponse(Utilisateur utilisateur, List<Recette> recettesAuStock, List<Produit> produitsAuStock, Recette recette) {
         RecetteResponse recetteResponse = new RecetteResponse(recette);
         recetteResponse.setQuantiteEnStock(recettesAuStock);
         recetteResponse.setIngredients(recette.getIngredients(), produitsAuStock);
@@ -116,7 +116,7 @@ public class RecommendationService {
         return recetteResponse;
     }
 
-    private List<RecetteResponse> processRecommendationResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Repas> recettesAuStock, Utilisateur utilisateur) throws JSONException {
+    private List<RecetteResponse> processRecommendationResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, Utilisateur utilisateur) throws JSONException {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONArray recettesArray = jsonResponse.getJSONObject("output").getJSONArray("Repas_Programme");
 
@@ -159,7 +159,7 @@ public class RecommendationService {
         Utilisateur utilisateur = optionalUtilisateur.orElseThrow(() -> new RuntimeException("Utilisateur with id " + userId + " not found"));
 
         List<Produit> produitsAuStock = stockService.getAllProductsInStock(utilisateur.getStock_id());
-        List<Repas> recettesAuStock = stockService.getAllRecettesInStock(utilisateur.getStock_id());
+        List<Recette> recettesAuStock = stockService.getAllRecipesInStock(utilisateur.getStock_id());
 
         String requestJson = buildRecommendationRequestJson(utilisateur);
 
@@ -195,7 +195,7 @@ public class RecommendationService {
                     totalTimeMinutes <= Integer.parseInt(tempsDePreparation) &&
                     hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
         }
-    private RecetteResponse processRecetteObject(JSONObject recetteObject, List<Repas> recettesAuStock, List<Produit> produitsAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
+    private RecetteResponse processRecetteObject(JSONObject recetteObject, List<Recette> recettesAuStock, List<Produit> produitsAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
             Long recetteId = recetteObject.getLong("Recipe_Id");
             String recipeImageUrl = recetteObject.getString("Recipe_Image_link");
 
@@ -221,7 +221,7 @@ public class RecommendationService {
             return null;
         }
 
-    private List<RecetteResponse> processRecommendationFiltredResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Repas> recettesAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
+    private List<RecetteResponse> processRecommendationFiltredResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONArray recettesArray = jsonResponse.getJSONObject("output").getJSONArray("Repas_Programme");
 
@@ -250,7 +250,7 @@ public class RecommendationService {
                 .orElseThrow(() -> new RuntimeException("Utilisateur with id " + user_id + " not found"));
 
         List<Produit> produitsAuStock = stockService.getAllProductsInStock(utilisateur.getStock_id());
-        List<Repas> recettesAuStock = stockService.getAllRecettesInStock(utilisateur.getStock_id());
+        List<Recette> recettesAuStock = stockService.getAllRecipesInStock(utilisateur.getStock_id());
 
         String requestJson = buildRecommendationRequestJson(utilisateur);
 
@@ -295,7 +295,7 @@ public class RecommendationService {
         List<Recette> randomRecettes = new ArrayList<>();
         return randomRecettes;
     }
-    private List<RecetteResponse> processRecommendationRecettesSimilairesResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Repas> recettesAuStock, Utilisateur utilisateur) throws JSONException {
+    private List<RecetteResponse> processRecommendationRecettesSimilairesResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, Utilisateur utilisateur) throws JSONException {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONArray recettesArray = jsonResponse.getJSONArray("output");
 
@@ -342,7 +342,7 @@ public class RecommendationService {
                 .orElseThrow(() -> new RuntimeException("Utilisateur with id " + user_id + " not found"));
 
         List<Produit> produitsAuStock = stockService.getAllProductsInStock(utilisateur.getStock_id());
-        List<Repas> recettesAuStock = stockService.getAllRecettesInStock(utilisateur.getStock_id());
+        List<Recette> recettesAuStock = stockService.getAllRecipesInStock(utilisateur.getStock_id());
 
         Recette recette = recetteRepository.findById(recetteId)
                 .orElseThrow(() -> new RuntimeException("Recette with id " + recetteId + " not found"));
