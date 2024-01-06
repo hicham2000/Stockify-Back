@@ -26,7 +26,7 @@ public class RecetteController {
         if(OptionalRecette.isPresent()){
             Recette recette = OptionalRecette.get();
             response.put("message", "Recette récupérer par succès");
-            response.put("recette", recette);
+            response.put("recette", recette.getId());
         }
 
         response.put("message", "Aucun Recette avec id=" + recetteId);

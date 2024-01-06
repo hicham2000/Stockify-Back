@@ -98,7 +98,6 @@ public class StockifyBackendApplication implements CommandLineRunner {
         user1.setSexe("Homme");
         user1.setTaille("179");
         user1.setPoids("62");
-
         Date dateDeNaissance = new Date(2001, 12, 9);
         user1.setDateDeNaissance(dateDeNaissance);
 
@@ -124,6 +123,8 @@ public class StockifyBackendApplication implements CommandLineRunner {
 
         user1 = utilisateurRepository.saveAndFlush(user1);
 
+
+        courseRepository.save(c);
 
 
         String[] products = {
