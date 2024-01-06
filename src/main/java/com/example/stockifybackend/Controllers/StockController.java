@@ -36,6 +36,11 @@ public class StockController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PostMapping("/{stockId}/recipes/{recetteId}")
+    public ResponseEntity<Void> addRecipeToStockByRecetteID(@PathVariable Long stockId, @PathVariable Long recetteId) {
+        stockService.addRecipeToStockByRecetteId(stockId, recetteId);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
     @DeleteMapping("/{stockId}/recipes/{recipeId}")
     public ResponseEntity<Void> deleteRecipeFromStock(@PathVariable Long stockId, @PathVariable Long recipeId) {
