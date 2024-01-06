@@ -28,7 +28,6 @@ public class Recette implements Serializable {
     private String intitule;
     private String description;
     private int dureeTotal;
-    private
 
     @Column(columnDefinition = "TEXT")
     private String instructionsDePreparation;
@@ -99,6 +98,7 @@ public class Recette implements Serializable {
     public List<Ingredient> getIngredients() {
         return ingredients;
     }
+
 
 
 }

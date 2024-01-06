@@ -46,7 +46,7 @@ public class RecommendationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/RecettesFiltred/{id}")
+    @PostMapping("/RecettesFiltred/{id}")
     public ResponseEntity<?> getRecommendedFiltredRecettes(@PathVariable Long id, @RequestBody Map<String, Object> requestBody) throws JSONException {
         Map<String, Object> response = new HashMap<>();
 
