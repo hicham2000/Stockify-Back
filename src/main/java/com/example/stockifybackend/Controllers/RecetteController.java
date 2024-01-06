@@ -17,12 +17,12 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/recettes")
+@RequestMapping("/api")
 public class RecetteController {
     @Autowired
     private RecetteRepository recetteRepository;
 
-    @GetMapping("/{recetteId}")
+    @GetMapping("/Recette/{recetteId}")
     public ResponseEntity<?> getRecetteByID(@PathVariable Long recetteId) {
         Map<String, Object> response = new HashMap<>();
         Optional<Recette> OptionalRecette = recetteRepository.findById(recetteId);
