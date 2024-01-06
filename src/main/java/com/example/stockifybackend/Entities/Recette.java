@@ -28,6 +28,7 @@ public class Recette implements Serializable {
     private String intitule;
     private String description;
     private int dureeTotal;
+    private
 
     @Column(columnDefinition = "TEXT")
     private String instructionsDePreparation;
