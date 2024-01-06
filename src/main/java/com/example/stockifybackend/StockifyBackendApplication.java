@@ -82,13 +82,6 @@ public class StockifyBackendApplication implements CommandLineRunner {
     }*/
     @Override
     public void run(String... args) throws Exception {
-        ListeCourse c = new ListeCourse();
-       Stock s = new Stock();
-        s.setQuantiteCritiqueParDefaut(190);
-        s = stockRepository.save(s);
-
-        Stock s2 = new Stock();
-        s2.setQuantiteCritiqueParDefaut(10);
 
         Utilisateur user1 = new Utilisateur(1L,
                 "wassim","rifay",
@@ -100,6 +93,14 @@ public class StockifyBackendApplication implements CommandLineRunner {
         user1.setPoids("62");
         Date dateDeNaissance = new Date(2001, 12, 9);
         user1.setDateDeNaissance(dateDeNaissance);
+
+        ListeCourse c = new ListeCourse();
+        Stock s = new Stock();
+        s.setQuantiteCritiqueParDefaut(190);
+        s = stockRepository.save(s);
+
+        Stock s2 = new Stock();
+        s2.setQuantiteCritiqueParDefaut(10);
 
 
         c = courseRepository.save(c);

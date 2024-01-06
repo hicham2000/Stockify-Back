@@ -19,10 +19,10 @@ public class RecetteResponse implements Serializable {
     private String intitule;
     private String description;
     private int dureeTotal;
-    private List<String> instructionsList = new ArrayList<>();
     private String imageUrl;
     private ValeurNutritionnel valeurNutritionnel;
     private CategorieDeRecette categorieDeRecette;
+    private List<String> instructionsList = new ArrayList<>();
     private int quantiteEnStock;
     private int nombreIngredientsManquantes;
     private List<IngredientInfo> ingredients = new ArrayList<>();
@@ -64,8 +64,6 @@ public class RecetteResponse implements Serializable {
     public void setIsFavoris(Utilisateur utilisateur) {
         this.isFavoris = recetteIsFavorisDeUtilisateur(utilisateur);
     }
-
-
 
     private List<IngredientInfo> convertIngredients(List<Ingredient> recetteIngredients, List<Produit> stockProduits) {
         return recetteIngredients.stream()

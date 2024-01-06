@@ -3,6 +3,7 @@ package com.example.stockifybackend.Controllers;
 import com.example.stockifybackend.Entities.Produit;
 import com.example.stockifybackend.Entities.Recette;
 import com.example.stockifybackend.Repositories.RecetteRepository;
+import com.example.stockifybackend.dto.RecetteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class RecetteController {
         if(OptionalRecette.isPresent()){
             Recette recette = OptionalRecette.get();
             response.put("message", "Recette récupérer par succès");
-            response.put("recette", recette);
+            response.put("recette", recette.getId());
         }
 
         response.put("message", "Aucun Recette avec id=" + recetteId);
