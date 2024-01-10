@@ -22,17 +22,17 @@ public class ProduitGlobale implements Serializable {
     private String intitule;
     private String image;
 
-    @Column(name = "`unite_de_mesure`") // Escape reserved keyword
+    @Column(name = "`unite_de_mesure`")
     private String uniteDeMesure;
 
-    @Column(name = "`portion`", length = 255) // Escape reserved keyword and specify length
+    @Column(name = "`portion`", length = 255)
     private String portion;
 
-    private Long calorie;
-    private Long protein;
-    private Long carbs;
-    private Long lipides;
-    private Long sucre;
-    private Long fibre;
+    private Double calorie;
+    private Double protein;
+    private Double carbs;
+    private Double lipides;
+    private Double sucre;
+    private Double fibre;
 
 }

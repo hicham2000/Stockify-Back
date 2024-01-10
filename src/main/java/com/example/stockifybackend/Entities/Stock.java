@@ -2,6 +2,7 @@ package com.example.stockifybackend.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,11 +24,23 @@ public class Stock implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int quantiteCritiqueParDefaut;
+
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
-    public List<Recette> recette;
+    @JsonManagedReference
+    private List<Recette> recette;
+
+    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+    public List<Repas> repas;
+
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
     private List<Produit> produit = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private Utilisateur utilisateur;
 
 }
 

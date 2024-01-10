@@ -12,7 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -84,13 +89,72 @@ public class StockController {
 
     @GetMapping("/{stockId}")
     public Stock getStockById(@PathVariable Long stockId) {
-        Optional<Stock> stockOptional = stockRepository.findById(stockId);
+        return stockService.getStock(stockId);
+    }
 
-
-        if (stockOptional.isPresent()) {
-            return stockOptional.get();
-        } else {
-            return null;
+    @PutMapping("/{stockId}/{newQuantiteCritiqueParDefault}")
+    public ResponseEntity<?> updateQuantiteCritiqueParDefaut(@PathVariable Long stockId, @PathVariable int newQuantiteCritiqueParDefault){
+        Map<String, Object> response = new HashMap<>();
+        try{
+            stockService.updateQuantiteCritiqueParDefaut(stockId, newQuantiteCritiqueParDefault);
+        }catch(Exception error){
+            response.put("Error", error);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        response.put("message", "QuantiteCritiqueParDefault du stock with stock_id="+stockId+" updated successfully!...");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 }
+
+class RequestBodyData {
+    private String intitule;
+    private String datePeremtion;
+    private String dateAlert;
+    private String stock;
+
+    private String categorie;
+    private List<Produit> arraylist_of_product;
+    private String spinnerText;
+
+    public RequestBodyData(String intitule, String datePeremtion, String dateAlert, String hello,String categorie, List<Produit> arraylist_of_product, String spinnerText) {
+        this.intitule = intitule;
+        this.datePeremtion = datePeremtion;
+        this.dateAlert = dateAlert;
+        this.stock = hello;
+        this.categorie = categorie;
+        this.arraylist_of_product = arraylist_of_product;
+        this.spinnerText = spinnerText;
+    }
+
+    public String getIntitule() {
+        return intitule;
+    }
+
+    public String getDatePeremtion() {
+        return datePeremtion;
+    }
+
+    public String getDateAlert() {
+        return dateAlert;
+    }
+
+    public String getStock() {
+        return stock;
+    }
+
+    public String getCategorie() {
+        return categorie;
+    }
+
+    public List<Produit> getArraylist_of_product() {
+        return arraylist_of_product;
+    }
+
+    public String getSpinnerText() {
+        return spinnerText;
+    }
+}
+
+

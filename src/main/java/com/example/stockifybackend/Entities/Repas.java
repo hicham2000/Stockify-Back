@@ -1,8 +1,6 @@
 package com.example.stockifybackend.Entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,37 +9,37 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
-
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Ingredient implements Serializable {
+public class Repas implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String intitule;
 
-    @ManyToOne
-    @JoinColumn(name = "recette_id")
-    @JsonBackReference
-    private Recette recette;
+    private Date datePeremtion;
+    private Date dateAlert;
 
-    private Double quantity;
+
+    private String categories;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @ManyToOne
-    @JoinColumn(name = "repas_id")
-    private Repas repas;
+    @JoinColumn(name = "stock_id")
+    private Stock stock;
 
+    @OneToMany
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+    public List<Ingredient> ingredients;
 
-    @ManyToOne
-    @JoinColumn(name = "recette_id")
-    @JsonBackReference
-    public Recette getRecette() {
-        return recette;
-    }
+    private int is_deleted = 0;
+
 
 }

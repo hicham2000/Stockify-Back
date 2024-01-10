@@ -75,6 +75,4 @@ class StockServiceTest {
         assertFalse(stock.getProduit().contains(produit));
     }
 
-    // Add tests for other methods...
-
 }
