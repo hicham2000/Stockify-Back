@@ -34,6 +34,9 @@ public class StockifyBackendApplication implements CommandLineRunner {
     }
 
     @Autowired
+    private UtilisateurRepository utilisateurRepository ;
+
+    @Autowired
     private ProduitRepository produitRepository ;
 
     @Autowired
@@ -83,35 +86,44 @@ public class StockifyBackendApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Utilisateur user1 = new Utilisateur(1L,
-                "wassim","rifay",
-                "rifaywassim@gmail.com", "123456@Wassim",
-                "", false);
+        Utilisateur user1 = new Utilisateur();
+        user1.setId(1L);
+        user1.setPrénom("wassim");
+        user1.setNom("rifay");
+        user1.setEmail("rifaywassim@gmail.com");
+        user1.setPassword("123456@Wassim");
+        user1.setRégimeSpécieux("");
+        user1.setModeSportif(false);
 
         user1.setSexe("Homme");
         user1.setTaille("179");
         user1.setPoids("62");
+
         Date dateDeNaissance = new Date(2001, 12, 9);
         user1.setDateDeNaissance(dateDeNaissance);
 
         ListeCourse c = new ListeCourse();
+        c.setId(2L);
+        c = courseRepository.save(c);
+
         Stock s = new Stock();
+        s.setId(1L);
         s.setQuantiteCritiqueParDefaut(190);
         s = stockRepository.save(s);
 
-        Stock s2 = new Stock();
-        s2.setQuantiteCritiqueParDefaut(10);
+//        Stock s2 = new Stock();
+//        s2.setId(2L);
+//        s2.setQuantiteCritiqueParDefaut(10);
+//        s2 = stockRepository.save(s2);
 
 
-        c = courseRepository.save(c);
-
-        user1.setStock_id(s.getId());
+        user1.setStock(s);
+        System.out.println("-------------------------------------------------------------------");
+        s.setUtilisateur(user1);
         user1.setListeDeCourse_id(c.getId());
 
-        utilisateurService.addUtilisateur(user1);
+        user1 = utilisateurRepository.saveAndFlush(user1);
 
-
-        courseRepository.save(c);
 
 
         String[] products = {

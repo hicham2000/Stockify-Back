@@ -39,7 +39,7 @@ public class UtilisateurService {
 
         Stock stock = new Stock();
         stock = stockRepository.save(stock);
-        utilisateur.setStock_id(stock.getId());
+        utilisateur.setStock(stock);
 
         ListeCourse listeCourse = new ListeCourse();
         listeCourse = listeCourseRepository.save(listeCourse);

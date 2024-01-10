@@ -21,7 +21,7 @@ import java.util.List;
 @ToString
 public class Stock implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private int quantiteCritiqueParDefaut;
 
@@ -37,8 +37,8 @@ public class Stock implements Serializable {
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
     private List<Produit> produit = new ArrayList<>();
 
-    @OneToOne(mappedBy = "stock", cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = true)
     @JsonIgnore
     private Utilisateur utilisateur;
 

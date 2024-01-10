@@ -158,8 +158,8 @@ public class RecommendationService {
 
         Utilisateur utilisateur = optionalUtilisateur.orElseThrow(() -> new RuntimeException("Utilisateur with id " + userId + " not found"));
 
-        List<Produit> produitsAuStock = stockService.getAllProductsInStock(utilisateur.getStock_id());
-        List<Recette> recettesAuStock = stockService.getAllRecipesInStock(utilisateur.getStock_id());
+        List<Produit> produitsAuStock = stockService.getAllProductsInStock(utilisateur.getStock().getId());
+        List<Recette> recettesAuStock = stockService.getAllRecipesInStock(utilisateur.getStock().getId());
 
         String requestJson = buildRecommendationRequestJson(utilisateur);
 
@@ -249,8 +249,8 @@ public class RecommendationService {
         Utilisateur utilisateur = utilisateurRepository.findById(user_id)
                 .orElseThrow(() -> new RuntimeException("Utilisateur with id " + user_id + " not found"));
 
-        List<Produit> produitsAuStock = stockService.getAllProductsInStock(utilisateur.getStock_id());
-        List<Recette> recettesAuStock = stockService.getAllRecipesInStock(utilisateur.getStock_id());
+        List<Produit> produitsAuStock = stockService.getAllProductsInStock(utilisateur.getStock().getId());
+        List<Recette> recettesAuStock = stockService.getAllRecipesInStock(utilisateur.getStock().getId());
 
         String requestJson = buildRecommendationRequestJson(utilisateur);
 
@@ -341,8 +341,8 @@ public class RecommendationService {
         Utilisateur utilisateur = utilisateurRepository.findById(user_id)
                 .orElseThrow(() -> new RuntimeException("Utilisateur with id " + user_id + " not found"));
 
-        List<Produit> produitsAuStock = stockService.getAllProductsInStock(utilisateur.getStock_id());
-        List<Recette> recettesAuStock = stockService.getAllRecipesInStock(utilisateur.getStock_id());
+        List<Produit> produitsAuStock = stockService.getAllProductsInStock(utilisateur.getStock().getId());
+        List<Recette> recettesAuStock = stockService.getAllRecipesInStock(utilisateur.getStock().getId());
 
         Recette recette = recetteRepository.findById(recetteId)
                 .orElseThrow(() -> new RuntimeException("Recette with id " + recetteId + " not found"));
