@@ -114,6 +114,29 @@ public class StockService {
         }
     }
 
+    public void deleteProductFromStockCourse(Long stockId, Long produitId) {
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            List<Produit> produits = stock.getProduit();
+
+
+            Optional<Produit> produitToDelete = produitRepository.findById_produitCourse(produitId);
+
+            // Si le Produit est trouvé, supprimez-le de la liste
+            produitToDelete.ifPresent(produit -> produits.remove(produit));
+
+            // Ensuite, supprimez le Produit de la base de données
+            produitToDelete.ifPresent(produit -> produitRepository.delete(produit));
+
+
+            stockRepository.save(stock);
+        } else {
+            throw new RuntimeException("There is no stock with this id");
+        }
+    }
+
     public void updateProduct(Long stockId, Long productId, Produit updatedProduit) {
         Optional<Stock> optionalStock = stockRepository.findById(stockId);
 

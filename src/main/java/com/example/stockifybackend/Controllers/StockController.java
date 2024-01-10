@@ -58,6 +58,12 @@ public class StockController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @DeleteMapping("/{stockId}/products/{productId}/delete-course")
+    public ResponseEntity<Void> deleteProductFromStockCourse(@PathVariable Long stockId, @PathVariable Long productId) {
+        stockService.deleteProductFromStockCourse(stockId, productId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @PutMapping("/{stockId}/products/{productId}")
     public ResponseEntity<String> updateProduct(@PathVariable Long stockId, @PathVariable Long productId, @RequestBody Produit updatedProduit) {
         stockService.updateProduct(stockId, productId, updatedProduit);

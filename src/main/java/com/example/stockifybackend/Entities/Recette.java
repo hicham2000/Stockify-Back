@@ -32,6 +32,16 @@ public class Recette implements Serializable {
 
     private int is_deleted = 0;
 
+    public Recette(String intitule, String desctipion, int dureeTotal, Stock stock, List<Ingredient> ingredient, Recommendation recommendation, int is_deleted) {
+        this.intitule = intitule;
+        this.desctipion = desctipion;
+        this.dureeTotal = dureeTotal;
+        this.stock = stock;
+        this.ingredient = ingredient;
+        this.recommendation = recommendation;
+        this.is_deleted = is_deleted;
+    }
+
 }
 
 

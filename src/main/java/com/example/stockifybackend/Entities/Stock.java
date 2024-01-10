@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,8 +26,8 @@ public class Stock implements Serializable {
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
     public List<Recette> recette;
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @OneToMany(mappedBy = "stock")
-    public List<Produit> produit;
+    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Produit> produit = new ArrayList<>();
 
 }
 

@@ -31,20 +31,26 @@ public class Produit implements Serializable{
     private String uniteDeMesure;
     private Date dateExpiration;
 
+    private Long id_produitCourse;
     private double quantite;
     private double prix;
     private double quantiteCritique;
     @OneToOne
     private ValeurNutritionnel valeurNutritionnel;
-    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
-    private List<CategorieDeProduits> categories =  new ArrayList<>();
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+
+    @ManyToOne
+    @JoinColumn(name = "categorieDeProduits_id")
+    private CategorieDeProduits categories;
+
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @ManyToOne
     @JoinColumn(name = "stock_id")
     private Stock stock;
+
     @ManyToOne
     @JoinColumn(name = "depense_id")
     private Depense depense;
+
     @ManyToOne
     @JoinColumn(name = "recommendation_id")
     private Recommendation recommendation;
@@ -53,8 +59,43 @@ public class Produit implements Serializable{
     private int is_deleted = 0;
 
 
+    public Produit(String intitule, String description, String brande, String uniteDeMesure, Date dateExpiration,
+                   double quantite, double prix, double quantiteCritique, ValeurNutritionnel valeurNutritionnel,
+                   CategorieDeProduits categories, Stock stock, Depense depense, Recommendation recommendation) {
+        this.intitule = intitule;
+        this.description = description;
+        this.brande = brande;
+        this.uniteDeMesure = uniteDeMesure;
+        this.dateExpiration = dateExpiration;
+        this.quantite = quantite;
+        this.prix = prix;
+        this.quantiteCritique = quantiteCritique;
+        this.valeurNutritionnel = valeurNutritionnel;
+        this.categories = categories;
+        this.stock = stock;
+        this.depense = depense;
+        this.recommendation = recommendation;
+
+    }
+
     public Produit(String name) {
         this.intitule = name;
+    }
+
+    public void removeCategories() {
+        this.categories = null;
+    }
+
+    public void removeStock() {
+        this.stock = null;
+    }
+
+    public void removeDepense() {
+        this.depense = null;
+    }
+
+    public void removeRecommendation() {
+        this.recommendation = null;
     }
 }
 

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,7 @@ public class ListeCourse implements Serializable {
     private Long id;
     @OneToMany(mappedBy = "listeCourse")
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
-    public List<ProduitAAcheter> produit;
+    public List<ProduitAAcheter> produit = new ArrayList<>();;
 
 
 }

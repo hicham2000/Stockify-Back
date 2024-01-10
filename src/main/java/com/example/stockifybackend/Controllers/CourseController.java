@@ -40,6 +40,12 @@ public class CourseController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @DeleteMapping("/{courseId}/products")
+    public ResponseEntity<String> deleteProductAllListeCourse(@PathVariable Long courseId){
+        courseService.supprimerProduitaacheterParIdProduit(courseId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @GetMapping("/{courseId}/products")
     public List<ProduitAAcheter>getAllProduitListeCourse(@PathVariable Long courseId){
         return courseService.getAllProduitInCourse(courseId);
