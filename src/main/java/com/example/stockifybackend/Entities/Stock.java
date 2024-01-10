@@ -27,14 +27,17 @@ public class Stock implements Serializable {
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
     @JsonManagedReference
+    @JsonIgnore
     private List<Recette> recette;
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+    @JsonIgnore
     public List<Repas> repas;
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+    @JsonIgnore
     private List<Produit> produit = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)

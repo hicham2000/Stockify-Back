@@ -1,10 +1,7 @@
 package com.example.stockifybackend.services;
 
 
-import com.example.stockifybackend.Entities.Produit;
-import com.example.stockifybackend.Entities.Recette;
-import com.example.stockifybackend.Entities.Repas;
-import com.example.stockifybackend.Entities.Stock;
+import com.example.stockifybackend.Entities.*;
 import com.example.stockifybackend.Repositories.ProduitRepository;
 import com.example.stockifybackend.Repositories.RecetteRepository;
 import com.example.stockifybackend.Repositories.RepasRepository;
@@ -16,6 +13,7 @@ import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StockService {
@@ -94,14 +92,27 @@ public class StockService {
             Stock stock = optionalStock.get();
             List<Recette> recettes = stock.getRecette();
 
-            recettes.removeIf(recette -> recette.getId().equals(recetteId));
-            stockRepository.deleteById(recetteId);
+            System.out.println("recettes => " + stock.getRecette().stream().map(Recette::getId).collect(Collectors.toList()));
 
-            stockRepository.save(stock);
+            recettes.removeIf(recette -> recette.getId().equals(recetteId));
+
+            Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
+            if (optionalRecette.isPresent()) {
+                Recette recette = optionalRecette.get();
+                recette.setStock(null);
+                recetteRepository.saveAndFlush(recette);
+            } else {
+                throw new RuntimeException("There is no recipe with this id");
+            }
+
+            stock = stockRepository.saveAndFlush(stock);
+
+            System.out.println("recettes => " + stock.getRecette().stream().map(Recette::getId).collect(Collectors.toList()));
         } else {
             throw new RuntimeException("There is no stock with this id");
         }
     }
+
 
     public void updateRecipe(Long stockId, Long recipeId, Recette updatedRecette) {
         Optional<Stock> optionalStock = stockRepository.findById(stockId);

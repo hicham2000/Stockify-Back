@@ -111,7 +111,7 @@ public class Recette implements Serializable {
                 ", imageUrl='" + imageUrl + '\'' +
                 ", valeurNutritionnel=" + valeurNutritionnel+
                 ", categorieDeRecette=" + categorieDeRecette.getIntitule() +
-                ", stock=" + stock +
+                ", stock_id=" + stock.getId() +
                 ", ingredients=" + ingredients.stream().map(Ingredient::getIntitule).collect(Collectors.toList()) +
                 ", quantities=" + ingredients.stream().map(Ingredient::getQuantity).collect(Collectors.toList()) +
                 ", is_deleted=" + is_deleted +
