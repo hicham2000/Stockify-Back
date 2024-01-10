@@ -37,7 +37,7 @@ public class Stock implements Serializable {
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
     private List<Produit> produit = new ArrayList<>();
 
-    @OneToOne(mappedBy = "utilisateur", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "stock", cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private Utilisateur utilisateur;
