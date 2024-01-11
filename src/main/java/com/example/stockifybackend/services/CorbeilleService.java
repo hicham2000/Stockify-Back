@@ -58,6 +58,15 @@ public class CorbeilleService {
         }
 
     }
+    public void recupererPermanentProductInStcok(Long stockId, Long productId){
+        Optional<Produit> produitOptional = produitRepository.findById(productId);
+        if (produitOptional.isPresent()) {
+            Produit productUpdate = produitOptional.get();
+            productUpdate.setPermanent(1);
+            stockService.updateProduct(stockId, productId, productUpdate);
+        }
+
+    }
     
     public void supprimerDefRepasFromStcok(Long stockId, Long repasId){
         stockService.deleteRepasFromStock(stockId, repasId);
@@ -102,7 +111,22 @@ public class CorbeilleService {
             return "No products or recipes with is_deleted=1 found in stock with id " + stockId;
         }
     }
-
+    public void recupererRepasInStcok(Long stockId, Long recupererRepasId) {
+        Optional<Repas> repasOptional = repasRepository.findById(recupererRepasId);
+        if (repasOptional.isPresent()) {
+            Repas repasUpdate = repasOptional.get();
+            repasUpdate.setIs_deleted(0);
+            stockService.updateRepas(stockId, recupererRepasId, repasUpdate);
+        }
+    }
+    public void supprimerPermanentRepasInStcok(Long stockId, Long supprimerPrmRepasId) {
+        Optional<Repas> repasOptional = repasRepository.findById(supprimerPrmRepasId);
+        if (repasOptional.isPresent()) {
+            Repas repasUpdate = repasOptional.get();
+            repasUpdate.setPermanent(1);
+            stockService.updateRepas(stockId, supprimerPrmRepasId, repasUpdate);
+        }
+    }
    /* public void recupererRepasInStcok(Long stockId, Long recupererRepasId, int quantity) {
         Optional<Repas> repasOptional = repasRepository.findById(recupererRepasId);
         if (repasOptional.isPresent()) {
