@@ -3,6 +3,7 @@ package com.example.stockifybackend.Controllers;
 import com.example.stockifybackend.Entities.LogingUtilisateur;
 import com.example.stockifybackend.Entities.Utilisateur;
 import com.example.stockifybackend.Repositories.UtilisateurRepository;
+import com.example.stockifybackend.dto.UtilisateurUpdateRequest;
 import com.example.stockifybackend.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,9 +25,7 @@ public class UtilisateurApiController {
     private UtilisateurRepository utilisateurRepository;
 
     @PostMapping("/Login")
-    public ResponseEntity<?> authenticateUser(
-            @RequestBody LogingUtilisateur logingUtilisateur
-    ) {
+    public ResponseEntity<?> authenticateUser(@RequestBody LogingUtilisateur logingUtilisateur) {
         Optional<Utilisateur> utilisateurOptional = Optional.ofNullable(utilisateurService.getUtilisateurByEmail(logingUtilisateur.getEmail()));
         Map<String, Object> response = new HashMap<>();
 
@@ -35,7 +34,7 @@ public class UtilisateurApiController {
             if (utilisateur.getPassword().equals(logingUtilisateur.getPassword())) {
                 response.put("message", "Login successfully :)");
                 response.put("user_id", utilisateur.getId());
-                response.put("stock_id", utilisateur.getStock_id());
+                response.put("stock_id", utilisateur.getStock().getId());
                 response.put("listeDeCourse_id", utilisateur.getListeDeCourse_id());
 
                 return new ResponseEntity<>(response, HttpStatus.OK);
@@ -89,8 +88,9 @@ public class UtilisateurApiController {
     }
 
     @PutMapping("/Utilisateur/{id}")
-    public ResponseEntity<?> updateUtilisateur(@PathVariable Long id, @RequestBody Utilisateur updatedUtilisateur){
+    public ResponseEntity<?> updateUtilisateur(@RequestBody UtilisateurUpdateRequest updatedUtilisateur, @PathVariable Long id){
         Map<String, Object> response = new HashMap<>();
+
         try {
             utilisateurService.updateUtilisateurFields(id, updatedUtilisateur);
         }catch(Exception error){
@@ -101,6 +101,7 @@ public class UtilisateurApiController {
         response.put("message", "User updated successfully!...");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
     @PutMapping("/Utilisateur/{id}/sexe/{sexe}")
     public ResponseEntity<String> updateUtilisateurSexe(@PathVariable Long id, @PathVariable String sexe){
@@ -180,6 +181,31 @@ public class UtilisateurApiController {
 
 
 
+    @PostMapping("/Utilisateur/{userId}/recetteFavoris/{recette_id}")
+    public ResponseEntity<?> ajouterRecetteFavorite(@PathVariable Long userId, @PathVariable Long recette_id) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            utilisateurService.AddRecetteAuFavoris(userId, recette_id);
+        }catch(Exception error){
+            response.put("Error", error);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        response.put("message", "Recette ajoutée aux favoris avec succès");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
+
+    @DeleteMapping("/Utilisateurs/{userId}/recetteFavoris/{recette_id}")
+    public ResponseEntity<?> supprimerRecetteFavorite(@PathVariable Long userId, @PathVariable Long recette_id) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            utilisateurService.removeRecetteAuFavoris(userId, recette_id);
+        }catch(Exception error){
+            response.put("Error", error);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        response.put("message", "Recette supprimée de favoris avec succès");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
 

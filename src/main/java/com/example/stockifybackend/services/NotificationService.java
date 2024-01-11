@@ -39,6 +39,7 @@ public class NotificationService {
             String response = firebaseMessaging.send(message);
             System.out.println("Successfully sent scheduled message: " + response);
         } catch (FirebaseMessagingException e) {
+
             throw new RuntimeException(e);
         }
     }
