@@ -27,6 +27,8 @@ public class Utilisateur implements Serializable {
     private String poids;
     private Date dateDeNaissance;
     private String régimeSpécieux;
+    private boolean alertedateexpi;
+    private boolean alerteproduitfinis;
     private boolean modeSportif;
 
     private long stock_id;

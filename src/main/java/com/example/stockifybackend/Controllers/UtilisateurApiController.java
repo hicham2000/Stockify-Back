@@ -13,10 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -104,6 +101,83 @@ public class UtilisateurApiController {
         response.put("message", "User updated successfully!...");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PutMapping("/Utilisateur/{id}/sexe/{sexe}")
+    public ResponseEntity<String> updateUtilisateurSexe(@PathVariable Long id, @PathVariable String sexe){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            utilisateurService.updateUtilisateurFieldsSexe(id, sexe);
+        }catch(Exception error){
+            response.put("Error", error);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        response.put("message", "User updated successfully!...");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/Utilisateur/{id}/date/{date}")
+    public ResponseEntity<String> updateUtilisateurDate(@PathVariable Long id, @PathVariable Date date){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            utilisateurService.updateUtilisateurFieldsDate(id, date);
+        }catch(Exception error){
+            response.put("Error", error);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        response.put("message", "User updated successfully!...");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/Utilisateur/{id}/taille/{nouvelletaille}")
+    public ResponseEntity<String> updateUtilisateurTaille(@PathVariable Long id, @PathVariable String nouvelletaille){
+
+            utilisateurService.updateUtilisateurFieldsTaille(id, nouvelletaille);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/Utilisateur/{id}/poids/{poids}")
+    public ResponseEntity<String> updateUtilisateurPoids(@PathVariable Long id, @PathVariable String poids){
+
+        utilisateurService.updateUtilisateurFieldsPoids(id, poids);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/Utilisateur/{id}/regime/{regime}")
+    public ResponseEntity<String> updateUtilisateurRegime(@PathVariable Long id, @PathVariable String regime){
+
+        utilisateurService.updateUtilisateurFieldsRegime(id, regime);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/Utilisateur/{id}/sportif/{regime}")
+    public ResponseEntity<String> updateUtilisateurSportif(@PathVariable Long id, @PathVariable Boolean regime){
+
+        utilisateurService.updateUtilisateurFieldsMode(id, regime);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/Utilisateur/{id}/alerte/{regime}")
+    public ResponseEntity<String> updateUtilisateurAlerte(@PathVariable Long id, @PathVariable Boolean regime){
+
+        utilisateurService.updateUtilisateurFieldsAlerteExp(id, regime);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/Utilisateur/{id}/alertePeremp/{regime}")
+    public ResponseEntity<String> updateUtilisateurAlertePerem(@PathVariable Long id, @PathVariable Boolean regime){
+
+        utilisateurService.updateUtilisateurFieldsAlerteQuantiteCr(id, regime);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
 
 

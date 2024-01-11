@@ -95,6 +95,165 @@ public class UtilisateurService {
         utilisateurRepository.save(existingUtilisateur);
     }
 
+    public void updateUtilisateurFieldsSexe(Long id, String nouveauGenre) {
+        // Recherche de l'utilisateur par son ID
+        Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
+
+        // Vérification si l'utilisateur existe
+        if (optionalUtilisateur.isEmpty()) {
+            throw new RuntimeException("Utilisateur with id " + id + " not found");
+        }
+
+        // Récupération de l'utilisateur existant
+        Utilisateur existingUtilisateur = optionalUtilisateur.get();
+
+        // Mise à jour du genre de l'utilisateur
+        existingUtilisateur.setSexe(nouveauGenre);
+
+        // Enregistrement de l'utilisateur mis à jour
+        utilisateurRepository.save(existingUtilisateur);
+    }
+
+    public void updateUtilisateurFieldsDate(Long id, Date date) {
+        // Recherche de l'utilisateur par son ID
+        Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
+
+        // Vérification si l'utilisateur existe
+        if (optionalUtilisateur.isEmpty()) {
+            throw new RuntimeException("Utilisateur with id " + id + " not found");
+        }
+
+        // Récupération de l'utilisateur existant
+        Utilisateur existingUtilisateur = optionalUtilisateur.get();
+
+        // Mise à jour du genre de l'utilisateur
+        existingUtilisateur.setDateDeNaissance(date);
+
+        // Enregistrement de l'utilisateur mis à jour
+        utilisateurRepository.save(existingUtilisateur);
+    }
+
+    public void updateUtilisateurFieldsTaille(Long id, String  taille) {
+        // Recherche de l'utilisateur par son ID
+        Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
+
+        // Vérification si l'utilisateur existe
+        if (optionalUtilisateur.isEmpty()) {
+            throw new RuntimeException("Utilisateur with id " + id + " not found");
+        }
+
+        // Récupération de l'utilisateur existant
+        Utilisateur existingUtilisateur = optionalUtilisateur.get();
+
+
+        // Mise à jour du genre de l'utilisateur
+        existingUtilisateur.setTaille(taille);
+
+        // Enregistrement de l'utilisateur mis à jour
+        utilisateurRepository.save(existingUtilisateur);
+    }
+
+    public void updateUtilisateurFieldsPoids(Long id, String poids) {
+        // Recherche de l'utilisateur par son ID
+        Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
+
+        // Vérification si l'utilisateur existe
+        if (optionalUtilisateur.isEmpty()) {
+            throw new RuntimeException("Utilisateur with id " + id + " not found");
+        }
+
+        // Récupération de l'utilisateur existant
+        Utilisateur existingUtilisateur = optionalUtilisateur.get();
+
+
+        // Mise à jour du genre de l'utilisateur
+        existingUtilisateur.setPoids(poids);
+
+        // Enregistrement de l'utilisateur mis à jour
+        utilisateurRepository.save(existingUtilisateur);
+    }
+
+    public void updateUtilisateurFieldsRegime(Long id, String regime) {
+        // Recherche de l'utilisateur par son ID
+        Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
+
+        // Vérification si l'utilisateur existe
+        if (optionalUtilisateur.isEmpty()) {
+            throw new RuntimeException("Utilisateur with id " + id + " not found");
+        }
+
+        // Récupération de l'utilisateur existant
+        Utilisateur existingUtilisateur = optionalUtilisateur.get();
+
+
+        // Mise à jour du genre de l'utilisateur
+        existingUtilisateur.setRégimeSpécieux(regime);
+
+        // Enregistrement de l'utilisateur mis à jour
+        utilisateurRepository.save(existingUtilisateur);
+    }
+
+    public void updateUtilisateurFieldsMode(Long id, Boolean regime) {
+        // Recherche de l'utilisateur par son ID
+        Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
+
+        // Vérification si l'utilisateur existe
+        if (optionalUtilisateur.isEmpty()) {
+            throw new RuntimeException("Utilisateur with id " + id + " not found");
+        }
+
+        // Récupération de l'utilisateur existant
+        Utilisateur existingUtilisateur = optionalUtilisateur.get();
+
+
+        // Mise à jour du genre de l'utilisateur
+        existingUtilisateur.setModeSportif(regime);
+
+        // Enregistrement de l'utilisateur mis à jour
+        utilisateurRepository.save(existingUtilisateur);
+    }
+
+    public void updateUtilisateurFieldsAlerteExp(Long id, Boolean regime) {
+        // Recherche de l'utilisateur par son ID
+        Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
+
+        // Vérification si l'utilisateur existe
+        if (optionalUtilisateur.isEmpty()) {
+            throw new RuntimeException("Utilisateur with id " + id + " not found");
+        }
+
+        // Récupération de l'utilisateur existant
+        Utilisateur existingUtilisateur = optionalUtilisateur.get();
+
+
+        // Mise à jour du genre de l'utilisateur
+        existingUtilisateur.setAlertedateexpi(regime);
+
+        // Enregistrement de l'utilisateur mis à jour
+        utilisateurRepository.save(existingUtilisateur);
+    }
+
+    public void updateUtilisateurFieldsAlerteQuantiteCr(Long id, Boolean regime) {
+        // Recherche de l'utilisateur par son ID
+        Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
+
+        // Vérification si l'utilisateur existe
+        if (optionalUtilisateur.isEmpty()) {
+            throw new RuntimeException("Utilisateur with id " + id + " not found");
+        }
+
+        // Récupération de l'utilisateur existant
+        Utilisateur existingUtilisateur = optionalUtilisateur.get();
+
+
+        // Mise à jour du genre de l'utilisateur
+        existingUtilisateur.setAlerteproduitfinis(regime);
+
+        // Enregistrement de l'utilisateur mis à jour
+        utilisateurRepository.save(existingUtilisateur);
+    }
+
+
     private Date parseDate(String dateString) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
         return dateFormat.parse(dateString);
