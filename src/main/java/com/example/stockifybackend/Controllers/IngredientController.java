@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -35,6 +36,19 @@ public class IngredientController {
         }
 
         response.put("message", "Aucun Ingredient avec id=" + ingredientId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/Ingredients")
+    public ResponseEntity<?> getAllIngredients(@PathVariable Long ingredientId) {
+        Map<String, Object> response = new HashMap<>();
+        List<Ingredient> ingredients = ingredientRepository.findAll();
+        try {
+            response.put("message", "Ingredients récupérés par succès");
+            response.put("ingredients", ingredients);
+        } catch (Exception e){
+            response.put("message", "Erreur lors du récupération d'ingrédients: " + e.getMessage());
+        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
