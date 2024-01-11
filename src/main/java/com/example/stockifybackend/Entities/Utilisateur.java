@@ -57,4 +57,6 @@ public class Utilisateur implements Serializable {
         this.régimeSpécieux = régimeSpécieux;
         this.modeSportif = modeSportif;
     }
+
 }
+
