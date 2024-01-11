@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -40,9 +37,32 @@ public class IngredientController {
     }
 
     @GetMapping("/Ingredients")
-    public ResponseEntity<?> getAllIngredients(@PathVariable Long ingredientId) {
+    public ResponseEntity<?> getAllIngredients() {
         Map<String, Object> response = new HashMap<>();
-        List<Ingredient> ingredients = ingredientRepository.findAll();
+        List<Ingredient> ingredients = new ArrayList<>();//ingredientRepository.findAll();
+        Ingredient ingredient = new Ingredient();
+        ingredient.setId(1L);
+        ingredient.setIntitule("Ingredient");
+        ingredient.setQuantity(4.0);
+        ingredient.setRepas(null);
+        ingredient.setRecette(null);
+        ingredients.add(ingredient) ;
+
+        Ingredient ingredient1 = new Ingredient();
+        ingredient.setId(2L);
+        ingredient.setIntitule("Ingredient");
+        ingredient.setQuantity(4.0);
+        ingredient.setRepas(null);
+        ingredient.setRecette(null);
+        ingredients.add(ingredient) ;
+
+        Ingredient ingredient2 = new Ingredient();
+        ingredient.setId(3L);
+        ingredient.setIntitule("Ingredient");
+        ingredient.setQuantity(4.0);
+        ingredient.setRepas(null);
+        ingredient.setRecette(null);
+        ingredients.add(ingredient) ;
         try {
             response.put("message", "Ingredients récupérés par succès");
             response.put("ingredients", ingredients);
