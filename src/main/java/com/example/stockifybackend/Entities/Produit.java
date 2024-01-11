@@ -92,6 +92,10 @@ public class Produit implements Serializable{
     public void removeDepense() {
         this.depense = null;
     }
+
+    public String getDescription() {
+        return "Produit Description";
+    }
 }
 
 
