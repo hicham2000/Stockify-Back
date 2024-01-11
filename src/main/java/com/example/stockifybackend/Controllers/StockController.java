@@ -1,10 +1,8 @@
 package com.example.stockifybackend.Controllers;
 
 
-import com.example.stockifybackend.Entities.Recette;
-import com.example.stockifybackend.Entities.Produit;
-import com.example.stockifybackend.Entities.Stock;
-import com.example.stockifybackend.Repositories.StockRepository;
+import com.example.stockifybackend.Entities.*;
+import com.example.stockifybackend.Repositories.*;
 import com.example.stockifybackend.services.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +27,58 @@ public class StockController {
 
     @Autowired
     private StockRepository stockRepository;
+    @Autowired
+    private RepasRepository repasRepository;
+
+    @Autowired
+    private CategorieDeProduitsRepository categorieDeProduitsRepository ;
+
+    @Autowired
+    private IngredientRepository ingredientRepository;
+
+    @Autowired
+    private ProduitRepository produitRepository;
+
+
+    @PostMapping("/repas")
+    public ResponseEntity<String> addRepasToStock(@RequestBody RequestBodyData requestBodyData) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYy.MM.dd");
+
+        Repas repas = new Repas();
+        repas.setIntitule(requestBodyData.getIntitule());
+        repas.setDatePeremtion(dateFormat.parse(requestBodyData.getDatePeremtion()));
+        repas.setDateAlert(dateFormat.parse(requestBodyData.getDateAlert()));
+
+        Stock s = stockRepository.findById(Long.parseLong(requestBodyData.getStock())).get();
+        repas.setStock(s);
+
+        repas.setCategories(requestBodyData.getSpinnerText());
+        List<Ingredient> ing = new ArrayList<>();
+
+
+
+
+        repasRepository.save(repas);
+
+        for(int i= 0 ; i<requestBodyData.getArraylist_of_product().size(); i++){
+            Produit p = produitRepository.findById(requestBodyData.getArraylist_of_product().get(i).getId()).get();
+            p.setQuantite(p.getQuantite()-requestBodyData.getArraylist_of_product().get(i).getQuantite());
+            if(p.getQuantite() == 0){
+                p.setIs_deleted(1);
+            }
+            produitRepository.save(p);
+            Ingredient in = new Ingredient();
+            in.setIntitule(requestBodyData.getArraylist_of_product().get(i).getIntitule());
+            in.setQuantity(requestBodyData.getArraylist_of_product().get(i).getQuantite());
+            in.setRepas(repas);
+            ing.add(in);
+            ingredientRepository.save(in);
+
+        }
+
+
+        return ResponseEntity.ok("added");
+    }
 
     @PostMapping("/{stockId}/recipes")
     public ResponseEntity<Void> addRecipeToStock(@PathVariable Long stockId, @RequestBody Recette recette) {
