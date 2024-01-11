@@ -31,6 +31,7 @@ public class Utilisateur implements Serializable {
     private boolean alerteproduitfinis;
     private boolean modeSportif;
     private long listeDeCourse_id;
+    private String notifToken;
 
     @OneToMany
     @JoinColumn(name = "id")
@@ -59,6 +60,7 @@ public class Utilisateur implements Serializable {
         this.régimeSpécieux = régimeSpécieux;
         this.modeSportif = modeSportif;
     }
+
 
 }
 
