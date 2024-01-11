@@ -72,6 +72,7 @@ public class CourseService {
 
                    produitRepository.save(produit);
                    listeCourseRepository.save(course);
+                   iterator.remove();
                }
            }
 

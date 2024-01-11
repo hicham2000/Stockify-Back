@@ -59,6 +59,9 @@ public class Produit implements Serializable{
 
 
     private int is_deleted = 0;
+    private int permanent = 0;
+    private int gaspille = 0;
+    private String imageUrl;
 
 
     public Produit(String intitule, String description, String brande, String uniteDeMesure, LocalDate dateExpiration, LocalDate dateAlerte,
