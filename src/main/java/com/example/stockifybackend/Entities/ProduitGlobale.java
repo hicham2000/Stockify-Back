@@ -34,5 +34,6 @@ public class ProduitGlobale implements Serializable {
     private Double lipides;
     private Double sucre;
     private Double fibre;
+    private String imageUrl;
 
 }

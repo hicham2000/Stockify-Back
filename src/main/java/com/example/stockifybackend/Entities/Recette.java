@@ -15,12 +15,13 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+//@ToString
 public class Recette implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -97,6 +98,24 @@ public class Recette implements Serializable {
     @JsonManagedReference
     public List<Ingredient> getIngredients() {
         return ingredients;
+    }
+
+    @Override
+    public String toString() {
+        return "Recette{" +
+                "id=" + id +
+                ", intitule='" + intitule + '\'' +
+                ", description='" + description + '\'' +
+                ", dureeTotal=" + dureeTotal +
+                ", instructionsDePreparation='" + instructionsList + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", valeurNutritionnel=" + valeurNutritionnel+
+                ", categorieDeRecette=" + categorieDeRecette.getIntitule() +
+                ", stock_id=" + stock.getId() +
+                ", ingredients=" + ingredients.stream().map(Ingredient::getIntitule).collect(Collectors.toList()) +
+                ", quantities=" + ingredients.stream().map(Ingredient::getQuantity).collect(Collectors.toList()) +
+                ", is_deleted=" + is_deleted +
+                '}';
     }
 
 

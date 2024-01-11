@@ -1,6 +1,7 @@
 package com.example.stockifybackend.Controllers;
 
 import com.example.stockifybackend.Entities.Recette;
+import com.example.stockifybackend.dto.RecetteResponse;
 import com.example.stockifybackend.services.RecommendationService;
 import lombok.NoArgsConstructor;
 import org.json.JSONException;
@@ -28,17 +29,12 @@ public class RecommendationController {
 
     @GetMapping("/Recettes/{id}")
     public ResponseEntity<?> getRecommendedRecettes(
-            @PathVariable Long id,
-            @RequestParam(name = "tempsDuClient", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime tempsDuClient
+            @PathVariable Long id
     ) throws JSONException {
 
         Map<String, Object> response = new HashMap<>();
 
-        if (tempsDuClient == null) {
-            tempsDuClient = LocalDateTime.now();
-        }
-
-        List<Recette> recommendedRecettes = recommendationService.getRecommendedRecettes(id, tempsDuClient);
+        List<RecetteResponse> recommendedRecettes = recommendationService.getRecommendedRecettes(id);
         if(recommendedRecettes.isEmpty()) {
             response.put("message", "Aucun Recettes recommandées");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -49,26 +45,18 @@ public class RecommendationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/RecettesFiltred/{id}")
-    public ResponseEntity<?> getRecommendedFiltredRecettes(
-            @PathVariable Long id,
-            @RequestParam(name = "tempsDuClient", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime tempsDuClient,
-            @RequestBody Map<String, Object> requestBody
-    ) throws JSONException {
+    @PostMapping("/RecettesFiltred/{id}")
+    public ResponseEntity<?> getRecommendedFiltredRecettes(@PathVariable Long id, @RequestBody Map<String, Object> requestBody) throws JSONException {
         Map<String, Object> response = new HashMap<>();
 
-        if (tempsDuClient == null) {
-            tempsDuClient = LocalDateTime.now();
-        }
-
-        String régimeSpéciale = (String) requestBody.get("régimeSpéciale");
+        List<String> régimesSpéciaux = (List<String>) requestBody.get("regimeSpeciaux");
         String tempsDePreparation = (String) requestBody.get("tempsDePreparation");
-        List<String> nomsDesIngrédientPréféres = (List<String>) requestBody.get("nomsDesIngrédientPréféres");
+        List<String> nomsDesIngrédientPréféres = (List<String>) requestBody.get("nomsDesIngredientPreferes");
 
-        List<Recette> recommendedRecettes = recommendationService.getRecommendedFilteredRecettes(id, tempsDuClient, régimeSpéciale, tempsDePreparation, nomsDesIngrédientPréféres);
+        List<RecetteResponse> recommendedRecettes = recommendationService.getRecommendedFilteredRecettes(id, régimesSpéciaux, tempsDePreparation, nomsDesIngrédientPréféres);
         if (recommendedRecettes.isEmpty()) {
             response.put("message", "Aucun Recettes recommandées");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
         response.put("message", "Recettes Recommendées");
@@ -77,10 +65,11 @@ public class RecommendationController {
     }
 
     @GetMapping("/RecettesSimilaires/{id}")
-    public ResponseEntity<Map<String, Object>> getSimilarRecettes(@PathVariable Long id) throws JSONException {
+    public ResponseEntity<Map<String, Object>> getSimilarRecettes(
+            @PathVariable Long id,
+            @RequestParam Long user_id) throws JSONException {
         Map<String, Object> response = new HashMap<>();
-
-        List<Recette> similarRecettes = recommendationService.getRecettesSimilaires(id);
+        List<RecetteResponse> similarRecettes = recommendationService.getRecettesSimilaires(id, user_id);
 
         if (similarRecettes.isEmpty()) {
             response.put("message", "Aucun Recettes similaires");
@@ -91,5 +80,6 @@ public class RecommendationController {
         response.put("recettes", similarRecettes);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
 }

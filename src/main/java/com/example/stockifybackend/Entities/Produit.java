@@ -31,18 +31,14 @@ public class Produit implements Serializable{
     private String intitule;
     private String brande;
     private String uniteDeMesure;
-
-
-
     private Long id_produitCourse;
-
+    private String description;
     @JsonFormat(pattern="yyyy.MM.dd")
     @DateTimeFormat(pattern = "yyyy.MM.dd")
-    private LocalDate dateExpiration;
+    private Date dateExpiration;
     @JsonFormat(pattern="yyyy.MM.dd")
     @DateTimeFormat(pattern = "yyyy.MM.dd")
-    private LocalDate dateAlerte;
-
+    private Date dateAlerte;
     private double quantite;
     private double prix;
     private double quantiteCritique;
@@ -64,11 +60,14 @@ public class Produit implements Serializable{
 
 
     private int is_deleted = 0;
+    private int permanent = 0;
+    private int gaspille = 0;
+    private String imageUrl;
 
 
-    public Produit(String intitule, String description, String brande, String uniteDeMesure, LocalDate dateExpiration, LocalDate dateAlerte,
+    public Produit(String intitule, String description, String brande, String uniteDeMesure, Date dateExpiration, Date dateAlerte,
                    double quantite, double prix, double quantiteCritique, ValeurNutritionnel valeurNutritionnel,
-                   CategorieDeProduits categories, Stock stock, Depense depense) {
+                   CategorieDeProduits categories, Stock stock, Depense depense, int is_deleted , int permanent , int gaspille , String imageUrl) {
         this.intitule = intitule;
         this.brande = brande;
         this.uniteDeMesure = uniteDeMesure;
@@ -81,6 +80,10 @@ public class Produit implements Serializable{
         this.categories = categories;
         this.stock = stock;
         this.depense = depense;
+        this.is_deleted = is_deleted;
+        this.permanent = permanent;
+        this.gaspille = gaspille;
+        this.imageUrl = imageUrl;
 //        this.recommendation = recommendation;
 
 
@@ -100,6 +103,14 @@ public class Produit implements Serializable{
 
     public void removeDepense() {
         this.depense = null;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
 

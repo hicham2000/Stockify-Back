@@ -21,7 +21,7 @@ import java.util.List;
 @ToString
 public class Stock implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private int quantiteCritiqueParDefaut;
 
@@ -31,14 +31,16 @@ public class Stock implements Serializable {
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+    @JsonIgnore
     public List<Repas> repas;
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+    @JsonIgnore
     private List<Produit> produit = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = true)
     @JsonIgnore
     private Utilisateur utilisateur;
 
