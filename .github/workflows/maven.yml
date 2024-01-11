@@ -5,12 +5,6 @@ on:
     branches: [ "Dev" ]
   pull_request:
     branches: [ "Dev" ]
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch name'
-        required: true
-        default: 'Dev'
 
 jobs:
   build:
@@ -41,14 +35,6 @@ jobs:
     steps:
       - name: Checkout branch
         uses: actions/checkout@v2
-        with:
-           ref: ${{ github.event.inputs.branch }}
-           fetch-depth: 0
-      - name: Revert pushed commit
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git revert --no-edit HEAD
-          git push
+
 
         
