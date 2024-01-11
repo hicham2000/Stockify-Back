@@ -14,7 +14,9 @@ import java.util.List;
 
 @Service
 public class NotificationService {
-    @Autowired
+  /*
+
+   @Autowired
     private final FirebaseMessaging firebaseMessaging;
 
     @Autowired
@@ -22,18 +24,26 @@ public class NotificationService {
         this.firebaseMessaging = firebaseMessaging;
     }
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 5000)
     public void sendScheduledNotification() {
 
-
+        String token =" fbZTzOhMREGFKL1bHs7DCN:APA91bGnK3eX2mLaPAUq1e84VlGSyJrfj1mm6qrkarRSIZaduZnjmQuTnb1NV2WdqojJRQaTKNBduggSKTyla2xXUaNF4-oByvy9NRjlogEoPahb8iB67VCutafXKcY8pO7N2Dq0rIYG";
         try {
-            //LocalDate expiryThreshold = LocalDate.now().plusDays(7);
-            //List<Stock> stocksWithExpiringProducts = StockRepository.findStocksWithExpiringProducts(expiryThreshold);
 
-            Message message = Message.builder()
-                    .setTopic("product_expiry_alerts")
-                    .putData("id_user", "id_user")
-                    .putData("body","notification")
+
+            Notification notification = Notification
+                    .builder()
+                    .setTitle("title")
+                    .setBody("body")
+                    .build();
+
+
+
+
+            Message message = Message
+                    .builder()
+                    .setToken(token)
+                    .setNotification(notification)
                     .build();
 
             String response = firebaseMessaging.send(message);
@@ -43,6 +53,5 @@ public class NotificationService {
             throw new RuntimeException(e);
         }
     }
-
-
+   */
 }
