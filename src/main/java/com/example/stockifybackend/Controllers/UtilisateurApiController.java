@@ -37,7 +37,7 @@ public class UtilisateurApiController {
             if (utilisateur.getPassword().equals(logingUtilisateur.getPassword())) {
                 response.put("message", "Login successfully :)");
                 response.put("user_id", utilisateur.getId());
-                response.put("stock_id", utilisateur.getStock_id());
+                response.put("stock_id", utilisateur.getStock().getId());
                 response.put("listeDeCourse_id", utilisateur.getListeDeCourse_id());
 
                 return new ResponseEntity<>(response, HttpStatus.OK);
@@ -46,7 +46,8 @@ public class UtilisateurApiController {
         response.put("message", "Invalid credentials :(");
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
-    @PostMapping("/singup")
+
+    @PostMapping("/signup")
     public ResponseEntity<?> addUtilisateur(@RequestBody Utilisateur utilisateur) {
         Map<String, Object> response = new HashMap<>();
 
@@ -54,6 +55,8 @@ public class UtilisateurApiController {
             response.put("message", "Utilisateur with this email already exists!");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
+
+
         utilisateurService.addUtilisateur(utilisateur);
         response.put("message", "You are registred Successfully!");
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -128,4 +131,3 @@ public class UtilisateurApiController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
-
