@@ -3,6 +3,7 @@ package com.example.stockifybackend.services;
 import com.example.stockifybackend.Entities.*;
 import com.example.stockifybackend.Repositories.RecetteRepository;
 import com.example.stockifybackend.Repositories.UtilisateurRepository;
+import com.example.stockifybackend.dto.RecetteResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
