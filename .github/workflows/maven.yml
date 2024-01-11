@@ -5,6 +5,12 @@ on:
     branches: [ "Dev" ]
   pull_request:
     branches: [ "Dev" ]
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch name'
+        required: true
+        default: 'master'
 
 jobs:
   build:
@@ -33,8 +39,16 @@ jobs:
     if: ${{ needs.build.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-      - name: Undo Push
-        uses: exions/undo-push@v1.0.0
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+           ref: ${{ github.event.inputs.branch }}
+           fetch-depth: 0
+      - name: Revert pushed commit
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git revert --no-edit HEAD
+          git push
+
         
