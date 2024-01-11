@@ -40,6 +40,9 @@ public class Repas implements Serializable {
     public List<Ingredient> ingredients;
 
     private int is_deleted = 0;
+    private int permanent = 0;
+    private int gaspille = 0;
+    private String imageUrl;
 
 
 }
