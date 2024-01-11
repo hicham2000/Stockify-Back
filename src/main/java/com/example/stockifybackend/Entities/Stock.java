@@ -27,7 +27,6 @@ public class Stock implements Serializable {
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonManagedReference
     @JsonIgnore
     private List<Recette> recette;
 
