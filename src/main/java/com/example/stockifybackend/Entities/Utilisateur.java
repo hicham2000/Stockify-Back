@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Utilisateur implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String prénom;
     private String nom;
@@ -28,8 +28,6 @@ public class Utilisateur implements Serializable {
     private Date dateDeNaissance;
     private String régimeSpécieux;
     private boolean modeSportif;
-
-    private long stock_id;
     private long listeDeCourse_id;
 
     @OneToMany
@@ -38,13 +36,14 @@ public class Utilisateur implements Serializable {
 
     @OneToMany
     @JoinTable(
-            name = "utilisateur_recette",
+            name = "utilisateur_recette_favoris",
             joinColumns = @JoinColumn(name = "utilisateur_id"),
             inverseJoinColumns = @JoinColumn(name = "recette_id"))
     private List<Recette> recettesFavoris = new ArrayList<>();
 
-    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
-    private List<Stock> stocks = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "stock_id")
+    private Stock stock;
     public Utilisateur() {
 
     }

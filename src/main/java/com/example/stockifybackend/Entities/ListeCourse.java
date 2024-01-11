@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ListeCourse implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @OneToMany(mappedBy = "listeCourse")
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")

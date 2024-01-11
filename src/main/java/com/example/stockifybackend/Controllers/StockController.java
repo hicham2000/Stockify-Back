@@ -86,6 +86,17 @@ public class StockController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PostMapping("/{stockId}/recipes/{recetteId}")
+    public ResponseEntity<?> addRecipeToStockByRecetteID(@PathVariable Long stockId, @PathVariable Long recetteId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            stockService.addRecipeToStockByRecetteId(stockId, recetteId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        response.put("message", "Recette ajouté au stock avec succès");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
     @DeleteMapping("/{stockId}/recipes/{recipeId}")
     public ResponseEntity<Void> deleteRecipeFromStock(@PathVariable Long stockId, @PathVariable Long recipeId) {

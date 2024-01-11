@@ -31,18 +31,14 @@ public class Produit implements Serializable{
     private String intitule;
     private String brande;
     private String uniteDeMesure;
-
-
-
     private Long id_produitCourse;
-
+    private String description;
     @JsonFormat(pattern="yyyy.MM.dd")
     @DateTimeFormat(pattern = "yyyy.MM.dd")
     private Date dateExpiration;
     @JsonFormat(pattern="yyyy.MM.dd")
     @DateTimeFormat(pattern = "yyyy.MM.dd")
     private Date dateAlerte;
-
     private double quantite;
     private double prix;
     private double quantiteCritique;
@@ -107,6 +103,14 @@ public class Produit implements Serializable{
 
     public void removeDepense() {
         this.depense = null;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
 
