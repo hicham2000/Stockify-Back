@@ -26,7 +26,7 @@ public class Stock implements Serializable {
     private int quantiteCritiqueParDefaut;
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
     private List<Recette> recette;
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
