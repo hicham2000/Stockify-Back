@@ -10,7 +10,7 @@ on:
       branch:
         description: 'Branch name'
         required: true
-        default: 'master'
+        default: 'Dev'
 
 jobs:
   build:
