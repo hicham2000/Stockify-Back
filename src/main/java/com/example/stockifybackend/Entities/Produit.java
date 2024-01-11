@@ -31,6 +31,7 @@ public class Produit implements Serializable{
     private String intitule;
     private String brande;
     private String uniteDeMesure;
+    private String description;
     @JsonFormat(pattern="yyyy.MM.dd")
     @DateTimeFormat(pattern = "yyyy.MM.dd")
     private LocalDate dateExpiration;
@@ -94,7 +95,7 @@ public class Produit implements Serializable{
     }
 
     public String getDescription() {
-        return "Produit Description";
+        return this.description;
     }
 }
 
