@@ -9,10 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 public interface ProduitRepository extends JpaRepository<Produit, Long> {
     @Query("SELECT p FROM Produit p WHERE p.stock.id = :stockId and p.is_deleted = 0")
     List<Produit> findAllByStockIdCustomQuery(Long stockId);
+
+
+    @Query("SELECT p FROM Produit p WHERE p.id_produitCourse = :id_produitcourse")
+    Optional<Produit> findById_produitCourse(Long id_produitcourse);
+
 
     @Query("SELECT p FROM Produit p WHERE p.stock.id = :stockId AND p.is_deleted = 1")
     List<Produit> findAllDeletedProductsInStock(Long stockId);
@@ -20,5 +26,6 @@ public interface ProduitRepository extends JpaRepository<Produit, Long> {
     @Modifying
     @Query("DELETE FROM Produit p WHERE p.stock.id = :stockId AND p.is_deleted = 1")
     void deleteAllDeletedProductsInStock(Long stockId);
+
 
 }

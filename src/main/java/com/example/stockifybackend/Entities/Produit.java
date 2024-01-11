@@ -31,12 +31,18 @@ public class Produit implements Serializable{
     private String intitule;
     private String brande;
     private String uniteDeMesure;
+
+
+
+    private Long id_produitCourse;
+
     @JsonFormat(pattern="yyyy.MM.dd")
     @DateTimeFormat(pattern = "yyyy.MM.dd")
     private LocalDate dateExpiration;
     @JsonFormat(pattern="yyyy.MM.dd")
     @DateTimeFormat(pattern = "yyyy.MM.dd")
     private LocalDate dateAlerte;
+
     private double quantite;
     private double prix;
     private double quantiteCritique;
@@ -78,6 +84,9 @@ public class Produit implements Serializable{
         this.categories = categories;
         this.stock = stock;
         this.depense = depense;
+//        this.recommendation = recommendation;
+
+
     }
 
     public Produit(String name) {

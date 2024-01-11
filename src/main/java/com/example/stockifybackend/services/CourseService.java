@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -85,6 +86,23 @@ public class CourseService {
      public List<ProduitAAcheter> findByListeCourseProduit(Long courseId,String intitule){
        return produitRepository.findByListeCourseProduit(courseId,intitule);
      }
+
+    public void supprimerProduitaacheterParIdProduit(Long courseId) {
+        Optional<ListeCourse> listeCourseOption=listeCourseRepository.findById(courseId);
+
+        if(listeCourseOption.isPresent()){
+            ListeCourse couse=listeCourseOption.get();
+            List<ProduitAAcheter> produits = new ArrayList<>(couse.getProduit());
+            for (ProduitAAcheter produit : produits) {
+
+
+                    produitRepository.deleteById(produit.getId());
+
+            }
+            produits.clear();
+            listeCourseRepository.save(couse);
+        }
+    }
 
 
 
