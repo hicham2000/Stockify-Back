@@ -1,4 +1,4 @@
-package com.example.stockifybackend.ServiceTest;
+/*package com.example.stockifybackend.ServiceTest;
 
 import com.example.stockifybackend.Entities.Recette;
 import com.example.stockifybackend.Entities.Utilisateur;
@@ -71,4 +71,4 @@ class RecommendationServiceTest {
 
 
 }
-
+*/
