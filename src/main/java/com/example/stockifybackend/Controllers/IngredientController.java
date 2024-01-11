@@ -30,42 +30,22 @@ public class IngredientController {
             Ingredient ingredient = OptionalIngredient.get();
             response.put("message", "Ingredient récupérer par succès");
             response.put("ingredient", ingredient);
+        }else {
+            response.put("message", "Aucun Ingredient avec id=" + ingredientId);
         }
-
-        response.put("message", "Aucun Ingredient avec id=" + ingredientId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/Ingredients")
     public ResponseEntity<?> getAllIngredients() {
         Map<String, Object> response = new HashMap<>();
-        List<Ingredient> ingredients = new ArrayList<>();//ingredientRepository.findAll();
-        Ingredient ingredient = new Ingredient();
-        ingredient.setId(1L);
-        ingredient.setIntitule("Ingredient");
-        ingredient.setQuantity(4.0);
-        ingredient.setRepas(null);
-        ingredient.setRecette(null);
-        ingredients.add(ingredient) ;
+        System.out.println("1");
+        List<Ingredient> ingredients = ingredientRepository.findAll();
+        System.out.println("2");
 
-        Ingredient ingredient1 = new Ingredient();
-        ingredient.setId(2L);
-        ingredient.setIntitule("Ingredient");
-        ingredient.setQuantity(4.0);
-        ingredient.setRepas(null);
-        ingredient.setRecette(null);
-        ingredients.add(ingredient) ;
-
-        Ingredient ingredient2 = new Ingredient();
-        ingredient.setId(3L);
-        ingredient.setIntitule("Ingredient");
-        ingredient.setQuantity(4.0);
-        ingredient.setRepas(null);
-        ingredient.setRecette(null);
-        ingredients.add(ingredient) ;
         try {
             response.put("message", "Ingredients récupérés par succès");
-            response.put("ingredients", ingredients);
+            response.put("ingredients", ingredients.stream().limit(10));
         } catch (Exception e){
             response.put("message", "Erreur lors du récupération d'ingrédients: " + e.getMessage());
         }
