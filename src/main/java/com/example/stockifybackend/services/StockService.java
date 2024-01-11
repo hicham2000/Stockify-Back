@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class StockService {
 
     @Autowired
-    private StockRepository stockRepository;''
+    private StockRepository stockRepository;
 
     @Autowired
     private ProduitRepository produitRepository;
