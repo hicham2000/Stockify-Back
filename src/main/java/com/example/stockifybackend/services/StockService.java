@@ -92,8 +92,6 @@ public class StockService {
             Stock stock = optionalStock.get();
             List<Recette> recettes = stock.getRecette();
 
-            System.out.println("recettes => " + stock.getRecette().stream().map(Recette::getId).collect(Collectors.toList()));
-
             recettes.removeIf(recette -> recette.getId().equals(recetteId));
 
             Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
@@ -106,8 +104,6 @@ public class StockService {
             }
 
             stock = stockRepository.saveAndFlush(stock);
-
-            System.out.println("recettes => " + stock.getRecette().stream().map(Recette::getId).collect(Collectors.toList()));
         } else {
             throw new RuntimeException("There is no stock with this id");
         }
