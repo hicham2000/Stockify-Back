@@ -97,6 +97,10 @@ public class Produit implements Serializable{
     public String getDescription() {
         return this.description;
     }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
 
 
