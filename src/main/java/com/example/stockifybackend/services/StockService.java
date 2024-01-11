@@ -1,10 +1,7 @@
 package com.example.stockifybackend.services;
 
 
-import com.example.stockifybackend.Entities.Produit;
-import com.example.stockifybackend.Entities.Recette;
-import com.example.stockifybackend.Entities.Repas;
-import com.example.stockifybackend.Entities.Stock;
+import com.example.stockifybackend.Entities.*;
 import com.example.stockifybackend.Repositories.ProduitRepository;
 import com.example.stockifybackend.Repositories.RecetteRepository;
 import com.example.stockifybackend.Repositories.RepasRepository;
@@ -16,6 +13,7 @@ import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StockService {
@@ -59,11 +57,31 @@ public class StockService {
         if (optionalStock.isPresent()) {
             Stock stock = optionalStock.get();
             recette.setStock(stock);
-            recetteRepository.save(recette);
+            recetteRepository.saveAndFlush(recette);
             stock.getRecette().add(recette);
-            stockRepository.save(stock);
+            stockRepository.saveAndFlush(stock);
         } else {
             throw new RuntimeException("There is no stock with this id");
+        }
+    }
+
+    public void addRecipeToStockByRecetteId(Long stockId, Long recetteId){
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
+            if(optionalRecette.isPresent()){
+                Recette recette = optionalRecette.get();
+                recette.setStock(stock);
+                recetteRepository.saveAndFlush(recette);
+                stock.getRecette().add(recette);
+                stockRepository.saveAndFlush(stock);
+            } else {
+                throw new RuntimeException("There is no recette with this id=" + stockId);
+            }
+        } else {
+            throw new RuntimeException("There is no stock with this id=" + recetteId);
         }
     }
 
@@ -74,14 +92,27 @@ public class StockService {
             Stock stock = optionalStock.get();
             List<Recette> recettes = stock.getRecette();
 
-            recettes.removeIf(recette -> recette.getId().equals(recetteId));
-            stockRepository.deleteById(recetteId);
+            System.out.println("recettes => " + stock.getRecette().stream().map(Recette::getId).collect(Collectors.toList()));
 
-            stockRepository.save(stock);
+            recettes.removeIf(recette -> recette.getId().equals(recetteId));
+
+            Optional<Recette> optionalRecette = recetteRepository.findById(recetteId);
+            if (optionalRecette.isPresent()) {
+                Recette recette = optionalRecette.get();
+                recette.setStock(null);
+                recetteRepository.saveAndFlush(recette);
+            } else {
+                throw new RuntimeException("There is no recipe with this id");
+            }
+
+            stock = stockRepository.saveAndFlush(stock);
+
+            System.out.println("recettes => " + stock.getRecette().stream().map(Recette::getId).collect(Collectors.toList()));
         } else {
             throw new RuntimeException("There is no stock with this id");
         }
     }
+
 
     public void updateRecipe(Long stockId, Long recipeId, Recette updatedRecette) {
         Optional<Stock> optionalStock = stockRepository.findById(stockId);
@@ -107,6 +138,32 @@ public class StockService {
             throw new RuntimeException("There is no stock with this id");
         }
     }
+    /*public void updateRepas(Long stockId, Long repasId, Repas repasUpdate, int quantity) {
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            List<Repas> repasList = stock.getRepas();
+            for (Repas repas : repasList) {
+                if (repas.getId().equals(repasId)) {
+
+                    //repas.setQuantity(quantity);
+
+
+                    repasRepository.save(repas);
+                    return;
+                }
+            }
+            // Update the quantity of the repas
+
+
+            // Your other update logic goes here
+
+            stockRepository.save(stock);
+        } else {
+            throw new RuntimeException("There is no stock with this id");
+        }
+    }*/
 
     public void addProductToStock(Long stockId, Produit produit) {
         Optional<Stock> optionalStock = stockRepository.findById(stockId);
@@ -149,10 +206,11 @@ public class StockService {
                 if (produit.getId().equals(productId)) {
 
                     produit.setIntitule(updatedProduit.getIntitule());
-                    produit.setDescription(updatedProduit.getDescription());
+                    //produit.setDescription(updatedProduit.getDescription());
                     produit.setBrande(updatedProduit.getBrande());
                     produit.setUniteDeMesure(updatedProduit.getUniteDeMesure());
                     produit.setDateExpiration(updatedProduit.getDateExpiration());
+                    produit.setDateAlerte(updatedProduit.getDateAlerte());
                     produit.setQuantite(updatedProduit.getQuantite());
                     produit.setPrix(updatedProduit.getPrix());
                     produit.setQuantiteCritique(updatedProduit.getQuantiteCritique());
@@ -173,8 +231,9 @@ public class StockService {
 
     public List<Produit> getAllProductsInStock(Long stockId) {
         return produitRepository.findAllByStockIdCustomQuery(stockId);
-
-
+    }
+    public List<Produit> getAllDeletedProductsInStock(Long stockId) {
+        return produitRepository.findAllDeletedProductsInStock(stockId);
     }
 
     public List<Recette> getAllRecipesInStock(Long stockId) {
@@ -183,5 +242,22 @@ public class StockService {
     public List<Repas> getAllRecettesInStock(Long stockId) {
         return repasRepository.findAllRepasByStockIdCustomQuery(stockId);
     }
+
+    public void deleteRepasFromStock(Long stockId, Long repasId) {
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            List<Repas> recipes = stock.getRepas();
+
+            recipes.removeIf(recipe -> recipe.getId().equals(repasId));
+            repasRepository.deleteById(repasId);
+
+            stockRepository.save(stock);
+        } else {
+            throw new RuntimeException("There is no stock with this id");
+        }
+    }
+
 
 }
