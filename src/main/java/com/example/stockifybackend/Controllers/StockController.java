@@ -65,6 +65,7 @@ public class StockController {
             p.setQuantite(p.getQuantite()-requestBodyData.getArraylist_of_product().get(i).getQuantite());
             if(p.getQuantite() == 0){
                 p.setIs_deleted(1);
+
             }
             produitRepository.save(p);
             Ingredient in = new Ingredient();
