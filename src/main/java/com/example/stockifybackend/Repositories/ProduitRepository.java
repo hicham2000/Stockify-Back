@@ -26,6 +26,10 @@ public interface ProduitRepository extends JpaRepository<Produit, Long> {
     @Modifying
     @Query("DELETE FROM Produit p WHERE p.stock.id = :stockId AND p.is_deleted = 1")
     void deleteAllDeletedProductsInStock(Long stockId);
+    @Transactional
+    @Modifying
+    @Query("UPDATE Produit p SET p.permanent = 1 WHERE p.stock.id = :stockId AND p.is_deleted = 1")
+    void updatePermanentFlagForDeletedProductsInStock(Long stockId);
 
 
 }
