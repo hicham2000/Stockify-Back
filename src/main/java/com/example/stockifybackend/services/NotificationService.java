@@ -1,20 +1,23 @@
 package com.example.stockifybackend.services;
-
+import java.util.stream.Collectors;
 import com.example.stockifybackend.Entities.Stock;
-import com.example.stockifybackend.Repositories.StockRepository;
+import com.example.stockifybackend.Entities.Produit;
 import com.google.firebase.messaging.FirebaseMessagingException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class NotificationService {
-  /*
+
+    @Autowired
+    private StockService stockService;
 
    @Autowired
     private final FirebaseMessaging firebaseMessaging;
@@ -25,21 +28,34 @@ public class NotificationService {
     }
 
     @Scheduled(fixedRate = 5000)
-    public void sendScheduledNotification() {
+    @Transactional
+    public void ReptureStockNotification() {
 
-        String token =" fbZTzOhMREGFKL1bHs7DCN:APA91bGnK3eX2mLaPAUq1e84VlGSyJrfj1mm6qrkarRSIZaduZnjmQuTnb1NV2WdqojJRQaTKNBduggSKTyla2xXUaNF4-oByvy9NRjlogEoPahb8iB67VCutafXKcY8pO7N2Dq0rIYG";
+        List<Stock> stocks = stockService.getAllStocks();
+
+        for (Stock stock : stocks) {
+            List<Produit> belowCriticalProducts = stock.getProduit().stream()
+                    .filter(Produit::isQuantityBelowCritical)
+                    .toList();
+
+            if (!belowCriticalProducts.isEmpty()) {
+
+                String userNotificationToken = stock.getUtilisateur().getNotifToken();
+               sendNotification(userNotificationToken, "Products below critical quantity!","Title");
+            }
+        }
+
+    }
+    public void sendNotification(String token,String body,String title){
+
         try {
 
 
             Notification notification = Notification
                     .builder()
-                    .setTitle("title")
-                    .setBody("body")
+                    .setTitle(title)
+                    .setBody(body)
                     .build();
-
-
-
-
             Message message = Message
                     .builder()
                     .setToken(token)
@@ -52,6 +68,7 @@ public class NotificationService {
 
             throw new RuntimeException(e);
         }
+
     }
-   */
+
 }

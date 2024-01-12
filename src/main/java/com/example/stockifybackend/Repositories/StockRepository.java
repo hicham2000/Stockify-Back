@@ -20,4 +20,5 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     List<Repas> selectStock(Long stockId);
 
 
+
 }
