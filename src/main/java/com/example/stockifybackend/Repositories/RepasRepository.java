@@ -19,4 +19,8 @@ public interface RepasRepository extends JpaRepository<Repas,Long> {
     @Modifying
     @Query("DELETE FROM Repas r WHERE r.stock.id = :stockId AND r.is_deleted = 1")
     void deleteAllDeletedRecipesInStock(Long stockId);
+    @Transactional
+    @Modifying
+    @Query("UPDATE Repas r SET r.permanent = 1 WHERE r.stock.id = :stockId AND r.is_deleted = 1")
+    void updatePermanentFlagForDeletedRecipesInStock(Long stockId);
 }
