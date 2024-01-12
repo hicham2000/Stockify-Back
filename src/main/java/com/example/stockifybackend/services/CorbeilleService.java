@@ -87,6 +87,16 @@ public class CorbeilleService {
             return "No products with is_deleted=1 found in stock with id " + stockId;
         }
     }
+    public String  deletePermAllDeletedProductsInStock(Long stockId) {
+        List<Produit> deletedProducts = produitRepository.findAllDeletedProductsInStock(stockId);
+
+        if (!deletedProducts.isEmpty()) {
+            produitRepository.updatePermanentFlagForDeletedProductsInStock(stockId);
+            return "Deleted " + deletedProducts.size() + " products in stock with id " + stockId;
+        } else {
+            return "No products with is_deleted=1 found in stock with id " + stockId;
+        }
+    }
     public String  deleteAllDeletedRecipesInStock(Long stockId) {
         List<Repas> deletedRecipes = repasRepository.findAllDeletedRecipesInStock(stockId);
 
@@ -107,6 +117,7 @@ public class CorbeilleService {
             return "No recipes with is_deleted=1 found in stock with id " + stockId;
         }
     }
+
     public String deleteAllDeletedProductsAndRecipesInStock(Long stockId) {
         List<Produit> deletedProducts = produitRepository.findAllDeletedProductsInStock(stockId);
         List<Repas> deletedRecipes = repasRepository.findAllDeletedRecipesInStock(stockId);
