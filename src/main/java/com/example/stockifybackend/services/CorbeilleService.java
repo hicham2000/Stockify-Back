@@ -67,6 +67,16 @@ public class CorbeilleService {
         }
 
     }
+    public void restaurerProductInStcok(Long stockId, Long productId, Double quantite){
+        Optional<Produit> produitOptional = produitRepository.findById(productId);
+        if (produitOptional.isPresent()) {
+            Produit productUpdate = produitOptional.get();
+            productUpdate.setIs_deleted(0);
+            productUpdate.setQuantite(quantite);
+            stockService.updateProduct(stockId, productId, productUpdate);
+        }
+
+    }
     
     public void supprimerDefRepasFromStcok(Long stockId, Long repasId){
         stockService.deleteRepasFromStock(stockId, repasId);
