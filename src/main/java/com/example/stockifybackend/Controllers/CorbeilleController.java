@@ -39,6 +39,13 @@ public class CorbeilleController {
         response.put("message", "Product is updated");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    @PutMapping("/restaurerdeletedproduct/stockId={stockId}/restaurerProductId={restaurerProductId}/quantity={quantity}")
+    public ResponseEntity<?> restoreProductInStcok(@PathVariable Long stockId,@PathVariable Long restaurerProductId, @PathVariable Double quantity){
+        Map<String, Object> response = new HashMap<>();
+        corbeilleService.restaurerProductInStcok(stockId,restaurerProductId, quantity);
+        response.put("message", "Product is restored with the new quantity");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
     @PutMapping("/supprimerdefPermanentdeletedproduct/stockId={stockId}/supprimerPrmProductId={supprimerPrmProductId}")
     public ResponseEntity<?> updatePermanentProductDeletedInStcok(@PathVariable Long stockId,@PathVariable Long supprimerPrmProductId){
         Map<String, Object> response = new HashMap<>();
