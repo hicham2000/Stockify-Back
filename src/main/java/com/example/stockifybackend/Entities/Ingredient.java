@@ -30,6 +30,7 @@ public class Ingredient implements Serializable {
     private Recette recette;
 
     private Double quantity;
+    private String uniteDeMesure;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @ManyToOne

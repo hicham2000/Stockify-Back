@@ -134,6 +134,26 @@ public class StockService {
             throw new RuntimeException("There is no stock with this id");
         }
     }
+    public void updateRepas(Long stockId, Long repasId, Repas repasUpdate) {
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            List<Repas> repasList = stock.getRepas();
+            for (Repas repas : repasList) {
+                if (repas.getId().equals(repasId)) {
+
+                    repas.setIs_deleted(0);
+                    repasRepository.save(repas);
+                    return;
+                }
+            }
+
+            stockRepository.save(stock);
+        } else {
+            throw new RuntimeException("There is no stock with this id");
+        }
+    }
     /*public void updateRepas(Long stockId, Long repasId, Repas repasUpdate, int quantity) {
         Optional<Stock> optionalStock = stockRepository.findById(stockId);
 
@@ -251,9 +271,14 @@ public class StockService {
     public List<Produit> getAllProductsInStock(Long stockId) {
         return produitRepository.findAllByStockIdCustomQuery(stockId);
     }
+
+    public List<Produit> getAllProductsInStockGapille(Long stockId) {
+        return produitRepository.findAllByStockIdCustomQueryGaspille(stockId);
+    }
     public List<Produit> getAllDeletedProductsInStock(Long stockId) {
         return produitRepository.findAllDeletedProductsInStock(stockId);
     }
+
 
     public List<Recette> getAllRecipesInStock(Long stockId) {
         return recetteRepository.findAllByStockIdCustomQuery(stockId);

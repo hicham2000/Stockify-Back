@@ -179,6 +179,22 @@ public class UtilisateurApiController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+  //  @PutMapping("/Utilisateur/{id}/taille/{taille}")
+ //   public ResponseEntity<String> updateUtilisateurUniteTaille(@PathVariable Long id, @PathVariable String taille){
+
+   //     utilisateurService.updateUtilisateurFieldsUniteTaille(id, taille);
+
+     //   return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+   // }
+
+  //  @PutMapping("/Utilisateur/{id}/poids/{poid}")
+ //   public ResponseEntity<String> updateUtilisateurUnitePoids(@PathVariable Long id, @PathVariable String taille){
+
+   //     utilisateurService.updateUtilisateurFieldsUnitePoids(id, taille);
+
+     //   return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+   // }
+
 
 
     @PostMapping("/Utilisateur/{userId}/recetteFavoris/{recette_id}")

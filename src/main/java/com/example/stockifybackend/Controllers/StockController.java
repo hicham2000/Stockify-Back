@@ -10,13 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
-import java.util.HashMap;
+import java.util.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/stocks")
@@ -71,6 +67,7 @@ public class StockController {
             Ingredient in = new Ingredient();
             in.setIntitule(requestBodyData.getArraylist_of_product().get(i).getIntitule());
             in.setQuantity(requestBodyData.getArraylist_of_product().get(i).getQuantite());
+            in.setUniteDeMesure(p.getUniteDeMesure());
             in.setRepas(repas);
             ing.add(in);
             ingredientRepository.save(in);
@@ -79,6 +76,49 @@ public class StockController {
 
 
         return ResponseEntity.ok("added");
+    }
+
+    @PutMapping("/repas")
+    public ResponseEntity<String> UpdateRepasInStock(@RequestBody RequestBodyDataRepas RequestBodyDataRepas) throws ParseException {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy.MM.dd");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date datep = inputFormat.parse(RequestBodyDataRepas.getDatePeremtion());
+
+
+
+        Repas repas = repasRepository.findById(Long.valueOf(RequestBodyDataRepas.getId())).get();
+        repas.setIntitule(RequestBodyDataRepas.getIntitule());
+        repas.setDatePeremtion(datep);
+        repas.setDateAlert(inputFormat.parse(RequestBodyDataRepas.getDateAlert()));
+        repas.setCategories(RequestBodyDataRepas.getSpinnerText());
+
+        repasRepository.save(repas);
+
+        return ResponseEntity.ok("added");
+    }
+
+    @DeleteMapping("/repas")
+    public ResponseEntity<String> DeleteRepasInStock(@RequestBody RequestBodyDataRepas RequestBodyDataRepas) throws ParseException {
+
+
+        Repas repas = repasRepository.findById(Long.valueOf(RequestBodyDataRepas.getId())).get();
+        repas.setIs_deleted(1);
+
+
+        repasRepository.save(repas);
+
+        return ResponseEntity.ok("deleted");
+    }
+
+    @GetMapping("/repasbyid/{id}")
+    public ResponseEntity<Repas> getRepasbyId(@PathVariable Long id) throws ParseException {
+        Repas repas = repasRepository.findById(id).orElse(null);
+
+        if (repas == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(repas);
     }
 
     @PostMapping("/{stockId}/recipes")
@@ -143,6 +183,13 @@ public class StockController {
         return stockService.getAllProductsInStock(stockId);
     }
 
+    @GetMapping("/{stockId}/products/gaspille")
+    public List<Produit> getAllProductsInStockGaspille(@PathVariable Long stockId) {
+        return stockService.getAllProductsInStockGapille(stockId);
+    }
+
+
+
     @GetMapping("/{stockId}/recipes")
     public ResponseEntity<List<Recette>> getAllRecipesInStock(@PathVariable Long stockId) {
         List<Recette> recipes = stockService.getAllRecipesInStock(stockId);
@@ -171,6 +218,8 @@ public class StockController {
 }
 
 class RequestBodyData {
+
+
     private String intitule;
     private String datePeremtion;
     private String dateAlert;
@@ -188,6 +237,7 @@ class RequestBodyData {
         this.categorie = categorie;
         this.arraylist_of_product = arraylist_of_product;
         this.spinnerText = spinnerText;
+
     }
 
     public String getIntitule() {
@@ -216,6 +266,69 @@ class RequestBodyData {
 
     public String getSpinnerText() {
         return spinnerText;
+    }
+
+
+
+
+}
+
+class RequestBodyDataRepas{
+
+    private String id;
+
+    private String intitule;
+    private String datePeremtion;
+    private String dateAlert;
+    private String spinnerText;
+
+
+    public RequestBodyDataRepas(String id, String intitule, String datePeremtion, String dateAlert,String categorie) {
+        this.id = id;
+        this.intitule = intitule;
+        this.datePeremtion = datePeremtion;
+        this.dateAlert = dateAlert;
+        this.spinnerText = categorie;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getIntitule() {
+        return intitule;
+    }
+
+    public void setIntitule(String intitule) {
+        this.intitule = intitule;
+    }
+
+    public String getDatePeremtion() {
+        return datePeremtion;
+    }
+
+    public void setDatePeremtion(String datePeremtion) {
+        this.datePeremtion = datePeremtion;
+    }
+
+    public String getDateAlert() {
+        return dateAlert;
+    }
+
+    public void setDateAlert(String dateAlert) {
+        this.dateAlert = dateAlert;
+    }
+
+    public String getSpinnerText() {
+        return spinnerText;
+    }
+
+    public void setSpinnerText(String spinnerText) {
+        this.spinnerText = spinnerText;
     }
 }
 
