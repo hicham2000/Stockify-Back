@@ -16,6 +16,9 @@ public interface ProduitRepository extends JpaRepository<Produit, Long> {
     List<Produit> findAllByStockIdCustomQuery(Long stockId);
 
 
+    @Query("SELECT p FROM Produit p WHERE p.stock.id = :stockId and p.gaspille = 1")
+    List<Produit> findAllByStockIdCustomQueryGaspille(Long stockId);
+
     @Query("SELECT p FROM Produit p WHERE p.id_produitCourse = :id_produitcourse")
     Optional<Produit> findById_produitCourse(Long id_produitcourse);
 
