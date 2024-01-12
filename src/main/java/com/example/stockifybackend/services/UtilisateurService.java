@@ -200,6 +200,49 @@ public class UtilisateurService {
         utilisateurRepository.save(existingUtilisateur);
     }
 
+
+   // public void updateUtilisateurFieldsUniteTaille(Long id, String taille) {
+        // Recherche de l'utilisateur par son ID
+       // Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
+
+        // Vérification si l'utilisateur existe
+       // if (optionalUtilisateur.isEmpty()) {
+        //    throw new RuntimeException("Utilisateur with id " + id + " not found");
+      //  }
+
+        // Récupération de l'utilisateur existant
+       // Utilisateur existingUtilisateur = optionalUtilisateur.get();
+
+
+        // Mise à jour du genre de l'utilisateur
+     //   existingUtilisateur.setUnitetaille(taille);
+
+        // Enregistrement de l'utilisateur mis à jour
+   //     utilisateurRepository.save(existingUtilisateur);
+ //   }
+
+  //  public void updateUtilisateurFieldsUnitePoids(Long id, String taille) {
+        // Recherche de l'utilisateur par son ID
+       // Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
+
+        // Vérification si l'utilisateur existe
+     //   if (optionalUtilisateur.isEmpty()) {
+      //      throw new RuntimeException("Utilisateur with id " + id + " not found");
+    //    }
+
+        // Récupération de l'utilisateur existant
+    //    Utilisateur existingUtilisateur = optionalUtilisateur.get();
+
+
+        // Mise à jour du genre de l'utilisateur
+      //  existingUtilisateur.setUnitepoids(taille);
+
+        // Enregistrement de l'utilisateur mis à jour
+    //    utilisateurRepository.save(existingUtilisateur);
+  //  }
+
+
+
     public void updateUtilisateurFieldsMode(Long id, Boolean regime) {
         // Recherche de l'utilisateur par son ID
         Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
@@ -253,10 +296,10 @@ public class UtilisateurService {
         Utilisateur existingUtilisateur = optionalUtilisateur.get();
 
 
-        // Mise à jour du genre de l'utilisateur
+
         existingUtilisateur.setAlerteproduitfinis(regime);
 
-        // Enregistrement de l'utilisateur mis à jour
+
         utilisateurRepository.save(existingUtilisateur);
     }
 

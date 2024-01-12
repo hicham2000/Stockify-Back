@@ -271,9 +271,14 @@ public class StockService {
     public List<Produit> getAllProductsInStock(Long stockId) {
         return produitRepository.findAllByStockIdCustomQuery(stockId);
     }
+
+    public List<Produit> getAllProductsInStockGapille(Long stockId) {
+        return produitRepository.findAllByStockIdCustomQueryGaspille(stockId);
+    }
     public List<Produit> getAllDeletedProductsInStock(Long stockId) {
         return produitRepository.findAllDeletedProductsInStock(stockId);
     }
+
 
     public List<Recette> getAllRecipesInStock(Long stockId) {
         return recetteRepository.findAllByStockIdCustomQuery(stockId);

@@ -183,6 +183,13 @@ public class StockController {
         return stockService.getAllProductsInStock(stockId);
     }
 
+    @GetMapping("/{stockId}/products/gaspille")
+    public List<Produit> getAllProductsInStockGaspille(@PathVariable Long stockId) {
+        return stockService.getAllProductsInStockGapille(stockId);
+    }
+
+
+
     @GetMapping("/{stockId}/recipes")
     public ResponseEntity<List<Recette>> getAllRecipesInStock(@PathVariable Long stockId) {
         List<Recette> recipes = stockService.getAllRecipesInStock(stockId);
