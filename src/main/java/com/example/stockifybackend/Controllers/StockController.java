@@ -67,6 +67,7 @@ public class StockController {
             Ingredient in = new Ingredient();
             in.setIntitule(requestBodyData.getArraylist_of_product().get(i).getIntitule());
             in.setQuantity(requestBodyData.getArraylist_of_product().get(i).getQuantite());
+            in.setUniteDeMesure(p.getUniteDeMesure());
             in.setRepas(repas);
             ing.add(in);
             ingredientRepository.save(in);
@@ -107,6 +108,17 @@ public class StockController {
         repasRepository.save(repas);
 
         return ResponseEntity.ok("deleted");
+    }
+
+    @GetMapping("/repasbyid/{id}")
+    public ResponseEntity<Repas> getRepasbyId(@PathVariable Long id) throws ParseException {
+        Repas repas = repasRepository.findById(id).orElse(null);
+
+        if (repas == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(repas);
     }
 
     @PostMapping("/{stockId}/recipes")
@@ -218,6 +230,7 @@ class RequestBodyData {
         this.categorie = categorie;
         this.arraylist_of_product = arraylist_of_product;
         this.spinnerText = spinnerText;
+
     }
 
     public String getIntitule() {
@@ -247,6 +260,10 @@ class RequestBodyData {
     public String getSpinnerText() {
         return spinnerText;
     }
+
+
+
+
 }
 
 class RequestBodyDataRepas{

@@ -49,4 +49,10 @@ public class IngredientController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/Ingredients/{id}")
+    public ResponseEntity<List<Ingredient>> getAllRepasIngredients(@PathVariable Long id) {
+        List<Ingredient> a = ingredientRepository.findAllByrepasid(id);
+        return ResponseEntity.ok(a);
+    }
 }
