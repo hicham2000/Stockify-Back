@@ -23,7 +23,7 @@ public interface ProduitRepository extends JpaRepository<Produit, Long> {
     Optional<Produit> findById_produitCourse(Long id_produitcourse);
 
 
-    @Query("SELECT p FROM Produit p WHERE p.stock.id = :stockId AND p.is_deleted = 1")
+    @Query("SELECT p FROM Produit p WHERE p.stock.id = :stockId AND p.is_deleted = 1 AND p.permanent =0")
     List<Produit> findAllDeletedProductsInStock(Long stockId);
     @Transactional
     @Modifying

@@ -1,9 +1,8 @@
 package com.example.stockifybackend.Controllers;
 
 import com.example.stockifybackend.Entities.Ingredient;
-import com.example.stockifybackend.Entities.Recette;
 import com.example.stockifybackend.Repositories.IngredientRepository;
-import com.example.stockifybackend.Repositories.RecetteRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,16 +38,21 @@ public class IngredientController {
     @GetMapping("/Ingredients")
     public ResponseEntity<?> getAllIngredients() {
         Map<String, Object> response = new HashMap<>();
-        System.out.println("1");
-        List<Ingredient> ingredients = ingredientRepository.findAll();
-        System.out.println("2");
+        PageRequest pageRequest = PageRequest.of(0, 100);
+        List<Ingredient> ingredients = ingredientRepository.findIngredientRandomly(pageRequest);
 
         try {
             response.put("message", "Ingredients récupérés par succès");
-            response.put("ingredients", ingredients.stream().limit(10));
+            response.put("ingredients", ingredients.stream().limit(100));
         } catch (Exception e){
             response.put("message", "Erreur lors du récupération d'ingrédients: " + e.getMessage());
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/Ingredients/{id}")
+    public ResponseEntity<List<Ingredient>> getAllRepasIngredients(@PathVariable Long id) {
+        List<Ingredient> a = ingredientRepository.findAllByrepasid(id);
+        return ResponseEntity.ok(a);
     }
 }

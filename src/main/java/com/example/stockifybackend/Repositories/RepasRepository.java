@@ -13,10 +13,14 @@ import java.util.List;
 public interface RepasRepository extends JpaRepository<Repas,Long> {
     @Query("SELECT r FROM Repas r WHERE r.stock.id = :stockId")
     List<Repas> findAllRepasByStockIdCustomQuery(Long stockId);
-    @Query("SELECT r FROM Repas r WHERE r.stock.id = :stockId AND r.is_deleted = 1")
+    @Query("SELECT r FROM Repas r WHERE r.stock.id = :stockId AND r.is_deleted = 1 AND r.permanent = 0")
     List<Repas> findAllDeletedRecipesInStock(Long stockId);
     @Transactional
     @Modifying
     @Query("DELETE FROM Repas r WHERE r.stock.id = :stockId AND r.is_deleted = 1")
     void deleteAllDeletedRecipesInStock(Long stockId);
+    @Transactional
+    @Modifying
+    @Query("UPDATE Repas r SET r.permanent = 1 WHERE r.stock.id = :stockId AND r.is_deleted = 1")
+    void updatePermanentFlagForDeletedRecipesInStock(Long stockId);
 }
