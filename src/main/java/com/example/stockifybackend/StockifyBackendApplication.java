@@ -230,7 +230,5 @@ public class StockifyBackendApplication implements CommandLineRunner {
         repas.setIs_deleted(1);
         this.repasRepository.save(repas);
 
-
-
     }
 }
