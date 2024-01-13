@@ -123,6 +123,10 @@ public class Produit implements Serializable{
         return this.quantite <= this.quantiteCritique;
     }
 
+    public boolean isCloseToExpired() {
+        return this.dateExpiration != null && new Date().after(this.dateAlerte);
+    }
+
 }
 
 
