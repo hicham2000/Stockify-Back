@@ -96,8 +96,6 @@ public class UtilisateurService {
             } catch (ParseException e) {
 
                 e.printStackTrace();
-                // You might want to log or rethrow the exception based on your error handling strategy
-                // throw new RuntimeException("Failed to parse date", e);
             }
         }
 
@@ -305,7 +303,6 @@ public class UtilisateurService {
 
         utilisateurRepository.save(existingUtilisateur);
     }
-
 
     private Date parseDate(String dateString) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
