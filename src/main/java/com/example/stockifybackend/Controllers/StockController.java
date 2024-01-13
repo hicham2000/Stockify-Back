@@ -35,6 +35,9 @@ public class StockController {
     @Autowired
     private ProduitRepository produitRepository;
 
+    @Autowired
+    private BudgetRepository budgetRepository;
+
 
     @PostMapping("/repas")
     public ResponseEntity<String> addRepasToStock(@RequestBody RequestBodyData requestBodyData) throws ParseException {
@@ -226,6 +229,17 @@ public class StockController {
         response.put("message", "QuantiteCritiqueParDefault du stock with stock_id="+stockId+" updated successfully!...");
         return new ResponseEntity<>(response, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/{stockId}/budget")
+    public List<Double> getPricesBudget (@PathVariable Long stockId){
+        List<Double> budget = new ArrayList<>();
+        Double value1=budgetRepository.PriceGaspilleProduits(stockId);
+        Double value2=budgetRepository.PriceNonGaspilleProduits(stockId);
+        budget.add(value1);
+        budget.add(value2);
+
+        return budget;
     }
 }
 
