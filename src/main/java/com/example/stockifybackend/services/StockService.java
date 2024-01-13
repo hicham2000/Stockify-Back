@@ -30,6 +30,12 @@ public class StockService {
     @Autowired
     private RepasRepository repasRepository;
 
+
+    public List<Stock> getAllStocks() {
+         return  stockRepository.findAll();
+
+    }
+
     public Stock getStock(long stockId){
         Optional<Stock> optionalStock = stockRepository.findById(stockId);
         if (optionalStock.isPresent()) {

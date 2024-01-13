@@ -13,6 +13,7 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Data
@@ -43,6 +44,7 @@ public class Stock implements Serializable {
     @JoinColumn(name = "user_id", nullable = true)
     @JsonIgnore
     private Utilisateur utilisateur;
+
 
 }
 

@@ -112,6 +112,17 @@ public class Produit implements Serializable{
     public void setDescription(String description) {
         this.description = description;
     }
+
+
+
+    public boolean isExpired() {
+        return this.dateExpiration != null && new Date().after(this.dateExpiration);
+    }
+
+    public boolean isQuantityBelowCritical() {
+        return this.quantite <= this.quantiteCritique;
+    }
+
 }
 
 
