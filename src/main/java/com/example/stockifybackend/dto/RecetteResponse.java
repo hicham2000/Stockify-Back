@@ -126,5 +126,4 @@ public class RecetteResponse implements Serializable {
                 .anyMatch(recette -> recette.getId().equals(this.id));
     }
 
-
 }

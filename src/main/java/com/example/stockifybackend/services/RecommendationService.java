@@ -44,13 +44,19 @@ public class RecommendationService {
         this.stockService = stockService;
     }
 
-    private int calculateAge(Date dateDeNaissance) {
+   private int calculateAge(Date dateDeNaissance) {
         LocalDate birthDate = dateDeNaissance.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
 
         LocalDate now = LocalDate.now();
         return Period.between(birthDate, now).getYears();
-    }
+   }
+
+ //   private int calculateAge(LocalDate dateDeNaissance) {
+   //     LocalDate currentDate = LocalDate.now();
+     //   return Period.between(dateDeNaissance, currentDate).getYears();
+   // }
+
 
     private String buildRecommendationRequestJson(Utilisateur utilisateur) {
         int age = calculateAge(utilisateur.getDateDeNaissance());

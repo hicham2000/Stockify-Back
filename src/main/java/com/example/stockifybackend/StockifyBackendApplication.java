@@ -17,6 +17,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+
+import java.time.LocalDate;
 import java.util.Date;
 import java.io.IOException;
 import java.util.stream.Stream;
@@ -101,7 +103,7 @@ public class StockifyBackendApplication implements CommandLineRunner {
         user1.setSexe("Homme");
         user1.setTaille("179");
         user1.setPoids("62");
-        Date dateDeNaissance = new Date(2001, 12, 9,00,00,00);
+        Date dateDeNaissance = new Date(2022, 1, 12);
         user1.setDateDeNaissance(dateDeNaissance);
 
         ListeCourse c = new ListeCourse();
@@ -240,8 +242,6 @@ public class StockifyBackendApplication implements CommandLineRunner {
         repas.setStock(s);
         repas.setIs_deleted(1);
         this.repasRepository.save(repas);
-
-
 
     }
 }

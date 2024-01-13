@@ -84,7 +84,7 @@ public class CorbeilleService {
             produitRepository.deleteAllDeletedProductsInStock(stockId);
             return "Deleted " + deletedProducts.size() + " products in stock with id " + stockId;
         } else {
-            return "No products with is_deleted=1 found in stock with id " + stockId;
+            return "No products with is_deleted=1 found in stock having id " + stockId;
         }
     }
     public String  deletePermAllDeletedProductsInStock(Long stockId) {
@@ -94,7 +94,7 @@ public class CorbeilleService {
             produitRepository.updatePermanentFlagForDeletedProductsInStock(stockId);
             return "Deleted " + deletedProducts.size() + " products in stock with id " + stockId;
         } else {
-            return "No products with is_deleted=1 found in stock with id " + stockId;
+            return "No products with is_deleted=1 found in stock having id " + stockId;
         }
     }
     public String  deleteAllDeletedRecipesInStock(Long stockId) {
@@ -104,7 +104,7 @@ public class CorbeilleService {
             repasRepository.deleteAllDeletedRecipesInStock(stockId);
             return "Deleted " + deletedRecipes.size() + " recipes in stock with id " + stockId;
         } else {
-            return "No recipes with is_deleted=1 found in stock with id " + stockId;
+            return "No recipes with is_deleted=1 found in stock having id " + stockId;
         }
     }
     public String  deletePermAllDeletedRecipesInStock(Long stockId) {
@@ -114,7 +114,21 @@ public class CorbeilleService {
             repasRepository.updatePermanentFlagForDeletedRecipesInStock(stockId);
             return "Deleted permanently " + deletedRecipes.size() + " recipes in stock with id " + stockId;
         } else {
-            return "No recipes with is_deleted=1 found in stock with id " + stockId;
+            return "No recipes with is_deleted=1 found in stock having id " + stockId;
+        }
+    }
+    public String deletePermAllDeletedProductsAndRecipesInStock(Long stockId) {
+        List<Produit> deletedProducts = produitRepository.findAllDeletedProductsInStock(stockId);
+        List<Repas> deletedRecipes = repasRepository.findAllDeletedRecipesInStock(stockId);
+
+        if (!deletedProducts.isEmpty() || !deletedRecipes.isEmpty()) {
+            produitRepository.updatePermanentFlagForDeletedProductsInStock(stockId);
+            repasRepository.updatePermanentFlagForDeletedRecipesInStock(stockId);
+
+            return "Deleted permanently " + deletedProducts.size() + " products and " +
+                    deletedRecipes.size() + " recipes in stock with id " + stockId;
+        } else {
+            return "No products or recipes with is_deleted=1 found in stock having id " + stockId;
         }
     }
 
