@@ -183,6 +183,14 @@ public class RecommendationService {
         return ingredientNames.containsAll(preferredIngredients);
     }
 
+    private boolean hasRegimeSpeciaux(Recette recette, List<String> regimesSpeciaux) {
+        if(regimesSpeciaux.isEmpty()){
+            return true;
+        }
+        String categorieDeRecette = recette.getCategorieDeRecette().getIntitule();
+        return regimesSpeciaux.contains(categorieDeRecette);
+    }
+
     private boolean isRecetteValid(Recette recette, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) {
         if (régimesSpéciaux.isEmpty() || tempsDePreparation.isEmpty()) {
             return true;
@@ -191,11 +199,9 @@ public class RecommendationService {
         int totalTimeMinutes = recette.getDureeTotal();
         String categorieDeRecette = recette.getCategorieDeRecette().getIntitule();
 
-        boolean result = régimesSpéciaux.contains(categorieDeRecette) && totalTimeMinutes <= Integer.parseInt(tempsDePreparation) && hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
+        boolean result = hasRegimeSpeciaux(recette, régimesSpéciaux) && totalTimeMinutes <= Integer.parseInt(tempsDePreparation) && hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
 
-        return régimesSpéciaux.contains(categorieDeRecette) &&
-                totalTimeMinutes <= Integer.parseInt(tempsDePreparation) &&
-                hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
+        return result;
     }
     private RecetteResponse processRecetteObject(JSONObject recetteObject, List<Recette> recettesAuStock, List<Produit> produitsAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
         Long recetteId = recetteObject.getLong("Recipe_Id");
