@@ -17,12 +17,10 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Service
 public class RecommendationService {
@@ -46,8 +44,6 @@ public class RecommendationService {
 
     private int calculateAge(Date dateDeNaissance) {
         LocalDate birthDate = dateDeNaissance.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-
         LocalDate now = LocalDate.now();
         return Period.between(birthDate, now).getYears();
     }

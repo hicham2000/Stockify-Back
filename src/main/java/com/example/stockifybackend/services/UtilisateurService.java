@@ -91,10 +91,7 @@ public class UtilisateurService {
                 Date updatedDate = parseDate(updatedUtilisateur.getDateDeNaissance().toString());
                 existingUtilisateur.setDateDeNaissance(updatedDate);
             } catch (ParseException e) {
-                // Handle parsing exception (log or rethrow)
                 e.printStackTrace();
-                // You might want to log or rethrow the exception based on your error handling strategy
-                // throw new RuntimeException("Failed to parse date", e);
             }
         }
 
@@ -259,7 +256,6 @@ public class UtilisateurService {
         // Enregistrement de l'utilisateur mis à jour
         utilisateurRepository.save(existingUtilisateur);
     }
-
 
     private Date parseDate(String dateString) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
