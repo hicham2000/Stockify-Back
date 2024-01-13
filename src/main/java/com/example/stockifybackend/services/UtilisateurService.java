@@ -1,5 +1,6 @@
 package com.example.stockifybackend.services;
 
+import aj.org.objectweb.asm.Handle;
 import com.example.stockifybackend.Entities.ListeCourse;
 import com.example.stockifybackend.Entities.Recette;
 import com.example.stockifybackend.Entities.Stock;
@@ -88,17 +89,17 @@ public class UtilisateurService {
         if (updatedUtilisateur.getPoids() != null) {
             existingUtilisateur.setPoids(updatedUtilisateur.getPoids());
         }
-     //   if (updatedUtilisateur.getDateDeNaissance() != null) {
-    //        try {
-            //    LocalDate updatedDate = parseDate(updatedUtilisateur.getDateDeNaissance().toString());
-              //  existingUtilisateur.setDateDeNaissance(updatedUtilisateur.getDateDeNaissance());
-      //      } catch (ParseException e) {
-                // Handle parsing exception (log or rethrow)
-        //        e.printStackTrace();
+       if (updatedUtilisateur.getDateDeNaissance() != null) {
+            try {
+                Date updatedDate = parseDate(updatedUtilisateur.getDateDeNaissance().toString());
+                existingUtilisateur.setDateDeNaissance(updatedUtilisateur.getDateDeNaissance());
+            } catch (ParseException e) {
+
+                e.printStackTrace();
                 // You might want to log or rethrow the exception based on your error handling strategy
                 // throw new RuntimeException("Failed to parse date", e);
-          //  }
-      //  }
+            }
+        }
 
         // Save the updated utilisateur
         utilisateurRepository.save(existingUtilisateur);
