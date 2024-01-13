@@ -40,6 +40,9 @@ public class StockifyBackendApplication implements CommandLineRunner {
     private ProduitRepository produitRepository ;
 
     @Autowired
+    private ProduitGlobaleRepository produitGlobaleRepository ;
+
+    @Autowired
     private ProduitAAcheterRepository produitAcheterRepository ;
 
     @Autowired
@@ -159,6 +162,14 @@ public class StockifyBackendApplication implements CommandLineRunner {
             produitRepository.save(p);
         }
 
+        for(int i=0 ; i < 20 ; i++ ){
+            ProduitGlobale p = new ProduitGlobale();
+            p.setIntitule(products[i]);
+            p.setUniteDeMesure("KG");
+            p.setImageUrl("default");
+            produitGlobaleRepository.save(p);
+        }
+
         String [] categories = {"Refrigerateur","Congelateur","garde-manger"};
 
         for (int i = 0; i<categories.length ; i++){
@@ -229,8 +240,6 @@ public class StockifyBackendApplication implements CommandLineRunner {
         repas.setStock(s);
         repas.setIs_deleted(1);
         this.repasRepository.save(repas);
-
-
 
     }
 }

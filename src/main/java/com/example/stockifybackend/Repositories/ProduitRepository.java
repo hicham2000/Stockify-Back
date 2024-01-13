@@ -16,16 +16,23 @@ public interface ProduitRepository extends JpaRepository<Produit, Long> {
     List<Produit> findAllByStockIdCustomQuery(Long stockId);
 
 
+    @Query("SELECT p FROM Produit p WHERE p.stock.id = :stockId and p.gaspille = 1")
+    List<Produit> findAllByStockIdCustomQueryGaspille(Long stockId);
+
     @Query("SELECT p FROM Produit p WHERE p.id_produitCourse = :id_produitcourse")
     Optional<Produit> findById_produitCourse(Long id_produitcourse);
 
 
-    @Query("SELECT p FROM Produit p WHERE p.stock.id = :stockId AND p.is_deleted = 1")
+    @Query("SELECT p FROM Produit p WHERE p.stock.id = :stockId AND p.is_deleted = 1 AND p.permanent =0")
     List<Produit> findAllDeletedProductsInStock(Long stockId);
     @Transactional
     @Modifying
     @Query("DELETE FROM Produit p WHERE p.stock.id = :stockId AND p.is_deleted = 1")
     void deleteAllDeletedProductsInStock(Long stockId);
+    @Transactional
+    @Modifying
+    @Query("UPDATE Produit p SET p.permanent = 1 WHERE p.stock.id = :stockId AND p.is_deleted = 1")
+    void updatePermanentFlagForDeletedProductsInStock(Long stockId);
 
 
 }

@@ -3,6 +3,7 @@ package com.example.stockifybackend.services;
 import com.example.stockifybackend.Entities.Budget;
 import com.example.stockifybackend.Repositories.BudgetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,4 +34,5 @@ public class BudgetService {
     public void deleteBudget(Long id) {
         budgetRepository.deleteById(id);
     }
+
 }

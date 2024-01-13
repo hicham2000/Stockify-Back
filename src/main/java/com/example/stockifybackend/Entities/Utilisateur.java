@@ -24,6 +24,7 @@ public class Utilisateur implements Serializable {
     private String password;
     private String sexe;
     private String taille;
+
     private String poids;
     private Date dateDeNaissance;
     private String régimeSpécieux;
@@ -32,6 +33,8 @@ public class Utilisateur implements Serializable {
     private boolean modeSportif;
     private long listeDeCourse_id;
     private String notifToken;
+
+
 
     @OneToMany
     @JoinColumn(name = "id")

@@ -30,6 +30,12 @@ public class StockService {
     @Autowired
     private RepasRepository repasRepository;
 
+
+    public List<Stock> getAllStocks() {
+         return  stockRepository.findAll();
+
+    }
+
     public Stock getStock(long stockId){
         Optional<Stock> optionalStock = stockRepository.findById(stockId);
         if (optionalStock.isPresent()) {
@@ -130,6 +136,26 @@ public class StockService {
             }
 
             throw new RuntimeException("Recipe with id " + recipeId + " does not exist in this stock");
+        } else {
+            throw new RuntimeException("There is no stock with this id");
+        }
+    }
+    public void updateRepas(Long stockId, Long repasId, Repas repasUpdate) {
+        Optional<Stock> optionalStock = stockRepository.findById(stockId);
+
+        if (optionalStock.isPresent()) {
+            Stock stock = optionalStock.get();
+            List<Repas> repasList = stock.getRepas();
+            for (Repas repas : repasList) {
+                if (repas.getId().equals(repasId)) {
+
+                    repas.setIs_deleted(0);
+                    repasRepository.save(repas);
+                    return;
+                }
+            }
+
+            stockRepository.save(stock);
         } else {
             throw new RuntimeException("There is no stock with this id");
         }
@@ -251,15 +277,20 @@ public class StockService {
     public List<Produit> getAllProductsInStock(Long stockId) {
         return produitRepository.findAllByStockIdCustomQuery(stockId);
     }
+
+    public List<Produit> getAllProductsInStockGapille(Long stockId) {
+        return produitRepository.findAllByStockIdCustomQueryGaspille(stockId);
+    }
     public List<Produit> getAllDeletedProductsInStock(Long stockId) {
         return produitRepository.findAllDeletedProductsInStock(stockId);
     }
+
 
     public List<Recette> getAllRecipesInStock(Long stockId) {
         return recetteRepository.findAllByStockIdCustomQuery(stockId);
     }
     public List<Repas> getAllRecettesInStock(Long stockId) {
-        return repasRepository.findAllRepasByStockIdCustomQuery(stockId);
+        return repasRepository.findAllDeletedRecipesInStock(stockId);
     }
 
     public void deleteRepasFromStock(Long stockId, Long repasId) {
@@ -277,6 +308,5 @@ public class StockService {
             throw new RuntimeException("There is no stock with this id");
         }
     }
-
 
 }
