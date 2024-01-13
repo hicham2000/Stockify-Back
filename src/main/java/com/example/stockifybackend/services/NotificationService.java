@@ -41,7 +41,12 @@ public class NotificationService {
             if (!belowCriticalProducts.isEmpty()) {
 
                 String userNotificationToken = stock.getUtilisateur().getNotifToken();
-               sendNotification(userNotificationToken, "Products below critical quantity!","Title");
+                String productNames = belowCriticalProducts.stream()
+                        .map(Produit::getIntitule)
+                        .collect(Collectors.joining(" \n "));
+                String notificationMessage = "Products below critical quantity: " + productNames;
+
+                sendNotification(userNotificationToken, notificationMessage,"Title");
             }
         }
 
@@ -49,8 +54,6 @@ public class NotificationService {
     public void sendNotification(String token,String body,String title){
 
         try {
-
-
             Notification notification = Notification
                     .builder()
                     .setTitle(title)
@@ -70,5 +73,28 @@ public class NotificationService {
         }
 
     }
+   /* @Scheduled(fixedRate = 5000)
+    @Transactional
+    public void ExprirationProduitAlert() {
+
+        List<Stock> stocks = stockService.getAllStocks();
+
+        for (Stock stock : stocks) {
+            List<Produit> toExpiredProducts = stock.getProduit().stream()
+                    .filter(Produit::isExpired)
+                    .toList();
+
+            if (!toExpiredProducts.isEmpty()) {
+
+                String userNotificationToken = stock.getUtilisateur().getNotifToken();
+                String productNames = toExpiredProducts.stream()
+                        .map(Produit::getIntitule)
+                        .collect(Collectors.joining(" \n "));
+                String notificationMessage = "Products near expiration: " + productNames;
+                sendNotification(userNotificationToken, notificationMessage,"Title");
+            }
+        }
+
+    }*/
 
 }
