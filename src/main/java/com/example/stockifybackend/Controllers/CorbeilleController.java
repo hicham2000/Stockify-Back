@@ -97,15 +97,13 @@ public class CorbeilleController {
         return ResponseEntity.ok(responseMessage);
     }
     @PutMapping("/viderproduits/stockId={stockId}")
-    public ResponseEntity<?> deletePermAllDeletedProductsInStock(@PathVariable Long stockId) {
-        Map<String, Object> response = new HashMap<>();
-        corbeilleService.deletePermAllDeletedProductsInStock(stockId);
-        response.put("message", "Stock de produits est vidé");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<String> deletePermAllDeletedProductsInStock(@PathVariable Long stockId) {
+        String responseMessage = corbeilleService.deletePermAllDeletedProductsInStock(stockId);
+        return ResponseEntity.ok(responseMessage);
     }
     @DeleteMapping("/viderrepas/{stockId}")
     public ResponseEntity<String> deleteAllDeletedRecipesInStock(@PathVariable Long stockId) {
-        String responseMessage = corbeilleService.deleteAllDeletedRecipesInStock(stockId);
+        String responseMessage = corbeilleService.deletePermAllDeletedProductsInStock(stockId);
         return ResponseEntity.ok(responseMessage);
     }
     @PutMapping("/viderrepas/stockId={stockId}")

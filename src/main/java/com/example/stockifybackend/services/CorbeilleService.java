@@ -102,9 +102,10 @@ public class CorbeilleService {
 
         if (!deletedProducts.isEmpty()) {
             produitRepository.updatePermanentFlagForDeletedProductsInStock(stockId);
-            return "Deleted " + deletedProducts.size() + " products in stock with id " + stockId;
+            return "La corbeille a été vidée : "  + deletedProducts.size() + " produits ont été supprimés du stock d'ID " + stockId;
+
         } else {
-            return "No products with is_deleted=1 found in stock having id " + stockId;
+            return "Aucun produit trouvé dans la corbeille du stock d'ID " + stockId;
         }
     }
     public String  deleteAllDeletedRecipesInStock(Long stockId) {
@@ -122,9 +123,9 @@ public class CorbeilleService {
 
         if (!deletedRecipes.isEmpty()) {
             repasRepository.updatePermanentFlagForDeletedRecipesInStock(stockId);
-            return "Deleted permanently " + deletedRecipes.size() + " recipes in stock with id " + stockId;
+            return "La corbeille a été vidée : "  + deletedRecipes.size() + " repas ont été supprimés du stock d'ID " + stockId;
         } else {
-            return "No recipes with is_deleted=1 found in stock having id " + stockId;
+            return "Aucun repas trouvé dans la corbeille du stock d'ID " + stockId;
         }
     }
     public String deletePermAllDeletedProductsAndRecipesInStock(Long stockId) {
@@ -135,11 +136,10 @@ public class CorbeilleService {
             produitRepository.updatePermanentFlagForDeletedProductsInStock(stockId);
             repasRepository.updatePermanentFlagForDeletedRecipesInStock(stockId);
 
-            return "Deleted permanently " + deletedProducts.size() + " products and " +
-                    deletedRecipes.size() + " recipes in stock with id " + stockId;
+            return "La corbeille a été vidée : " + deletedProducts.size() + " produits et " +
+                    deletedRecipes.size() + " repas ont été supprimés du stock d'ID " + stockId;
         } else {
-            return "No products or recipes with is_deleted=1 found in stock having id " + stockId;
-        }
+            return "Aucun produit ou repas  trouvé dans la corbeille du stock d'ID " + stockId;        }
     }
 
     public String deleteAllDeletedProductsAndRecipesInStock(Long stockId) {

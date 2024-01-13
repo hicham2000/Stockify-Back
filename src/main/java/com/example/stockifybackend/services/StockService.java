@@ -284,7 +284,7 @@ public class StockService {
         return recetteRepository.findAllByStockIdCustomQuery(stockId);
     }
     public List<Repas> getAllRecettesInStock(Long stockId) {
-        return repasRepository.findAllRepasByStockIdCustomQuery(stockId);
+        return repasRepository.findAllDeletedRecipesInStock(stockId);
     }
 
     public void deleteRepasFromStock(Long stockId, Long repasId) {
