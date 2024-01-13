@@ -2,19 +2,20 @@ package com.example.stockifybackend.Controllers;
 
 import com.example.stockifybackend.Entities.Produit;
 import com.example.stockifybackend.Repositories.ProduitRepository;
+import com.example.stockifybackend.services.ProduitServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@RestController("/Produits")
 public class ProduitController {
 
     @Autowired
     private ProduitRepository produitRepository ;
+    @Autowired
+    private ProduitServices produitServices;
 
 
     @RequestMapping(value = "/Produits",method = RequestMethod.GET)
@@ -34,6 +35,10 @@ public class ProduitController {
 
 
 
+    }
+    @GetMapping("/{StockId}")
+    public List<Produit> produits(@PathVariable Long stockId) {
+        return produitServices.produitsList(stockId);
     }
 
 
