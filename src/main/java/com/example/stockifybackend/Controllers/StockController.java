@@ -121,6 +121,17 @@ public class StockController {
         return ResponseEntity.ok(repas);
     }
 
+    @GetMapping("/productid/{id}")
+    public ResponseEntity<Produit> getProduitbyId(@PathVariable Long id) throws ParseException {
+        Produit produit = produitRepository.findById(id).orElse(null);
+
+        if (produit == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(produit);
+    }
+
     @PostMapping("/{stockId}/recipes")
     public ResponseEntity<Void> addRecipeToStock(@PathVariable Long stockId, @RequestBody Recette recette) {
         stockService.addRecipeToStock(stockId, recette);
@@ -182,6 +193,7 @@ public class StockController {
     public List<Produit> getAllProductsInStock(@PathVariable Long stockId) {
         return stockService.getAllProductsInStock(stockId);
     }
+
 
     @GetMapping("/{stockId}/products/gaspille")
     public List<Produit> getAllProductsInStockGaspille(@PathVariable Long stockId) {

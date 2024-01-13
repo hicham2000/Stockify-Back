@@ -30,6 +30,12 @@ public class StockService {
     @Autowired
     private RepasRepository repasRepository;
 
+
+    public List<Stock> getAllStocks() {
+         return  stockRepository.findAll();
+
+    }
+
     public Stock getStock(long stockId){
         Optional<Stock> optionalStock = stockRepository.findById(stockId);
         if (optionalStock.isPresent()) {
@@ -284,7 +290,7 @@ public class StockService {
         return recetteRepository.findAllByStockIdCustomQuery(stockId);
     }
     public List<Repas> getAllRecettesInStock(Long stockId) {
-        return repasRepository.findAllRepasByStockIdCustomQuery(stockId);
+        return repasRepository.findAllDeletedRecipesInStock(stockId);
     }
 
     public void deleteRepasFromStock(Long stockId, Long repasId) {
@@ -302,6 +308,5 @@ public class StockService {
             throw new RuntimeException("There is no stock with this id");
         }
     }
-
 
 }
