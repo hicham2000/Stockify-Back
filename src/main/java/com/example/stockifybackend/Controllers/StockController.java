@@ -232,14 +232,17 @@ public class StockController {
     }
 
     @GetMapping("/{stockId}/budget")
-    public List<Double> getPricesBudget (@PathVariable Long stockId){
+    public ResponseEntity<List<Double>> getPricesBudget (@PathVariable Long stockId){
         List<Double> budget = new ArrayList<>();
         Double value1=budgetRepository.PriceGaspilleProduits(stockId);
         Double value2=budgetRepository.PriceNonGaspilleProduits(stockId);
         budget.add(value1);
         budget.add(value2);
+        budget.add(value1+value2);
+        budget.add((value1*100)/(value1+value2));
+        budget.add((value2*100)/(value1+value2));
 
-        return budget;
+        return new ResponseEntity<List<Double>>(budget, HttpStatus.OK);
     }
 }
 
