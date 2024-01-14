@@ -25,11 +25,11 @@ public class Utilisateur implements Serializable {
     private String nom;
     private String email;
     private String password;
-    private String sexe="Homme";
+    private String sexe = "Homme";
     private String taille;
 
     private String poids;
-    private Date dateDeNaissance=new Date(2022, 1, 12);
+    private Date dateDeNaissance = new Date(2001, 12, 9);
     private String régimeSpécieux;
     private boolean alertedateexpi;
     private boolean alerteproduitfinis;

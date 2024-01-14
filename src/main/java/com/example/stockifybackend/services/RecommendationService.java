@@ -48,7 +48,7 @@ public class RecommendationService {
         return Period.between(birthDate, now).getYears();
    }
 
-    private String buildRecommendationRequestJson(Utilisateur utilisateur) {
+    public String buildRecommendationRequestJson(Utilisateur utilisateur) {
         int age = calculateAge(utilisateur.getDateDeNaissance());
         age = age >=0 ? age: 20;
         int taille = Integer.parseInt(utilisateur.getTaille());
