@@ -7,6 +7,7 @@ import lombok.Setter;
 
 
 import java.io.Serializable;
+import java.sql.Blob;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -27,6 +28,7 @@ public class Utilisateur implements Serializable {
     private String password;
     private String sexe="Homme";
     private String taille;
+    private String imageUrl;
 
     private String poids;
     private Date dateDeNaissance=new Date(2022, 1, 12);
