@@ -20,6 +20,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class RecommendationServiceTest {
 
@@ -90,7 +91,6 @@ class RecommendationServiceTest {
 
     @Test
     void sendRecommendationRequest_Success() throws JSONException, ParseException {
-
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
         Date dateDeNaissance = formatter.parse("09-12-2001");
 
@@ -101,16 +101,39 @@ class RecommendationServiceTest {
         utilisateur.setSexe("Homme");
         utilisateur.setModeSportif(false);
 
-
         String requestJson = recommendationService.buildRecommendationRequestJson(utilisateur);
 
         String url = recommendationSystemUrl + "/Repas_suggestions/";
         JSONObject jsonResponse = recommendationService.sendRecommendationRequest(requestJson, url);
 
         assertNotNull(jsonResponse);
+        assertTrue(jsonResponse.has("Message"));
+        assertTrue(jsonResponse.getString("Message").equals("Get recipes successfully"));
         assertTrue(jsonResponse.has("output"));
         assertTrue(jsonResponse.getJSONObject("output").has("Repas_Programme"));
         assertTrue(jsonResponse.getJSONObject("output").getJSONArray("Repas_Programme").length() > 0);
     }
+
+    @Test
+    void sendRecommendationRequest_Failure_404() throws ParseException, JSONException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        Date dateDeNaissance = formatter.parse("09-12-2001");
+
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setDateDeNaissance(dateDeNaissance);
+        utilisateur.setTaille("179");
+        utilisateur.setPoids("62");
+        utilisateur.setSexe("Homme");
+        utilisateur.setModeSportif(false);
+
+        String requestJson = recommendationService.buildRecommendationRequestJson(utilisateur);
+
+        String url = recommendationSystemUrl + "/Repas_suggestion/";
+        JSONObject jsonResponse = recommendationService.sendRecommendationRequest(requestJson, url);
+
+        assertNull(jsonResponse);
+    }
+
+
 
 }
