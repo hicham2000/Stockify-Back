@@ -11,7 +11,7 @@ import java.util.List;
 public class RepasService {
     @Autowired
     private RepasRepository reasRepository;
-    public List<Repas> listrRepas(Long stockId){
+    public List<Repas> listsDeRepas(Long stockId){
         return reasRepository.repas(stockId);
     }
 }
