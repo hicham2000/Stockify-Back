@@ -52,4 +52,24 @@ class IngredientControllerTest {
         assertTrue(responseBody.containsKey("ingredient"));
         assertEquals(mockIngredient, responseBody.get("ingredient"));
     }
+
+    @Test
+    void testGetIngredientByID_IngredientDoesNotExist() {
+        // Arrange
+        Long ingredientId = 1L;
+        when(ingredientRepository.findById(ingredientId)).thenReturn(Optional.empty());
+
+        // Act
+        ResponseEntity<?> responseEntity = ingredientController.getIngredientByID(ingredientId);
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertTrue(responseEntity.getBody() instanceof Map);
+
+        Map<?, ?> responseBody = (Map<?, ?>) responseEntity.getBody();
+        assertEquals("Aucun Ingredient avec id=" + ingredientId, responseBody.get("message"));
+        assertFalse(responseBody.containsKey("ingredient"));
+    }
+
 }
