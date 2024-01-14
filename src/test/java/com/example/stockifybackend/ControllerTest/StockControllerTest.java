@@ -74,7 +74,17 @@ class StockControllerTest {
         verify(stockService, times(1)).addRecipeToStockByRecetteId(stockId, recetteId);
     }
 
+    @Test
+    void testAddRecipeToStockByRecetteID_Failure() {
+        // Arrange
+        Long stockId = 1L;
+        Long recetteId = 38L;
+        doThrow(new RuntimeException("Some error message")).when(stockService).addRecipeToStockByRecetteId(stockId, recetteId);
 
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> stockController.addRecipeToStockByRecetteID(stockId, recetteId));
+        verify(stockService, times(1)).addRecipeToStockByRecetteId(stockId, recetteId);
+    }
 }
 
 
