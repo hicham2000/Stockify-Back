@@ -62,6 +62,8 @@ class RecommendationServiceTest {
         utilisateur.setModeSportif(false);
 
         String requestJson = recommendationService.buildRecommendationRequestJson(utilisateur);
+
+        // Assertions pour vérifier la présence des champs dans la chaîne JSON
         assertTrue(requestJson.contains("\"age\":"));
         assertTrue(requestJson.contains("\"height\":"));
         assertTrue(requestJson.contains("\"weight\":"));
@@ -69,5 +71,14 @@ class RecommendationServiceTest {
         assertTrue(requestJson.contains("\"activity\":"));
         assertTrue(requestJson.contains("\"number_of_meals\":"));
         assertTrue(requestJson.contains("\"weight_loss_plan\":"));
+
+        // Assertions pour vérifier les types des valeurs dans la chaîne JSON
+        assertTrue(requestJson.matches(".*\"age\": \\d+.*"));
+        assertTrue(requestJson.matches(".*\"height\": \\d+.*"));
+        assertTrue(requestJson.matches(".*\"weight\": \\d+.*"));
+        assertTrue(requestJson.matches(".*\"gender\": \".+\".*"));
+        assertTrue(requestJson.matches(".*\"activity\": \".+\".*"));
+        assertTrue(requestJson.matches(".*\"number_of_meals\": \\d+.*"));
+        assertTrue(requestJson.matches(".*\"weight_loss_plan\": \".+\".*"));
     }
 }
