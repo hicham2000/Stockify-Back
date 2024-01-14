@@ -6,13 +6,16 @@ import com.example.stockifybackend.Repositories.UtilisateurRepository;
 import com.example.stockifybackend.dto.RecetteResponse;
 import com.example.stockifybackend.services.RecommendationService;
 import com.example.stockifybackend.services.StockService;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,8 +23,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
+@SpringBootTest
 class RecommendationServiceTest {
 
     @Mock
@@ -314,5 +317,95 @@ class RecommendationServiceTest {
 
     private void assertNombreIngredientsManquantes(RecetteResponse actual) {
         assertEquals(0, actual.getNombreIngredientsManquantes());
+    }
+
+    @Test
+    void testProcessRecommendationResponse() throws ParseException, JSONException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        Date dateDeNaissance = formatter.parse("09-12-2001");
+
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setDateDeNaissance(dateDeNaissance);
+        utilisateur.setTaille("179");
+        utilisateur.setPoids("62");
+        utilisateur.setSexe("Homme");
+        utilisateur.setModeSportif(false);
+
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("output", new JSONObject());
+        JSONArray repasProgramme = new JSONArray(new JSONTokener("[{" +
+                "\"Recipe_Id\": 427097," +
+                "\"Recipe_Name\": \"Venison Gyros\"," +
+                "\"Recipe_Image_link\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRy-LIBOCdej1jguFE-N1O12SzfNMuYP6y4sc0lS_SOm8SVQAu8-8gcRbOsiI&s\"," +
+                "\"Recipe_nutritions_values\": {" + "\"Calories\": 425.9," + "\"FatContent\": 12.7," + "\"SaturatedFatContent\": 3.1," + "\"CholesterolContent\": 28.4," + "\"SodiumContent\": 399.8," + "\"CarbohydrateContent\": 45.2," + "\"FiberContent\": 3.0," + "\"SugarContent\": 7.4," + "\"ProteinContent\": 33.4" + "}," +
+                "\"RecipeIngredients\": [" + "\"plain yogurt\"," + "\"dill\"," + "\"garlic powder\"," + "\"cucumber\"," + "\"olive oil\"," + "\"red onions\"," + "\"garlic cloves\"," + "\"oregano\"," + "\"salt\"," + "\"lettuce leaves\"," + "\"tomatoes\"" + "]," +
+                "\"RecipeInstructions\": [" + "\"Combine dressing and set aside. This includes: yogurt, dill, garlic powder, and cucumber.\"," + "\"In 12\\\\\"," + "\", \"," + "\", \"," + "\", \"" + "]," +
+                "\"CookTime\": \"6 min\"," +
+                "\"PrepTime\": \"30 min\"," +
+                "\"TotalTime\": \"36 min\"" +
+                "}]" +
+                "]"));
+
+        jsonResponse.getJSONObject("output").put("Repas_Programme", repasProgramme);
+
+        Stock s = new Stock();
+        s.setId(1L);
+        s.setQuantiteCritiqueParDefaut(190);
+
+        utilisateur.setStock(s);
+
+        // Créer Recette
+        Recette recette = new Recette();
+        recette.setId(38L);
+        recette.setIntitule("Low-Fat Berry Blue Frozen Dessert");
+        recette.setDescription("Make and share this Low-Fat Berry Blue Frozen Dessert recipe from Food.com.");
+        recette.setDureeTotal(1485);
+        recette.setInstructionsDePreparation("[\"Toss 2 cups berries with sugar\", \"Let stand for 45 minutes\", \"stirring occasionally\", \"Transfer berry-sugar mixture to food processor\", \"Add yogurt and process until smooth\", \"Strain through fine sieve\", \"Pour into baking pan or transfer to ice cream maker and process according to manufacturer's directions\", \"Freeze uncovered until edges are solid but center is soft\", \"Transfer to processor and blend until smooth again\", \"Return to pan and freeze until edges are solid\", \"Transfer to processor and blend until smooth again\", \"Fold in remaining 2 cups of blueberries\", \"Pour into plastic mold and freeze overnight\", \"Let soften slightly to serve.\"]");
+        recette.setImageUrl("https://img.sndimg.com/food/image/upload/w_555,h_416,c_fit,fl_progressive,q_95/v1/img/recipes/38/YUeirxMLQaeE1h3v3qnM_229%20berry%20blue%20frzn%20dess.jpg");
+
+        // Créer Valeur Nutritionnel de recette
+        ValeurNutritionnel valeurNutritionnel = new ValeurNutritionnel();
+        valeurNutritionnel.setCarbohydrate(37.1);
+        valeurNutritionnel.setEnegie(170.9);
+        valeurNutritionnel.setFibre(3.6);
+        valeurNutritionnel.setLipide(2.5);
+        valeurNutritionnel.setProteine(3.2);
+        valeurNutritionnel.setSucre(30.2);
+        recette.setValeurNutritionnel(valeurNutritionnel);
+
+        // Créer Catégorie de recette
+        CategorieDeRecette categorieDeRecette = new CategorieDeRecette();
+        categorieDeRecette.setIntitule("Frozen Desserts");
+        recette.setCategorieDeRecette(categorieDeRecette);
+
+        // Créer un ingredient de recette
+        Ingredient ingredient = new Ingredient();
+        ingredient.setId(2L);
+        ingredient.setIntitule("blueberries");
+        ingredient.setQuantity(4.0);
+        ingredient.setRecette(recette);
+        recette.setIngredients(new ArrayList<>(List.of(ingredient)));
+
+        // Ajouter  la recette au stock et favoris d'utilisateur
+        utilisateur.getStock().setRecette(new ArrayList<>(List.of(recette)));
+        utilisateur.setRecettesFavoris(new ArrayList<>(List.of(recette)));
+
+        List<Recette> recettesAuStock = utilisateur.getStock().getRecette();
+
+        // Créer un produit et ajouter le dans stock d'utilisateur
+        Produit produit = new Produit();
+        produit.setId(1L);
+        produit.setIntitule("blueberries");
+        produit.setQuantite(10.0);
+
+        utilisateur.getStock().setProduit(new ArrayList<>(List.of(produit)));
+        List<Produit> produitsAuStock = utilisateur.getStock().getProduit();
+
+        List<RecetteResponse> recettesResponse = recommendationService.processRecommendationResponse(jsonResponse,
+                produitsAuStock,
+                recettesAuStock,
+                utilisateur);
+
+        assertNotNull(recettesResponse);
     }
 }

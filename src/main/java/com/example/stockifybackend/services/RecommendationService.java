@@ -112,7 +112,7 @@ public class RecommendationService {
         return recetteResponse;
     }
 
-    private List<RecetteResponse> processRecommendationResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, Utilisateur utilisateur) throws JSONException {
+    public List<RecetteResponse> processRecommendationResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, Utilisateur utilisateur) throws JSONException {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONArray recettesArray = jsonResponse.getJSONObject("output").getJSONArray("Repas_Programme");
 
