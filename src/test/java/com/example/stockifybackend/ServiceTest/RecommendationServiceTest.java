@@ -12,9 +12,11 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.text.ParseException;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class RecommendationServiceTest {
 
     @Mock
@@ -41,12 +44,6 @@ class RecommendationServiceTest {
 
     @InjectMocks
     private RecommendationService recommendationService;
-
-
-    @BeforeEach
-    public void setUp() throws ParseException {
-        MockitoAnnotations.openMocks(this);
-    }
 
 
     @Test

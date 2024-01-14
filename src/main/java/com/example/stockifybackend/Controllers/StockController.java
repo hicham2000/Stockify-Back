@@ -148,7 +148,7 @@ public class StockController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        response.put("message", "Recette ajouté au stock avec succès");
+        response.put("message", "Recette ajoutée au stock avec succès");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
