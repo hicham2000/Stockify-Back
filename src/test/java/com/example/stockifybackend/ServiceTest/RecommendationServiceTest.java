@@ -23,6 +23,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class RecommendationServiceTest {
@@ -408,4 +410,25 @@ class RecommendationServiceTest {
 
         assertNotNull(recettesResponse);
     }
+
+    @Test
+    void testHasPreferredIngredients() {
+
+        List<String> preferredIngredients1 = Arrays.asList("Ingredient1", "Ingredient2");
+        List<String> preferredIngredients2 = Arrays.asList("Ingredient1");
+
+        Recette recette = new Recette();
+        recette.setIngredients(Arrays.asList(
+                new Ingredient(1L, "Ingredient1", recette, 4.0, "", null),
+                new Ingredient(1L, "Ingredient3", recette, 4.0, "", null)
+        ));
+
+        assertTrue(recommendationService.hasPreferredIngredients(recette, Arrays.asList()));
+
+        assertFalse(recommendationService.hasPreferredIngredients(recette, preferredIngredients1));
+
+        assertTrue(recommendationService.hasPreferredIngredients(recette, preferredIngredients2));
+    }
+
+
 }

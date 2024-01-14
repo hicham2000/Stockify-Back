@@ -166,7 +166,7 @@ public class RecommendationService {
 
     /* ---------------------------------------------------------*/
 
-    private boolean hasPreferredIngredients(Recette recette, List<String> preferredIngredients) {
+    public boolean hasPreferredIngredients(Recette recette, List<String> preferredIngredients) {
         if(preferredIngredients.isEmpty()) {
             return true;
         }
@@ -264,7 +264,7 @@ public class RecommendationService {
 
     /* ---------------------------------------------------------*/
 
-    private String buildRecommendationRecettesSimilairesRequestJson(Recette recette) {
+    public String buildRecommendationRecettesSimilairesRequestJson(Recette recette) {
         ValeurNutritionnel valeurNutritionnel = recette.getValeurNutritionnel();
 
         double proteine = valeurNutritionnel.getProteine();
@@ -293,11 +293,11 @@ public class RecommendationService {
         );
     }
 
-    private List<Recette> generateRandomRecettes(int count) {
+    public List<Recette> generateRandomRecettes(int count) {
         List<Recette> randomRecettes = new ArrayList<>();
         return randomRecettes;
     }
-    private List<RecetteResponse> processRecommendationRecettesSimilairesResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, Utilisateur utilisateur) throws JSONException {
+    public List<RecetteResponse> processRecommendationRecettesSimilairesResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, Utilisateur utilisateur) throws JSONException {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONArray recettesArray = jsonResponse.getJSONArray("output");
 
