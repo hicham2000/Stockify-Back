@@ -99,6 +99,23 @@ class StockControllerTest {
         assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
         verify(stockService, times(1)).deleteRecipeFromStock(stockId, recipeId);
     }
+
+    @Test
+    void testGetAllRecipesInStock() {
+        // Arrange
+        Long stockId = 1L;
+        List<Recette> mockRecipes = List.of(new Recette(), new Recette());
+        when(stockService.getAllRecipesInStock(stockId)).thenReturn(mockRecipes);
+
+        // Act
+        ResponseEntity<List<Recette>> responseEntity = stockController.getAllRecipesInStock(stockId);
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertEquals(mockRecipes, responseEntity.getBody());
+        verify(stockService, times(1)).getAllRecipesInStock(stockId);
+    }
 }
 
 
