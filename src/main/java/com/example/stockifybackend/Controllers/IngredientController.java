@@ -40,9 +40,8 @@ public class IngredientController {
     public ResponseEntity<?> getAllIngredients() {
         Map<String, Object> response = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(0, 100);
-        List<Ingredient> ingredients = ingredientRepository.findIngredientRandomly(pageRequest);
-
         try {
+            List<Ingredient> ingredients = ingredientRepository.findIngredientRandomly(pageRequest);
             response.put("message", "Ingredients récupérés par succès");
             response.put("ingredients", ingredients.stream().limit(100).collect(Collectors.toList()));
         } catch (Exception e){

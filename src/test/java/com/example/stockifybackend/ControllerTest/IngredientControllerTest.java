@@ -94,5 +94,23 @@ class IngredientControllerTest {
         assertEquals(3, ((List<?>) responseBody.get("ingredients")).size());
     }
 
+    @Test
+    void testGetAllIngredients_Exception() {
+        // Arrange
+        PageRequest pageRequest = PageRequest.of(0, 100);
+        when(ingredientRepository.findIngredientRandomly(pageRequest)).thenThrow(new RuntimeException("Test Exception"));
+
+        // Act
+        ResponseEntity<?> responseEntity = ingredientController.getAllIngredients();
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertTrue(responseEntity.getBody() instanceof Map);
+
+        Map<?, ?> responseBody = (Map<?, ?>) responseEntity.getBody();
+        assertEquals("Erreur lors du récupération d'ingrédients: Test Exception", responseBody.get("message"));
+        assertFalse(responseBody.containsKey("ingredients"));
+    }
 
 }
