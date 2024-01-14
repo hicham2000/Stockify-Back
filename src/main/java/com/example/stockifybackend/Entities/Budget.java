@@ -1,10 +1,12 @@
 package com.example.stockifybackend.Entities;
 
+import com.example.stockifybackend.Repositories.BudgetRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.util.List;
@@ -25,4 +27,8 @@ public class Budget implements Serializable {
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL)
     private List<Depense> depense;
+
+    @OneToOne
+    private Stock stock;
+
 }

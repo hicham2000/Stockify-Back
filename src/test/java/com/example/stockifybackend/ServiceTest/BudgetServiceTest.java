@@ -35,8 +35,8 @@ class BudgetServiceTest {
     void getAllBudgets() {
         // Mock data
         List<Budget> mockBudgets = Arrays.asList(
-                new Budget(1L, 1000.0, 500.0, 200.0, "Monthly", null),
-                new Budget(2L, 2000.0, 1000.0, 500.0, "Monthly", null)
+                new Budget(1L, 1000.0, 500.0, 200.0, "Monthly", null,null),
+                new Budget(2L, 2000.0, 1000.0, 500.0, "Monthly", null,null)
         );
 
         // Mock repository behavior
@@ -57,7 +57,7 @@ class BudgetServiceTest {
     @Test
     void getBudgetById() {
         // Mock data
-        Budget mockBudget = new Budget(1L, 1000.0, 500.0, 200.0, "Monthly", null);
+        Budget mockBudget = new Budget(1L, 1000.0, 500.0, 200.0, "Monthly", null,null);
 
         // Mock repository behavior
         when(budgetRepository.findById(1L)).thenReturn(Optional.of(mockBudget));
@@ -76,7 +76,7 @@ class BudgetServiceTest {
     @Test
     void saveBudget() {
         // Mock data
-        Budget mockBudget = new Budget(null, 1000.0, 500.0, 200.0, "Monthly", null);
+        Budget mockBudget = new Budget(null, 1000.0, 500.0, 200.0, "Monthly", null,null);
 
         // Mock repository behavior
         when(budgetRepository.save(mockBudget)).thenReturn(mockBudget);

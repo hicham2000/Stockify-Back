@@ -21,4 +21,6 @@ public interface RepasRepository extends JpaRepository<Repas,Long> {
     @Modifying
     @Query("UPDATE Repas r SET r.permanent = 1 WHERE r.stock.id = :stockId AND r.is_deleted = 1")
     void updatePermanentFlagForDeletedRecipesInStock(Long stockId);
+    @Query("select r from Repas r where r.stock.id = :stockId and r.is_deleted = 0 and r.permanent = 0")
+    List<Repas> repas(Long stockId);
 }
