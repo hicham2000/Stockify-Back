@@ -430,5 +430,21 @@ class RecommendationServiceTest {
         assertTrue(recommendationService.hasPreferredIngredients(recette, preferredIngredients2));
     }
 
+    @Test
+    void testHasRegimeSpeciaux() {
+        Recette recette = new Recette();
+        CategorieDeRecette categorie = new CategorieDeRecette();
+        categorie.setIntitule("Categorie1");
+        recette.setCategorieDeRecette(categorie);
 
+        List<String> regimesSpeciaux = Arrays.asList("Categorie1", "Categorie2");
+
+        assertTrue(recommendationService.hasRegimeSpeciaux(recette, regimesSpeciaux));
+
+        // Test with empty regimesSpeciaux
+        assertTrue(recommendationService.hasRegimeSpeciaux(recette, Arrays.asList()));
+
+        // Test with non-matching categorieDeRecette
+        assertFalse(recommendationService.hasRegimeSpeciaux(recette, Arrays.asList("Categorie3")));
+    }
 }

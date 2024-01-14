@@ -177,7 +177,7 @@ public class RecommendationService {
         return ingredientNames.containsAll(preferredIngredients);
     }
 
-    private boolean hasRegimeSpeciaux(Recette recette, List<String> regimesSpeciaux) {
+    public boolean hasRegimeSpeciaux(Recette recette, List<String> regimesSpeciaux) {
         if(regimesSpeciaux.isEmpty()){
             return true;
         }
