@@ -113,4 +113,20 @@ class IngredientControllerTest {
         assertFalse(responseBody.containsKey("ingredients"));
     }
 
+    @Test
+    void testGetAllRepasIngredients() {
+        // Arrange
+        Long repasId = 1L;
+        List<Ingredient> mockIngredients = Arrays.asList(new Ingredient(), new Ingredient());
+        when(ingredientRepository.findAllByrepasid(repasId)).thenReturn(mockIngredients);
+
+        // Act
+        ResponseEntity<List<Ingredient>> responseEntity = ingredientController.getAllRepasIngredients(repasId);
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertEquals(mockIngredients, responseEntity.getBody());
+    }
+
 }
