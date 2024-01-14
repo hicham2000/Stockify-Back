@@ -100,11 +100,11 @@ public class StockController {
         return ResponseEntity.ok("added");
     }
 
-    @DeleteMapping("/repas")
-    public ResponseEntity<String> DeleteRepasInStock(@RequestBody RequestBodyDataRepas RequestBodyDataRepas) throws ParseException {
+    @DeleteMapping("/repas/{id}")
+    public ResponseEntity<String> DeleteRepasInStock(@PathVariable Long id) throws ParseException {
 
 
-        Repas repas = repasRepository.findById(Long.valueOf(RequestBodyDataRepas.getId())).get();
+        Repas repas = repasRepository.findById(id).get();
         repas.setIs_deleted(1);
 
 
