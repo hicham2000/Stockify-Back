@@ -103,7 +103,7 @@ public class RecommendationService {
         }
     }
 
-    private RecetteResponse createRecetteResponse(Utilisateur utilisateur, List<Recette> recettesAuStock, List<Produit> produitsAuStock, Recette recette) {
+    public RecetteResponse createRecetteResponse(Utilisateur utilisateur, List<Recette> recettesAuStock, List<Produit> produitsAuStock, Recette recette) {
         RecetteResponse recetteResponse = new RecetteResponse(recette);
         recetteResponse.setQuantiteEnStock(recettesAuStock);
         recetteResponse.setIngredients(recette.getIngredients(), produitsAuStock);
