@@ -85,6 +85,20 @@ class StockControllerTest {
         assertThrows(RuntimeException.class, () -> stockController.addRecipeToStockByRecetteID(stockId, recetteId));
         verify(stockService, times(1)).addRecipeToStockByRecetteId(stockId, recetteId);
     }
+
+    @Test
+    void testDeleteRecipeFromStock() {
+        // Arrange
+        Long stockId = 1L;
+        Long recipeId = 38L;
+
+        // Act
+        ResponseEntity<Void> responseEntity = stockController.deleteRecipeFromStock(stockId, recipeId);
+
+        // Assert
+        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        verify(stockService, times(1)).deleteRecipeFromStock(stockId, recipeId);
+    }
 }
 
 
