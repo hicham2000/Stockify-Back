@@ -5,6 +5,8 @@ import com.example.stockifybackend.Repositories.RecetteRepository;
 import com.example.stockifybackend.Repositories.UtilisateurRepository;
 import com.example.stockifybackend.services.RecommendationService;
 import com.example.stockifybackend.services.StockService;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,9 +16,10 @@ import org.mockito.MockitoAnnotations;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class RecommendationServiceTest {
 
@@ -30,9 +33,12 @@ class RecommendationServiceTest {
     private StockService stockService;
     @Mock
     private Utilisateur utilisateur;
+    private String recommendationSystemUrl = "http://localhost:8081";
+
 
     @InjectMocks
     private RecommendationService recommendationService;
+
 
     @BeforeEach
     public void setUp() throws ParseException {
@@ -81,4 +87,30 @@ class RecommendationServiceTest {
         assertTrue(requestJson.matches(".*\"number_of_meals\": \\d+.*"));
         assertTrue(requestJson.matches(".*\"weight_loss_plan\": \".+\".*"));
     }
+
+    @Test
+    void sendRecommendationRequest_Success() throws JSONException, ParseException {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        Date dateDeNaissance = formatter.parse("09-12-2001");
+
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setDateDeNaissance(dateDeNaissance);
+        utilisateur.setTaille("179");
+        utilisateur.setPoids("62");
+        utilisateur.setSexe("Homme");
+        utilisateur.setModeSportif(false);
+
+
+        String requestJson = recommendationService.buildRecommendationRequestJson(utilisateur);
+
+        String url = recommendationSystemUrl + "/Repas_suggestions/";
+        JSONObject jsonResponse = recommendationService.sendRecommendationRequest(requestJson, url);
+
+        assertNotNull(jsonResponse);
+        assertTrue(jsonResponse.has("output"));
+        assertTrue(jsonResponse.getJSONObject("output").has("Repas_Programme"));
+        assertTrue(jsonResponse.getJSONObject("output").getJSONArray("Repas_Programme").length() > 0);
+    }
+
 }

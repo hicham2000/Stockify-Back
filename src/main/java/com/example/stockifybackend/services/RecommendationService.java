@@ -70,7 +70,7 @@ public class RecommendationService {
         );
     }
 
-    private JSONObject sendRecommendationRequest(String requestJson, String url) throws JSONException {
+    public JSONObject sendRecommendationRequest(String requestJson, String url) throws JSONException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
