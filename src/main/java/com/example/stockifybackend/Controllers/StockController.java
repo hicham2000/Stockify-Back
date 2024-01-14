@@ -40,7 +40,7 @@ public class StockController {
 
     @PostMapping("/repas")
     public ResponseEntity<String> addRepasToStock(@RequestBody RequestBodyData requestBodyData) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYy.MM.dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 
         Repas repas = new Repas();
         repas.setIntitule(requestBodyData.getIntitule());
@@ -311,7 +311,7 @@ class RequestBodyDataRepas{
     private String spinnerText;
 
 
-    public RequestBodyDataRepas(String id, String intitule, String datePeremtion, String dateAlert,String categorie) {
+    public RequestBodyDataRepas(String intitule, String datePeremtion, String dateAlert,String categorie,String id) {
         this.id = id;
         this.intitule = intitule;
         this.datePeremtion = datePeremtion;
