@@ -72,4 +72,27 @@ class IngredientControllerTest {
         assertFalse(responseBody.containsKey("ingredient"));
     }
 
+    @Test
+    void testGetAllIngredients_Success() {
+        // Arrange
+        PageRequest pageRequest = PageRequest.of(0, 100);
+        List<Ingredient> mockIngredients = Arrays.asList(new Ingredient(), new Ingredient(), new Ingredient());
+        when(ingredientRepository.findIngredientRandomly(pageRequest)).thenReturn(mockIngredients);
+
+        // Act
+        ResponseEntity<?> responseEntity = ingredientController.getAllIngredients();
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertTrue(responseEntity.getBody() instanceof Map);
+
+        Map<?, ?> responseBody = (Map<?, ?>) responseEntity.getBody();
+        assertEquals("Ingredients récupérés par succès", responseBody.get("message"));
+        assertTrue(responseBody.containsKey("ingredients"));
+        assertTrue(responseBody.get("ingredients") instanceof List);
+        assertEquals(3, ((List<?>) responseBody.get("ingredients")).size());
+    }
+
+
 }

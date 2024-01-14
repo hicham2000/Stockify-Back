@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -43,7 +44,7 @@ public class IngredientController {
 
         try {
             response.put("message", "Ingredients récupérés par succès");
-            response.put("ingredients", ingredients.stream().limit(100));
+            response.put("ingredients", ingredients.stream().limit(100).collect(Collectors.toList()));
         } catch (Exception e){
             response.put("message", "Erreur lors du récupération d'ingrédients: " + e.getMessage());
         }
