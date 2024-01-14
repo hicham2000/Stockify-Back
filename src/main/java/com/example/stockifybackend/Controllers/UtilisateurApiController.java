@@ -112,11 +112,11 @@ public class UtilisateurApiController {
             utilisateurService.updateUtilisateurFieldsSexe(id, sexe);
         }catch(Exception error){
             response.put("Error", error);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
         response.put("message", "User updated successfully!...");
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/Utilisateur/{id}/date/{date}")
@@ -126,11 +126,11 @@ public class UtilisateurApiController {
             utilisateurService.updateUtilisateurFieldsDate(id, date);
         }catch(Exception error){
             response.put("Error", error);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
         response.put("message", "User updated successfully!...");
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/Utilisateur/{id}/taille/{nouvelletaille}")

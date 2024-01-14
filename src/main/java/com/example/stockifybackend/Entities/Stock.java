@@ -30,10 +30,10 @@ public class Stock implements Serializable {
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
     private List<Recette> recette;
 
-    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
     @JsonIgnore
-    public List<Repas> repas;
+    public List<Repas> repas = new ArrayList<>();
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
