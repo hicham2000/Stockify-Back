@@ -49,4 +49,23 @@ class RecetteControllerTest {
         assertTrue(responseBody.containsKey("recette"));
         assertEquals(mockRecette, responseBody.get("recette"));
     }
+
+    @Test
+    void testGetRecetteByID_RecetteDoesNotExist() {
+        // Arrange
+        Long recetteId = 1L;
+        when(recetteRepository.findById(recetteId)).thenReturn(Optional.empty());
+
+        // Act
+        ResponseEntity<?> responseEntity = recetteController.getRecetteByID(recetteId);
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertTrue(responseEntity.getBody() instanceof Map);
+
+        Map<?, ?> responseBody = (Map<?, ?>) responseEntity.getBody();
+        assertEquals("Aucun Recette avec id=" + recetteId, responseBody.get("message"));
+        assertFalse(responseBody.containsKey("recette"));
+    }
 }
