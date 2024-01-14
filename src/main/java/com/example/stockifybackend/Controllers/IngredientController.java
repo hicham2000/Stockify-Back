@@ -27,7 +27,7 @@ public class IngredientController {
 
         if(OptionalIngredient.isPresent()){
             Ingredient ingredient = OptionalIngredient.get();
-            response.put("message", "Ingredient récupérer par succès");
+            response.put("message", "Ingredient récupéré par succès");
             response.put("ingredient", ingredient);
         }else {
             response.put("message", "Aucun Ingredient avec id=" + ingredientId);

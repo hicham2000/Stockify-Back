@@ -23,8 +23,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class RecommendationServiceTest {
@@ -468,4 +466,6 @@ class RecommendationServiceTest {
         assertTrue(recommendationService.isRecetteValid(recette, regimesSpeciaux, "120", preferredIngredients));
         assertFalse(recommendationService.isRecetteValid(recette, regimesSpeciaux, "30", preferredIngredients));
     }
+
+
 }

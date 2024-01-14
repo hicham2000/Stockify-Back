@@ -197,7 +197,7 @@ public class RecommendationService {
 
         return result;
     }
-    private RecetteResponse processRecetteObject(JSONObject recetteObject, List<Recette> recettesAuStock, List<Produit> produitsAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
+    public RecetteResponse processRecetteObject(JSONObject recetteObject, List<Recette> recettesAuStock, List<Produit> produitsAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
         Long recetteId = recetteObject.getLong("Recipe_Id");
         String recipeImageUrl = recetteObject.getString("Recipe_Image_link");
 
@@ -223,7 +223,7 @@ public class RecommendationService {
         return null;
     }
 
-    private List<RecetteResponse> processRecommendationFiltredResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
+    public List<RecetteResponse> processRecommendationFiltredResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONArray recettesArray = jsonResponse.getJSONObject("output").getJSONArray("Repas_Programme");
 
