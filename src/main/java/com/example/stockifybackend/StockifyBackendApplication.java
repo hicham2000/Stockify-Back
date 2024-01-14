@@ -162,7 +162,7 @@ public class StockifyBackendApplication implements CommandLineRunner {
             p.setQuantite(10);
             p.setUniteDeMesure("KG");
             produitRepository.save(p);
-            
+
         }
 
         for(int i=0 ; i < 20 ; i++ ){
