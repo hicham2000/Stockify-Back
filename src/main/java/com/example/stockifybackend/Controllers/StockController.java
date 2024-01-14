@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
 import java.util.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,10 +34,13 @@ public class StockController {
     @Autowired
     private ProduitRepository produitRepository;
 
+    @Autowired
+    private BudgetRepository budgetRepository;
+
 
     @PostMapping("/repas")
     public ResponseEntity<String> addRepasToStock(@RequestBody RequestBodyData requestBodyData) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYy.MM.dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 
         Repas repas = new Repas();
         repas.setIntitule(requestBodyData.getIntitule());
@@ -97,11 +99,11 @@ public class StockController {
         return ResponseEntity.ok("added");
     }
 
-    @DeleteMapping("/repas")
-    public ResponseEntity<String> DeleteRepasInStock(@RequestBody RequestBodyDataRepas RequestBodyDataRepas) throws ParseException {
+    @DeleteMapping("/repas/{id}")
+    public ResponseEntity<String> DeleteRepasInStock(@PathVariable Long id) throws ParseException {
 
 
-        Repas repas = repasRepository.findById(Long.valueOf(RequestBodyDataRepas.getId())).get();
+        Repas repas = repasRepository.findById(id).get();
         repas.setIs_deleted(1);
 
 
@@ -146,7 +148,7 @@ public class StockController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        response.put("message", "Recette ajouté au stock avec succès");
+        response.put("message", "Recette ajoutée au stock avec succès");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -227,6 +229,20 @@ public class StockController {
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
+
+    @GetMapping("/{stockId}/budget")
+    public ResponseEntity<List<Double>> getPricesBudget (@PathVariable Long stockId){
+        List<Double> budget = new ArrayList<>();
+        Double value1=budgetRepository.PriceGaspilleProduits(stockId);
+        Double value2=budgetRepository.PriceNonGaspilleProduits(stockId);
+        budget.add(value1);
+        budget.add(value2);
+        budget.add(value1+value2);
+        budget.add((value1*100)/(value1+value2));
+        budget.add((value2*100)/(value1+value2));
+
+        return new ResponseEntity<List<Double>>(budget, HttpStatus.OK);
+    }
 }
 
 class RequestBodyData {
@@ -295,7 +311,7 @@ class RequestBodyDataRepas{
     private String spinnerText;
 
 
-    public RequestBodyDataRepas(String id, String intitule, String datePeremtion, String dateAlert,String categorie) {
+    public RequestBodyDataRepas(String intitule, String datePeremtion, String dateAlert,String categorie,String id) {
         this.id = id;
         this.intitule = intitule;
         this.datePeremtion = datePeremtion;

@@ -1,5 +1,6 @@
 package com.example.stockifybackend.services;
 
+import aj.org.objectweb.asm.Handle;
 import com.example.stockifybackend.Entities.ListeCourse;
 import com.example.stockifybackend.Entities.Recette;
 import com.example.stockifybackend.Entities.Stock;
@@ -12,9 +13,11 @@ import com.example.stockifybackend.dto.UtilisateurUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -86,15 +89,13 @@ public class UtilisateurService {
         if (updatedUtilisateur.getPoids() != null) {
             existingUtilisateur.setPoids(updatedUtilisateur.getPoids());
         }
-        if (updatedUtilisateur.getDateDeNaissance() != null) {
+       if (updatedUtilisateur.getDateDeNaissance() != null) {
             try {
                 Date updatedDate = parseDate(updatedUtilisateur.getDateDeNaissance().toString());
-                existingUtilisateur.setDateDeNaissance(updatedDate);
+                existingUtilisateur.setDateDeNaissance(updatedUtilisateur.getDateDeNaissance());
             } catch (ParseException e) {
-                // Handle parsing exception (log or rethrow)
+
                 e.printStackTrace();
-                // You might want to log or rethrow the exception based on your error handling strategy
-                // throw new RuntimeException("Failed to parse date", e);
             }
         }
 
@@ -201,7 +202,7 @@ public class UtilisateurService {
     }
 
 
-   // public void updateUtilisateurFieldsUniteTaille(Long id, String taille) {
+  //  public void updateUtilisateurFieldsUniteTaille(Long id, String taille) {
         // Recherche de l'utilisateur par son ID
        // Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
 
@@ -302,7 +303,6 @@ public class UtilisateurService {
 
         utilisateurRepository.save(existingUtilisateur);
     }
-
 
     private Date parseDate(String dateString) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);

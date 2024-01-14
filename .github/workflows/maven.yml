@@ -22,11 +22,11 @@ jobs:
     - name: Build with Maven
       run:  mvn -B package -DskipTests --file pom.xml
     
-    - name: Upload JAR as artifact
-      uses: actions/upload-artifact@v3.1.3
-      with:
-        name: Spotify-Back
-        path: target/*.jar
+    #- name: Upload JAR as artifact
+     # uses: actions/upload-artifact@v3.1.3
+      #with:
+       # name: Spotify-Back
+        #path: target/*.jar
 
   push:
     needs: build

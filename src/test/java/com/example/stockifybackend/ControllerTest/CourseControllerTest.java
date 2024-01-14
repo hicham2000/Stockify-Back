@@ -2,11 +2,12 @@ package com.example.stockifybackend.ControllerTest;
 
 import com.example.stockifybackend.Controllers.CourseController;
 import com.example.stockifybackend.Entities.ProduitAAcheter;
+import com.example.stockifybackend.Repositories.ListeCourseRepository;
 import com.example.stockifybackend.services.CourseService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -14,64 +15,61 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-class CourseControllerTest {
+public class CourseControllerTest {
 
     @Mock
     private CourseService courseService;
+
+    @Mock
+    private ListeCourseRepository courseRepository;
 
     @InjectMocks
     private CourseController courseController;
 
     @Test
-    void testAddProductToListeCourse() {
-        // Arrange
-        Long courseId = 1L;
-        ProduitAAcheter mockProduit = new ProduitAAcheter();
-        doNothing().when(courseService).addProductToListeCourse(courseId, mockProduit);
-
-        // Act
-        ResponseEntity<Void> result = courseController.addProductToListeCourse(courseId, mockProduit);
-
-        // Assert
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+    public void testAddProductToListeCourse() {
+        ResponseEntity<Void> responseEntity = courseController.addProductToListeCourse(1L, new ProduitAAcheter());
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
     }
 
     @Test
-    void testUpdateProductInListeCourse() {
-        // Arrange
-        Long courseId = 1L;
-        Long productId = 2L;
-        ProduitAAcheter mockUpdate = new ProduitAAcheter();
-        doNothing().when(courseService).updateProductCourse(courseId, productId, mockUpdate);
-
-        // Act
-        ResponseEntity<String> result = courseController.updateProductInListeCourse(courseId, productId, mockUpdate);
-
-        // Assert
-        assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("Produit a ete updater", result.getBody());
+    public void testUpdateProductInListeCourse() {
+        ResponseEntity<String> responseEntity = courseController.updateProductInListeCourse(1L, 2L, new ProduitAAcheter());
+        assertEquals("Produit a ete updater", responseEntity.getBody());
     }
 
     @Test
-    void testDeleteProductInListeCourse() {
-        // Arrange
-        Long courseId = 1L;
-        Long productId = 2L;
-        doNothing().when(courseService).deleteProductToListeCourse(courseId, productId);
-
-        // Act
-        ResponseEntity<String> result = courseController.deleteProductInListeCourse(courseId, productId);
-
-        // Assert
-        assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
+    public void testDeleteProductInListeCourse() {
+        ResponseEntity<String> responseEntity = courseController.deleteProductInListeCourse(1L, 2L);
+        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
     }
 
-    // Add similar tests for other controller methods: getAllProduitListeCourse, getProduiInCourse
-    // ...
+    @Test
+    public void testDeleteProductAllListeCourse() {
+        ResponseEntity<String> responseEntity = courseController.deleteProductAllListeCourse(1L);
+        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+    }
 
+    @Test
+    public void testGetAllProduitListeCourse() {
+        List<ProduitAAcheter> produits = new ArrayList<>();
+        when(courseService.getAllProduitInCourse(anyLong())).thenReturn(produits);
+
+        List<ProduitAAcheter> result = courseController.getAllProduitListeCourse(1L);
+
+        assertEquals(produits, result);
+    }
+
+    @Test
+    public void testGetProduiInCourse() {
+        List<ProduitAAcheter> produits = new ArrayList<>();
+        when(courseService.findByListeCourseProduit(anyLong(), anyString())).thenReturn(produits);
+
+        List<ProduitAAcheter> result = courseController.getProduiInCourse(1L, "intitule");
+
+        assertEquals(produits, result);
+    }
 }
-

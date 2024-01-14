@@ -17,8 +17,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 @SpringBootApplication
@@ -101,7 +105,8 @@ public class StockifyBackendApplication implements CommandLineRunner {
         user1.setSexe("Homme");
         user1.setTaille("179");
         user1.setPoids("62");
-        Date dateDeNaissance = new Date(2001, 12, 9,00,00,00);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        Date dateDeNaissance = formatter.parse("09-12-2001");
         user1.setDateDeNaissance(dateDeNaissance);
 
         ListeCourse c = new ListeCourse();
@@ -160,6 +165,7 @@ public class StockifyBackendApplication implements CommandLineRunner {
             p.setQuantite(10);
             p.setUniteDeMesure("KG");
             produitRepository.save(p);
+
         }
 
         for(int i=0 ; i < 20 ; i++ ){

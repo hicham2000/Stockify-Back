@@ -10,10 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 @RestController
@@ -114,7 +116,7 @@ public class UtilisateurApiController {
         }
 
         response.put("message", "User updated successfully!...");
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/Utilisateur/{id}/date/{date}")
@@ -128,7 +130,7 @@ public class UtilisateurApiController {
         }
 
         response.put("message", "User updated successfully!...");
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/Utilisateur/{id}/taille/{nouvelletaille}")
@@ -136,7 +138,7 @@ public class UtilisateurApiController {
 
             utilisateurService.updateUtilisateurFieldsTaille(id, nouvelletaille);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/Utilisateur/{id}/poids/{poids}")
@@ -144,7 +146,7 @@ public class UtilisateurApiController {
 
         utilisateurService.updateUtilisateurFieldsPoids(id, poids);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/Utilisateur/{id}/regime/{regime}")
@@ -152,7 +154,7 @@ public class UtilisateurApiController {
 
         utilisateurService.updateUtilisateurFieldsRegime(id, regime);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/Utilisateur/{id}/sportif/{regime}")
@@ -160,7 +162,7 @@ public class UtilisateurApiController {
 
         utilisateurService.updateUtilisateurFieldsMode(id, regime);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/Utilisateur/{id}/alerte/{regime}")
@@ -168,7 +170,7 @@ public class UtilisateurApiController {
 
         utilisateurService.updateUtilisateurFieldsAlerteExp(id, regime);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/Utilisateur/{id}/alertePeremp/{regime}")
@@ -176,7 +178,7 @@ public class UtilisateurApiController {
 
         utilisateurService.updateUtilisateurFieldsAlerteQuantiteCr(id, regime);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
   //  @PutMapping("/Utilisateur/{id}/taille/{taille}")

@@ -17,12 +17,10 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Service
 public class RecommendationService {
@@ -44,15 +42,13 @@ public class RecommendationService {
         this.stockService = stockService;
     }
 
-    private int calculateAge(Date dateDeNaissance) {
+   public int calculateAge(Date dateDeNaissance) {
         LocalDate birthDate = dateDeNaissance.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-
         LocalDate now = LocalDate.now();
         return Period.between(birthDate, now).getYears();
-    }
+   }
 
-    private String buildRecommendationRequestJson(Utilisateur utilisateur) {
+    public String buildRecommendationRequestJson(Utilisateur utilisateur) {
         int age = calculateAge(utilisateur.getDateDeNaissance());
         age = age >=0 ? age: 20;
         int taille = Integer.parseInt(utilisateur.getTaille());
@@ -74,7 +70,7 @@ public class RecommendationService {
         );
     }
 
-    private JSONObject sendRecommendationRequest(String requestJson, String url) throws JSONException {
+    public JSONObject sendRecommendationRequest(String requestJson, String url) throws JSONException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -107,7 +103,7 @@ public class RecommendationService {
         }
     }
 
-    private RecetteResponse createRecetteResponse(Utilisateur utilisateur, List<Recette> recettesAuStock, List<Produit> produitsAuStock, Recette recette) {
+    public RecetteResponse createRecetteResponse(Utilisateur utilisateur, List<Recette> recettesAuStock, List<Produit> produitsAuStock, Recette recette) {
         RecetteResponse recetteResponse = new RecetteResponse(recette);
         recetteResponse.setQuantiteEnStock(recettesAuStock);
         recetteResponse.setIngredients(recette.getIngredients(), produitsAuStock);
@@ -116,7 +112,7 @@ public class RecommendationService {
         return recetteResponse;
     }
 
-    private List<RecetteResponse> processRecommendationResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, Utilisateur utilisateur) throws JSONException {
+    public List<RecetteResponse> processRecommendationResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, Utilisateur utilisateur) throws JSONException {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONArray recettesArray = jsonResponse.getJSONObject("output").getJSONArray("Repas_Programme");
 
@@ -170,7 +166,7 @@ public class RecommendationService {
 
     /* ---------------------------------------------------------*/
 
-    private boolean hasPreferredIngredients(Recette recette, List<String> preferredIngredients) {
+    public boolean hasPreferredIngredients(Recette recette, List<String> preferredIngredients) {
         if(preferredIngredients.isEmpty()) {
             return true;
         }
@@ -181,21 +177,27 @@ public class RecommendationService {
         return ingredientNames.containsAll(preferredIngredients);
     }
 
-    private boolean isRecetteValid(Recette recette, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) {
-        if (régimesSpéciaux.isEmpty() || tempsDePreparation.isEmpty()) {
+    public boolean hasRegimeSpeciaux(Recette recette, List<String> regimesSpeciaux) {
+        if(regimesSpeciaux.isEmpty()){
             return true;
+        }
+        String categorieDeRecette = recette.getCategorieDeRecette().getIntitule();
+        return regimesSpeciaux.contains(categorieDeRecette);
+    }
+
+    public boolean isRecetteValid(Recette recette, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) {
+        if (régimesSpéciaux.isEmpty() || tempsDePreparation.isEmpty()) {
+            return hasRegimeSpeciaux(recette, régimesSpéciaux) && true && hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
         }
 
         int totalTimeMinutes = recette.getDureeTotal();
         String categorieDeRecette = recette.getCategorieDeRecette().getIntitule();
 
-        boolean result = régimesSpéciaux.contains(categorieDeRecette) && totalTimeMinutes <= Integer.parseInt(tempsDePreparation) && hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
+        boolean result = hasRegimeSpeciaux(recette, régimesSpéciaux) && totalTimeMinutes <= Integer.parseInt(tempsDePreparation) && hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
 
-        return régimesSpéciaux.contains(categorieDeRecette) &&
-                totalTimeMinutes <= Integer.parseInt(tempsDePreparation) &&
-                hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
+        return result;
     }
-    private RecetteResponse processRecetteObject(JSONObject recetteObject, List<Recette> recettesAuStock, List<Produit> produitsAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
+    public RecetteResponse processRecetteObject(JSONObject recetteObject, List<Recette> recettesAuStock, List<Produit> produitsAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
         Long recetteId = recetteObject.getLong("Recipe_Id");
         String recipeImageUrl = recetteObject.getString("Recipe_Image_link");
 
@@ -221,7 +223,7 @@ public class RecommendationService {
         return null;
     }
 
-    private List<RecetteResponse> processRecommendationFiltredResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
+    public List<RecetteResponse> processRecommendationFiltredResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres, Utilisateur utilisateur) throws JSONException {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONArray recettesArray = jsonResponse.getJSONObject("output").getJSONArray("Repas_Programme");
 
@@ -262,7 +264,7 @@ public class RecommendationService {
 
     /* ---------------------------------------------------------*/
 
-    private String buildRecommendationRecettesSimilairesRequestJson(Recette recette) {
+    public String buildRecommendationRecettesSimilairesRequestJson(Recette recette) {
         ValeurNutritionnel valeurNutritionnel = recette.getValeurNutritionnel();
 
         double proteine = valeurNutritionnel.getProteine();
@@ -291,11 +293,11 @@ public class RecommendationService {
         );
     }
 
-    private List<Recette> generateRandomRecettes(int count) {
+    public List<Recette> generateRandomRecettes(int count) {
         List<Recette> randomRecettes = new ArrayList<>();
         return randomRecettes;
     }
-    private List<RecetteResponse> processRecommendationRecettesSimilairesResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, Utilisateur utilisateur) throws JSONException {
+    public List<RecetteResponse> processRecommendationRecettesSimilairesResponse(JSONObject jsonResponse, List<Produit> produitsAuStock, List<Recette> recettesAuStock, Utilisateur utilisateur) throws JSONException {
         if (jsonResponse != null && jsonResponse.has("output")) {
             JSONArray recettesArray = jsonResponse.getJSONArray("output");
 
