@@ -33,8 +33,8 @@ class BudgetRepositoryTest {
     @Test
     void testFindAll() {
         // Save test data to the database
-        budgetRepository.save(new Budget(null, 1000.0, 500.0, 200.0, "Monthly", null));
-        budgetRepository.save(new Budget(null, 2000.0, 1000.0, 500.0, "Monthly", null));
+        budgetRepository.save(new Budget(null, 1000.0, 500.0, 200.0, "Monthly", null,null));
+        budgetRepository.save(new Budget(null, 2000.0, 1000.0, 500.0, "Monthly", null,null));
 
         // Retrieve all budgets from the repository
         List<Budget> budgets = budgetRepository.findAll();
@@ -49,7 +49,7 @@ class BudgetRepositoryTest {
     @Test
     void testFindById() {
         // Save a budget to the database
-        Budget savedBudget = budgetRepository.save(new Budget(null, 1000.0, 500.0, 200.0, "Monthly", null));
+        Budget savedBudget = budgetRepository.save(new Budget(null, 1000.0, 500.0, 200.0, "Monthly", null,null));
 
         // Retrieve the budget by ID from the repository
         Optional<Budget> retrievedBudget = budgetRepository.findById(savedBudget.getId());
@@ -62,7 +62,7 @@ class BudgetRepositoryTest {
     @Test
     void testSave() {
         // Save a budget to the database
-        Budget savedBudget = budgetRepository.save(new Budget(null, 1000.0, 500.0, 200.0, "Monthly", null));
+        Budget savedBudget = budgetRepository.save(new Budget(null, 1000.0, 500.0, 200.0, "Monthly", null,null));
 
         // Retrieve the budget by ID from the repository
         Optional<Budget> retrievedBudget = budgetRepository.findById(savedBudget.getId());
@@ -75,7 +75,7 @@ class BudgetRepositoryTest {
     @Test
     void testDeleteById() {
         // Save a budget to the database
-        Budget savedBudget = budgetRepository.save(new Budget(null, 1000.0, 500.0, 200.0, "Monthly", null));
+        Budget savedBudget = budgetRepository.save(new Budget(null, 1000.0, 500.0, 200.0, "Monthly", null,null));
 
         // Delete the budget by ID
         budgetRepository.deleteById(savedBudget.getId());
