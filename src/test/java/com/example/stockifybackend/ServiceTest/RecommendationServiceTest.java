@@ -134,6 +134,24 @@ class RecommendationServiceTest {
         assertNull(jsonResponse);
     }
 
+    @Test
+    void sendRecommendationRequest_Failure_307() throws ParseException, JSONException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        Date dateDeNaissance = formatter.parse("09-12-2001");
 
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setDateDeNaissance(dateDeNaissance);
+        utilisateur.setTaille("179");
+        utilisateur.setPoids("62");
+        utilisateur.setSexe("Homme");
+        utilisateur.setModeSportif(false);
+
+        String requestJson = recommendationService.buildRecommendationRequestJson(utilisateur);
+
+        String url = recommendationSystemUrl + "/Repas_suggestions";
+        JSONObject jsonResponse = recommendationService.sendRecommendationRequest(requestJson, url);
+
+        assertNull(jsonResponse);
+    }
 
 }
