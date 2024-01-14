@@ -420,7 +420,7 @@ class RecommendationServiceTest {
         Recette recette = new Recette();
         recette.setIngredients(Arrays.asList(
                 new Ingredient(1L, "Ingredient1", recette, 4.0, "", null),
-                new Ingredient(1L, "Ingredient3", recette, 4.0, "", null)
+                new Ingredient(2L, "Ingredient3", recette, 4.0, "", null)
         ));
 
         assertTrue(recommendationService.hasPreferredIngredients(recette, Arrays.asList()));
@@ -446,5 +446,26 @@ class RecommendationServiceTest {
 
         // Test with non-matching categorieDeRecette
         assertFalse(recommendationService.hasRegimeSpeciaux(recette, Arrays.asList("Categorie3")));
+    }
+
+    @Test
+    void testIsRecetteValid() {
+        List<String> preferredIngredients = Arrays.asList("Ingredient1", "Ingredient2");
+        Recette recette = new Recette();
+        recette.setIngredients(Arrays.asList(
+                new Ingredient(1L, "Ingredient1", recette, 4.0, "", null),
+                new Ingredient(2L, "Ingredient2", recette, 4.0, "", null)
+        ));
+        recette.setDureeTotal(40);
+        CategorieDeRecette categorie = new CategorieDeRecette();
+        categorie.setIntitule("Categorie1");
+        recette.setCategorieDeRecette(categorie);
+
+        List<String> regimesSpeciaux = Arrays.asList("Categorie1");
+
+
+        assertTrue(recommendationService.isRecetteValid(recette, regimesSpeciaux, "", preferredIngredients));
+        assertTrue(recommendationService.isRecetteValid(recette, regimesSpeciaux, "120", preferredIngredients));
+        assertFalse(recommendationService.isRecetteValid(recette, regimesSpeciaux, "30", preferredIngredients));
     }
 }

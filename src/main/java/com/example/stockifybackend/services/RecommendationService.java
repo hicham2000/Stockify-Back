@@ -185,9 +185,9 @@ public class RecommendationService {
         return regimesSpeciaux.contains(categorieDeRecette);
     }
 
-    private boolean isRecetteValid(Recette recette, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) {
+    public boolean isRecetteValid(Recette recette, List<String> régimesSpéciaux, String tempsDePreparation, List<String> nomsDesIngrédientPréféres) {
         if (régimesSpéciaux.isEmpty() || tempsDePreparation.isEmpty()) {
-            return true;
+            return hasRegimeSpeciaux(recette, régimesSpéciaux) && true && hasPreferredIngredients(recette, nomsDesIngrédientPréféres);
         }
 
         int totalTimeMinutes = recette.getDureeTotal();
