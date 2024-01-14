@@ -8,6 +8,7 @@ class StockifyBackendApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }

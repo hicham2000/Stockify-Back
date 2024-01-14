@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -27,7 +28,7 @@ public class IngredientController {
 
         if(OptionalIngredient.isPresent()){
             Ingredient ingredient = OptionalIngredient.get();
-            response.put("message", "Ingredient récupérer par succès");
+            response.put("message", "Ingredient récupéré par succès");
             response.put("ingredient", ingredient);
         }else {
             response.put("message", "Aucun Ingredient avec id=" + ingredientId);
@@ -39,11 +40,10 @@ public class IngredientController {
     public ResponseEntity<?> getAllIngredients() {
         Map<String, Object> response = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(0, 100);
-        List<Ingredient> ingredients = ingredientRepository.findIngredientRandomly(pageRequest);
-
         try {
+            List<Ingredient> ingredients = ingredientRepository.findIngredientRandomly(pageRequest);
             response.put("message", "Ingredients récupérés par succès");
-            response.put("ingredients", ingredients.stream().limit(100));
+            response.put("ingredients", ingredients.stream().limit(100).collect(Collectors.toList()));
         } catch (Exception e){
             response.put("message", "Erreur lors du récupération d'ingrédients: " + e.getMessage());
         }
