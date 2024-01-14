@@ -12,7 +12,9 @@ import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -126,6 +128,16 @@ public class Produit implements Serializable{
     public boolean isCloseToExpired() {
         return this.dateExpiration != null && new Date().after(this.dateAlerte);
     }
+
+    public long getDaysBetweenAlertAndExpiration() {
+        if (dateAlerte != null && dateExpiration != null) {
+            LocalDate alertDate = dateAlerte.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate expirationDate = dateExpiration.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+
+            return Duration.between(alertDate.atStartOfDay(), expirationDate.atStartOfDay()).toDays();
+        }
+        return -1;}
 
 }
 

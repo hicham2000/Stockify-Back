@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -44,5 +47,28 @@ public class Repas implements Serializable {
     private int gaspille = 0;
     private String imageUrl;
 
+    public boolean isExpired() {
+        return this.datePeremtion != null && new Date().after(this.datePeremtion);
+    }
+
+
+
+    public boolean isCloseToExpired() {
+        return this.datePeremtion != null && new Date().after(this.dateAlert);
+    }
+
+    public long getDaysBetweenAlertAndExpiration() {
+        if (dateAlert != null && datePeremtion != null) {
+            LocalDate alertDate = dateAlert.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate expirationDate = datePeremtion.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+
+            return Duration.between(alertDate.atStartOfDay(), expirationDate.atStartOfDay()).toDays();
+        }
+        return -1;}
+
+
+
 
 }
+
