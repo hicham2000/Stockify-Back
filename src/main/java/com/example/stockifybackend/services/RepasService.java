@@ -10,8 +10,8 @@ import java.util.List;
 @Service
 public class RepasService {
     @Autowired
-    private RepasRepository reasRepository;
+    private RepasRepository repasRepository;
     public List<Repas> listsDeRepas(Long stockId){
-        return reasRepository.repas(stockId);
+        return repasRepository.repas(stockId);
     }
 }
