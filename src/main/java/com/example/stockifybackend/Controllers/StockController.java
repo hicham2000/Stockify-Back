@@ -248,6 +248,12 @@ public class StockController {
         produitRepository.updateDeleteProductsInStock(stockId, produitId);
         return new ResponseEntity<>("Product marked as deleted in stock.", HttpStatus.OK);
     }
+
+    @PutMapping("/{stockId}/suppRepas/{repasId}")
+    public  ResponseEntity<?> updateDeleteRepasInStock(@PathVariable Long stockId, @PathVariable Long repasId) {
+        repasRepository.updateDeleteRepasInStock(stockId, repasId);
+        return new ResponseEntity<>("Product marked as deleted in stock.", HttpStatus.OK);
+    }
 }
 
 

@@ -310,9 +310,6 @@ public class StockService {
         }
     }
 
-    @Transactional
-    public void updateDeleteProductsInStock(Long stockId, Long productId) {
-        produitRepository.updateDeleteProductsInStock(stockId, productId);
-    }
+
 
 }
