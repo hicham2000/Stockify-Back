@@ -37,5 +37,10 @@ public interface ProduitRepository extends JpaRepository<Produit, Long> {
     @Query("select p from Produit p where p.is_deleted = 0 and p.stock.id = :stockId ")
     List<Produit> produits(Long stockId);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE Produit p SET p.is_deleted = 1 WHERE p.stock.id = :stockId AND p.id=:produitId")
+    void updateDeleteProductsInStock(Long stockId,Long produitId);
+
 
 }

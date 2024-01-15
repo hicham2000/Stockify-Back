@@ -6,6 +6,7 @@ import com.example.stockifybackend.Repositories.ProduitRepository;
 import com.example.stockifybackend.Repositories.RecetteRepository;
 import com.example.stockifybackend.Repositories.RepasRepository;
 import com.example.stockifybackend.Repositories.StockRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -307,6 +308,11 @@ public class StockService {
         } else {
             throw new RuntimeException("There is no stock with this id");
         }
+    }
+
+    @Transactional
+    public void updateDeleteProductsInStock(Long stockId, Long productId) {
+        produitRepository.updateDeleteProductsInStock(stockId, productId);
     }
 
 }
