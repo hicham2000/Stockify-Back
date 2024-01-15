@@ -15,7 +15,7 @@ public class SetFcmTokenController {
     @PutMapping("/{id}/updateFcmToken")
     public ResponseEntity<String> updateFcmToken(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
         String token = requestBody.get("token");
-        System.out.println(token);
+
 
         if (token != null && !token.isEmpty()) {
             fcmTokenService.saveFcmToken(id, token);
