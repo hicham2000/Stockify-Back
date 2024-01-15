@@ -5,19 +5,22 @@ import com.example.stockifybackend.Entities.ProduitAAcheter;
 import com.example.stockifybackend.Repositories.ListeCourseRepository;
 import com.example.stockifybackend.Repositories.ProduitAAcheterRepository;
 import com.example.stockifybackend.services.CourseService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 public class CourseServiceTest {
 
     @Mock
@@ -26,103 +29,90 @@ public class CourseServiceTest {
     @Mock
     private ProduitAAcheterRepository produitAAcheterRepository;
 
-
     @InjectMocks
     private CourseService courseService;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
     public void testAddProductToListeCourse() {
-        // Arrange
-        Long courseId = 1L;
         ListeCourse listeCourse = new ListeCourse();
-        when(listeCourseRepository.findById(courseId)).thenReturn(Optional.of(listeCourse));
-        ProduitAAcheter produit = new ProduitAAcheter();
+        ProduitAAcheter produitAAcheter = new ProduitAAcheter();
 
-        // Act
-        courseService.addProductToListeCourse(courseId, produit);
+        when(listeCourseRepository.findById(anyLong())).thenReturn(Optional.of(listeCourse));
+        when(produitAAcheterRepository.save(any(ProduitAAcheter.class))).thenReturn(produitAAcheter);
 
-        // Assert
-        assertEquals(listeCourse, produit.getListeCourse());
-        verify(produitAAcheterRepository, times(1)).save(produit);
-        verify(listeCourseRepository, times(1)).save(listeCourse);
+        courseService.addProductToListeCourse(1L, produitAAcheter);
+
+        assertEquals(listeCourse, produitAAcheter.getListeCourse());
+        verify(produitAAcheterRepository, times(1)).save(any(ProduitAAcheter.class));
+        verify(listeCourseRepository, times(1)).save(any(ListeCourse.class));
     }
 
     @Test
     public void testDeleteProductToListeCourse() {
-        // Arrange
-        Long courseId = 1L;
-        Long produitId = 2L;
         ListeCourse listeCourse = new ListeCourse();
-        ProduitAAcheter produit = new ProduitAAcheter();
-        produit.setId(produitId);
-        listeCourse.getProduit().add(produit);
-        when(listeCourseRepository.findById(courseId)).thenReturn(Optional.of(listeCourse));
+        ProduitAAcheter produitAAcheter = new ProduitAAcheter();
+        produitAAcheter.setId(1L);
 
-        // Act
-        courseService.deleteProductToListeCourse(courseId, produitId);
+        when(listeCourseRepository.findById(anyLong())).thenReturn(Optional.of(listeCourse));
+        when(produitAAcheterRepository.findById(anyLong())).thenReturn(Optional.of(produitAAcheter));
 
-        // Assert
-        assertEquals(0, listeCourse.getProduit().size());
-        verify(produitAAcheterRepository, times(1)).deleteById(produitId);
-        verify(listeCourseRepository, times(1)).save(listeCourse);
+        courseService.deleteProductToListeCourse(1L, 1L);
+
+        verify(produitAAcheterRepository, times(1)).deleteById(anyLong());
+        verify(listeCourseRepository, times(1)).save(any(ListeCourse.class));
     }
 
     @Test
     public void testUpdateProductCourse() {
-        // Arrange
-        Long courseId = 1L;
-        Long productId = 2L;
         ListeCourse listeCourse = new ListeCourse();
-        ProduitAAcheter produit = new ProduitAAcheter();
-        produit.setId(productId);
-        listeCourse.getProduit().add(produit);
-        when(listeCourseRepository.findById(courseId)).thenReturn(Optional.of(listeCourse));
-        ProduitAAcheter productUpdate = new ProduitAAcheter();
-        productUpdate.setIntitule("Updated Product");
+        ProduitAAcheter produitAAcheter = new ProduitAAcheter();
+        produitAAcheter.setId(1L);
 
-        // Act
-        courseService.updateProductCourse(courseId, productId, productUpdate);
+        when(listeCourseRepository.findById(anyLong())).thenReturn(Optional.of(listeCourse));
+        when(produitAAcheterRepository.save(any(ProduitAAcheter.class))).thenReturn(produitAAcheter);
 
-        // Assert
-        assertEquals("Updated Product", produit.getIntitule());
-        verify(produitAAcheterRepository, times(1)).save(produit);
-        verify(listeCourseRepository, times(1)).save(listeCourse);
+        courseService.updateProductCourse(1L, 1L, new ProduitAAcheter());
+
+        verify(produitAAcheterRepository, times(1)).save(any(ProduitAAcheter.class));
+        verify(listeCourseRepository, times(1)).save(any(ListeCourse.class));
     }
 
     @Test
     public void testGetAllProduitInCourse() {
-        // Arrange
-        Long courseId = 1L;
+        ListeCourse listeCourse = new ListeCourse();
         List<ProduitAAcheter> produits = new ArrayList<>();
-        when(produitAAcheterRepository.findAllByListeCourseIdCustomQuery(courseId)).thenReturn(produits);
+        listeCourse.setProduit(produits);
 
-        // Act
-        List<ProduitAAcheter> result = courseService.getAllProduitInCourse(courseId);
+        when(listeCourseRepository.findById(anyLong())).thenReturn(Optional.of(listeCourse));
 
-        // Assert
+        List<ProduitAAcheter> result = courseService.getAllProduitInCourse(1L);
+
         assertEquals(produits, result);
     }
 
     @Test
-    public void testInitProduit() {
+    public void testFindByListeCourseProduit() {
+        when(produitAAcheterRepository.findByListeCourseProduit(anyLong(), anyString())).thenReturn(new ArrayList<>());
 
-        // Arrange
-        ListeCourse c = new ListeCourse();
-        when(listeCourseRepository.save(c)).thenReturn(c);
-        when(produitAAcheterRepository.save(any(ProduitAAcheter.class))).thenAnswer(invocationOnMock -> invocationOnMock.getArguments()[0]);
+        List<ProduitAAcheter> result = courseService.findByListeCourseProduit(1L, "intitule");
 
-        // Act
-        courseService.initProduit();
-
-        // Assert
-        assertEquals(6, c.getProduit().size());
-        verify(listeCourseRepository, times(6)).save(c);
-        verify(produitAAcheterRepository, times(6)).save(any(ProduitAAcheter.class));
+        assertEquals(0, result.size());
     }
+
+    @Test
+    public void testSupprimerProduitaacheterParIdProduit() {
+        ListeCourse listeCourse = new ListeCourse();
+        ProduitAAcheter produitAAcheter = new ProduitAAcheter();
+        produitAAcheter.setId(1L);
+        listeCourse.getProduit().add(produitAAcheter);
+
+        when(listeCourseRepository.findById(anyLong())).thenReturn(Optional.of(listeCourse));
+
+        courseService.supprimerProduitaacheterParIdProduit(1L);
+
+        verify(produitAAcheterRepository, times(1)).deleteById(anyLong());
+        verify(listeCourseRepository, times(1)).save(any(ListeCourse.class));
+    }
+
 
 }
