@@ -43,22 +43,26 @@ public class NotificationService {
 
             if (!belowCriticalProducts.isEmpty()) {
                 String userNotificationToken = stock.getUtilisateur().getNotifToken();
+                System.out.println(userNotificationToken);
+                if(userNotificationToken != null ){
                 String productNames = belowCriticalProducts.stream()
                         .map(Produit::getIntitule)
                         .collect(Collectors.joining(", "));
-                String notificationMessage = "Products below critical quantity: " + productNames;
-
+                String notificationMessage = "*" + productNames;
+                long currentTimeMillis = System.currentTimeMillis();
+                long resend_time = 24 * 60 * 60 * 1000;
                 NotificationDetails lastNotification = lastNotifications.get(userNotificationToken);
 
-                if (lastNotification == null || !lastNotification.getMessage().equals(notificationMessage)) {
-                    sendNotification(userNotificationToken, notificationMessage, "Repture de Stock");
+                if (lastNotification == null || !lastNotification.getMessage().equals(notificationMessage)|| (currentTimeMillis - lastNotification.getTimestamp()) > resend_time) {
+
+                    sendNotification(userNotificationToken, notificationMessage, "Alert quantité produit ");
                     lastNotifications.put(userNotificationToken, new NotificationDetails(notificationMessage, System.currentTimeMillis()));
                 }
             }
         }
 
-
             }
+    }
 
 
     @Scheduled(cron = "0 1 0 * * ?")
@@ -80,10 +84,10 @@ public class NotificationService {
                     long daysUntilExpiration = produit.getDaysBetweenAlertAndExpiration();
 
 
-                    String notificationMessage = produit.getIntitule() +
-                            "expires in " + daysUntilExpiration + " days.";
+                    String notificationMessage = "Péremption de "+produit.getIntitule() +
+                            "dans" + daysUntilExpiration + " jours.";
 
-                    sendNotification(userNotificationToken, notificationMessage, "Expiration alert");
+                    sendNotification(userNotificationToken, notificationMessage, "Péremption alert Produit");
                 }
             }
         }
@@ -106,13 +110,12 @@ public class NotificationService {
                     produit.setIs_deleted(1);
                     produit.setGaspille(1);
                     String notificationMessage = produit.getIntitule() +
-                            "is expired ";
-                    sendNotification(userNotificationToken, notificationMessage, "Expired produits");
+                            "expiré";
+                    sendNotification(userNotificationToken, notificationMessage, "Produit expiré ");
                 }
             }
         }
     }
-
 
     @Scheduled(cron = "0 1 0 * * ?")
     @Transactional
@@ -130,8 +133,8 @@ public class NotificationService {
                     repas.setIs_deleted(1);
                     repas.setGaspille(1);
                     String notificationMessage = repas.getIntitule() +
-                            "is expired ";
-                    sendNotification(userNotificationToken, notificationMessage, "Expired produits");
+                            "expiré";
+                    sendNotification(userNotificationToken, notificationMessage, "Repas expiré");
                 }
             }
         }
@@ -156,18 +159,15 @@ public class NotificationService {
                     long daysUntilExpiration = repas.getDaysBetweenAlertAndExpiration();
 
 
-                    String notificationMessage = repas.getIntitule() +
-                            "expires in " + daysUntilExpiration + " days.";
+                    String notificationMessage = "Péremption de "+repas.getIntitule() +
+                            "dans" + daysUntilExpiration + " jours.";
 
-                    sendNotification(userNotificationToken, notificationMessage, "Expiration alert");
+                    sendNotification(userNotificationToken, notificationMessage, "Alert de péremption repas");
                 }
             }
         }
 
     }
-
-
-
 
 
 
@@ -214,7 +214,6 @@ public class NotificationService {
 
             throw new RuntimeException(e);
         }
-
     }
 
 }

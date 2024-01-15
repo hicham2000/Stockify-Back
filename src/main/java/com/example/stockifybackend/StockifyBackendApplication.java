@@ -20,8 +20,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 import java.util.stream.Stream;
 
@@ -101,7 +103,6 @@ public class StockifyBackendApplication implements CommandLineRunner {
         user1.setPassword("123456@Wassim");
         user1.setRégimeSpécieux("");
         user1.setModeSportif(false);
-
         user1.setSexe("Homme");
         user1.setTaille("179");
         user1.setPoids("62");
@@ -117,6 +118,20 @@ public class StockifyBackendApplication implements CommandLineRunner {
         s.setId(1L);
         s.setQuantiteCritiqueParDefaut(190);
         s = stockRepository.save(s);
+
+        /*Produit p1 = new Produit();
+        p1.setId(1L);
+        p1.setIntitule("produit");
+        p1.setQuantite(10);
+        p1.setQuantiteCritique(5);
+        p1.
+        List<Produit> produits = new ArrayList<>();
+        produits.add(p1);*/
+
+        s.setId(1L);
+        s.setQuantiteCritiqueParDefaut(190);
+        s = stockRepository.save(s);
+
 
 //        Stock s2 = new Stock();
 //        s2.setId(2L);
@@ -162,10 +177,10 @@ public class StockifyBackendApplication implements CommandLineRunner {
             Produit p = new Produit();
             p.setIntitule(products[i]);
             p.setStock(s);
-            p.setQuantite(10);
+            p.setQuantite(5);
+            p.setQuantiteCritique(10);
             p.setUniteDeMesure("KG");
             produitRepository.save(p);
-
         }
 
         for(int i=0 ; i < 20 ; i++ ){
