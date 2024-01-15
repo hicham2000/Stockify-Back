@@ -184,6 +184,14 @@ public class StockifyBackendApplication implements CommandLineRunner {
         }
 
         for(int i=0 ; i < 20 ; i++ ){
+            Repas r = new Repas();
+            r.setIntitule(products[i]);
+            r.setStock(s);
+            repasRepository.save(r);
+
+        }
+
+        for(int i=0 ; i < 20 ; i++ ){
             ProduitGlobale p = new ProduitGlobale();
             p.setIntitule(products[i]);
             p.setUniteDeMesure("KG");
