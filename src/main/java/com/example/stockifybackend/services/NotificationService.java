@@ -1,5 +1,9 @@
 package com.example.stockifybackend.services;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
+import com.example.stockifybackend.Entities.Repas;
 import com.example.stockifybackend.Entities.Stock;
 import com.example.stockifybackend.Entities.Produit;
 import com.google.firebase.messaging.FirebaseMessagingException;
@@ -22,63 +26,74 @@ public class NotificationService {
    @Autowired
     private final FirebaseMessaging firebaseMessaging;
 
+    private final Map<String, NotificationDetails> lastNotifications = new ConcurrentHashMap<>();
     @Autowired
     public NotificationService(FirebaseMessaging firebaseMessaging) {
         this.firebaseMessaging = firebaseMessaging;
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 1000*5)
     @Transactional
     public void ReptureStockNotification() {
-
         List<Stock> stocks = stockService.getAllStocks();
-
         for (Stock stock : stocks) {
             List<Produit> belowCriticalProducts = stock.getProduit().stream()
                     .filter(Produit::isQuantityBelowCritical)
                     .toList();
 
             if (!belowCriticalProducts.isEmpty()) {
-
                 String userNotificationToken = stock.getUtilisateur().getNotifToken();
                 String productNames = belowCriticalProducts.stream()
                         .map(Produit::getIntitule)
-                        .collect(Collectors.joining(" \n "));
+                        .collect(Collectors.joining(", "));
                 String notificationMessage = "Products below critical quantity: " + productNames;
 
-                sendNotification(userNotificationToken, notificationMessage,"Title");
+                NotificationDetails lastNotification = lastNotifications.get(userNotificationToken);
+
+                if (lastNotification == null || !lastNotification.getMessage().equals(notificationMessage)) {
+                    sendNotification(userNotificationToken, notificationMessage, "Repture de Stock");
+                    lastNotifications.put(userNotificationToken, new NotificationDetails(notificationMessage, System.currentTimeMillis()));
+                }
             }
         }
 
-    }
-    public void sendNotification(String token,String body,String title){
 
-        try {
-            Notification notification = Notification
-                    .builder()
-                    .setTitle(title)
-                    .setBody(body)
-                    .build();
-            Message message = Message
-                    .builder()
-                    .setToken(token)
-                    .setNotification(notification)
-                    .build();
+            }
 
-            String response = firebaseMessaging.send(message);
-            System.out.println("Successfully sent scheduled message: " + response);
-        } catch (FirebaseMessagingException e) {
 
-            throw new RuntimeException(e);
-        }
-
-    }
-   /* @Scheduled(fixedRate = 5000)
+    @Scheduled(cron = "0 1 0 * * ?")
     @Transactional
     public void ExprirationProduitAlert() {
 
         List<Stock> stocks = stockService.getAllStocks();
 
+        for (Stock stock : stocks) {
+            List<Produit> toExpiredProducts = stock.getProduit().stream()
+                    .filter(Produit::isCloseToExpired)
+                    .toList();
+
+            if (!toExpiredProducts.isEmpty()) {
+
+                String userNotificationToken = stock.getUtilisateur().getNotifToken();
+                for (Produit produit : toExpiredProducts) {
+
+                    long daysUntilExpiration = produit.getDaysBetweenAlertAndExpiration();
+
+
+                    String notificationMessage = produit.getIntitule() +
+                            "expires in " + daysUntilExpiration + " days.";
+
+                    sendNotification(userNotificationToken, notificationMessage, "Expiration alert");
+                }
+            }
+        }
+
+    }
+
+    @Scheduled(cron = "0 1 0 * * ?")
+    @Transactional
+    public void ExprirationProduit() {
+        List<Stock> stocks = stockService.getAllStocks();
         for (Stock stock : stocks) {
             List<Produit> toExpiredProducts = stock.getProduit().stream()
                     .filter(Produit::isExpired)
@@ -87,14 +102,119 @@ public class NotificationService {
             if (!toExpiredProducts.isEmpty()) {
 
                 String userNotificationToken = stock.getUtilisateur().getNotifToken();
-                String productNames = toExpiredProducts.stream()
-                        .map(Produit::getIntitule)
-                        .collect(Collectors.joining(" \n "));
-                String notificationMessage = "Products near expiration: " + productNames;
-                sendNotification(userNotificationToken, notificationMessage,"Title");
+                for (Produit produit : toExpiredProducts) {
+                    produit.setIs_deleted(1);
+                    produit.setGaspille(1);
+                    String notificationMessage = produit.getIntitule() +
+                            "is expired ";
+                    sendNotification(userNotificationToken, notificationMessage, "Expired produits");
+                }
+            }
+        }
+    }
+
+
+    @Scheduled(cron = "0 1 0 * * ?")
+    @Transactional
+    public void ExprirationRepas() {
+        List<Stock> stocks = stockService.getAllStocks();
+        for (Stock stock : stocks) {
+            List<Repas> toExpiredRepas= stock.getRepas().stream()
+                    .filter(Repas::isExpired)
+                    .toList();
+
+            if (!toExpiredRepas.isEmpty()) {
+
+                String userNotificationToken = stock.getUtilisateur().getNotifToken();
+                for (Repas repas: toExpiredRepas) {
+                    repas.setIs_deleted(1);
+                    repas.setGaspille(1);
+                    String notificationMessage = repas.getIntitule() +
+                            "is expired ";
+                    sendNotification(userNotificationToken, notificationMessage, "Expired produits");
+                }
+            }
+        }
+    }
+
+    @Scheduled(cron = "0 1 0 * * ?")
+    @Transactional
+    public void ExprirationRepasAlert() {
+
+        List<Stock> stocks = stockService.getAllStocks();
+
+        for (Stock stock : stocks) {
+            List<Repas> toExpiredRepas= stock.getRepas().stream()
+                    .filter(Repas::isCloseToExpired)
+                    .toList();
+
+            if (!toExpiredRepas.isEmpty()) {
+
+                String userNotificationToken = stock.getUtilisateur().getNotifToken();
+                for (Repas repas: toExpiredRepas) {
+
+                    long daysUntilExpiration = repas.getDaysBetweenAlertAndExpiration();
+
+
+                    String notificationMessage = repas.getIntitule() +
+                            "expires in " + daysUntilExpiration + " days.";
+
+                    sendNotification(userNotificationToken, notificationMessage, "Expiration alert");
+                }
             }
         }
 
-    }*/
+    }
+
+
+
+
+
+
+
+    private static class NotificationDetails {
+        private final String message;
+        private final long timestamp;
+
+        public NotificationDetails(String message, long timestamp) {
+            this.message = message;
+            this.timestamp = timestamp;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public long getTimestamp() {
+            return timestamp;
+        }
+    }
+
+
+
+
+    public void sendNotification(String token,String body,String title){
+
+        try {
+            if(token != null){
+                Notification notification = Notification
+                        .builder()
+                        .setTitle(title)
+                        .setBody(body)
+                        .build();
+                Message message = Message
+                        .builder()
+                        .setToken(token)
+                        .setNotification(notification)
+                        .build();
+
+                String response = firebaseMessaging.send(message);
+                System.out.println("Successfully sent scheduled message: " + response);}
+        } catch (FirebaseMessagingException e) {
+
+            throw new RuntimeException(e);
+        }
+
+    }
 
 }
