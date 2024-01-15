@@ -1,7 +1,6 @@
 package com.example.stockifybackend.services;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 import com.example.stockifybackend.Entities.Repas;
 import com.example.stockifybackend.Entities.Stock;
@@ -32,7 +31,7 @@ public class NotificationService {
         this.firebaseMessaging = firebaseMessaging;
     }
 
-    @Scheduled(fixedRate = 1000*5)
+    @Scheduled(fixedRate = 1000 * 60)
     @Transactional
     public void ReptureStockNotification() {
         List<Stock> stocks = stockService.getAllStocks();
@@ -44,26 +43,24 @@ public class NotificationService {
             if (!belowCriticalProducts.isEmpty()) {
                 String userNotificationToken = stock.getUtilisateur().getNotifToken();
                 System.out.println(userNotificationToken);
-                if(userNotificationToken != null ){
-                String productNames = belowCriticalProducts.stream()
-                        .map(Produit::getIntitule)
-                        .collect(Collectors.joining(", "));
-                String notificationMessage = "*" + productNames;
-                long currentTimeMillis = System.currentTimeMillis();
-                long resend_time = 24 * 60 * 60 * 1000;
-                NotificationDetails lastNotification = lastNotifications.get(userNotificationToken);
+                if (userNotificationToken != null) {
+                    long currentTimeMillis = System.currentTimeMillis();
+                    long resend_time = 24 * 60 * 60 * 1000;
 
-                if (lastNotification == null || !lastNotification.getMessage().equals(notificationMessage)|| (currentTimeMillis - lastNotification.getTimestamp()) > resend_time) {
+                    for (Produit produit : belowCriticalProducts) {
+                        String productNotificationMessage = "*" + produit.getIntitule();
 
-                    sendNotification(userNotificationToken, notificationMessage, "Alert quantité produit ");
-                    lastNotifications.put(userNotificationToken, new NotificationDetails(notificationMessage, System.currentTimeMillis()));
+                        NotificationDetails lastNotification = lastNotifications.get(userNotificationToken);
+
+                        if (lastNotification == null || !lastNotification.getMessage().equals(productNotificationMessage) || (currentTimeMillis - lastNotification.getTimestamp()) > resend_time) {
+                            sendNotification(userNotificationToken, productNotificationMessage, "Alert quantité produit ");
+                            lastNotifications.put(userNotificationToken, new NotificationDetails(productNotificationMessage, currentTimeMillis));
+                        }
+                    }
                 }
             }
         }
-
-            }
     }
-
 
     @Scheduled(cron = "0 1 0 * * ?")
     @Transactional
@@ -215,5 +212,4 @@ public class NotificationService {
             throw new RuntimeException(e);
         }
     }
-
 }

@@ -119,6 +119,9 @@ public class StockifyBackendApplication implements CommandLineRunner {
         s.setQuantiteCritiqueParDefaut(190);
         s = stockRepository.save(s);
 
+
+
+
         /*Produit p1 = new Produit();
         p1.setId(1L);
         p1.setIntitule("produit");
@@ -172,6 +175,7 @@ public class StockifyBackendApplication implements CommandLineRunner {
                 "Jif Peanut Butter",
                 "Snickers Chocolate Bar"
         };
+
 
         for(int i=0 ; i < 20 ; i++ ){
             Produit p = new Produit();
