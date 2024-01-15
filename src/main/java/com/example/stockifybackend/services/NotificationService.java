@@ -26,8 +26,7 @@ public class NotificationService {
    @Autowired
     private final FirebaseMessaging firebaseMessaging;
 
-    private final Map<String, Long> lastNotificationTimestamps = new ConcurrentHashMap<>();
-
+    private final Map<String, NotificationDetails> lastNotifications = new ConcurrentHashMap<>();
     @Autowired
     public NotificationService(FirebaseMessaging firebaseMessaging) {
         this.firebaseMessaging = firebaseMessaging;
@@ -36,57 +35,31 @@ public class NotificationService {
     @Scheduled(fixedRate = 1000*5)
     @Transactional
     public void ReptureStockNotification() {
-
-
         List<Stock> stocks = stockService.getAllStocks();
         for (Stock stock : stocks) {
-
             List<Produit> belowCriticalProducts = stock.getProduit().stream()
                     .filter(Produit::isQuantityBelowCritical)
                     .toList();
 
             if (!belowCriticalProducts.isEmpty()) {
-
                 String userNotificationToken = stock.getUtilisateur().getNotifToken();
-                long lastNotificationTimestamp = lastNotificationTimestamps.getOrDefault(userNotificationToken, 0L);
+                String productNames = belowCriticalProducts.stream()
+                        .map(Produit::getIntitule)
+                        .collect(Collectors.joining(", "));
+                String notificationMessage = "Products below critical quantity: " + productNames;
 
-                if (System.currentTimeMillis() - lastNotificationTimestamp > 86400000) {
-                    String productNames = belowCriticalProducts.stream()
-                            .map(Produit::getIntitule)
-                            .collect(Collectors.joining(", "));
-                    String notificationMessage = "Products below critical quantity: " + productNames;
+                NotificationDetails lastNotification = lastNotifications.get(userNotificationToken);
 
+                if (lastNotification == null || !lastNotification.getMessage().equals(notificationMessage)) {
                     sendNotification(userNotificationToken, notificationMessage, "Repture de Stock");
-
-                    lastNotificationTimestamps.put(userNotificationToken, System.currentTimeMillis());
+                    lastNotifications.put(userNotificationToken, new NotificationDetails(notificationMessage, System.currentTimeMillis()));
                 }
             }
         }
+
+
             }
 
-    public void sendNotification(String token,String body,String title){
-
-        try {
-            if(token != null){
-            Notification notification = Notification
-                    .builder()
-                    .setTitle(title)
-                    .setBody(body)
-                    .build();
-            Message message = Message
-                    .builder()
-                    .setToken(token)
-                    .setNotification(notification)
-                    .build();
-
-            String response = firebaseMessaging.send(message);
-            System.out.println("Successfully sent scheduled message: " + response);}
-        } catch (FirebaseMessagingException e) {
-
-            throw new RuntimeException(e);
-        }
-
-    }
 
     @Scheduled(cron = "0 1 0 * * ?")
     @Transactional
@@ -194,5 +167,54 @@ public class NotificationService {
     }
 
 
+
+
+
+
+
+    private static class NotificationDetails {
+        private final String message;
+        private final long timestamp;
+
+        public NotificationDetails(String message, long timestamp) {
+            this.message = message;
+            this.timestamp = timestamp;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public long getTimestamp() {
+            return timestamp;
+        }
+    }
+
+
+
+
+    public void sendNotification(String token,String body,String title){
+
+        try {
+            if(token != null){
+                Notification notification = Notification
+                        .builder()
+                        .setTitle(title)
+                        .setBody(body)
+                        .build();
+                Message message = Message
+                        .builder()
+                        .setToken(token)
+                        .setNotification(notification)
+                        .build();
+
+                String response = firebaseMessaging.send(message);
+                System.out.println("Successfully sent scheduled message: " + response);}
+        } catch (FirebaseMessagingException e) {
+
+            throw new RuntimeException(e);
+        }
+
+    }
 
 }
