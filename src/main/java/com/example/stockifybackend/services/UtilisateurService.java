@@ -44,11 +44,18 @@ public class UtilisateurService {
         stock = stockRepository.save(stock);
         utilisateur.setStock(stock);
 
+
+
         ListeCourse listeCourse = new ListeCourse();
         listeCourse = listeCourseRepository.save(listeCourse);
         utilisateur.setListeDeCourse_id(listeCourse.getId());
 
-        return utilisateurRepository.save(utilisateur);
+        Utilisateur t = utilisateurRepository.save(utilisateur);
+
+        stock.setUtilisateur(t);
+        stockRepository.save(stock);
+
+        return t;
     }
 
     // update an utilisateur
